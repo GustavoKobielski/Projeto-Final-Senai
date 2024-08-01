@@ -1,17 +1,177 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
 
-{% block content %}
-   <div class="container">
-        <div class="row mt-4">
-        <h3>Envio de contatos</h3>
+    <style>
+        html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+
+.dd {
+    background-color: red;
+}
+
+.background {
+    display: flex;
+    height: 100vh; /* Ocupa toda a altura da viewport */
+}
+
+.left-side {
+    background-color: #407DD8;
+    width: 40%; /* Lado esquerdo ocupa 50% da largura */
+    height: 100%;
+}
+
+.right-side {
+    background-color: #f5f5f5;
+    width: 60%; /* Lado direito ocupa 50% da largura */
+    height: 100%;
+    display: flex;
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center; /* Centraliza verticalmente */
+}
+
+.container {
+    width: 100%; /* Ajuste a largura conforme necessário */
+    max-width: 500px; /* Define um tamanho máximo para o formulário */
+}
+
+.logo {
+   display: flex;
+   justify-content: center;
+   margin-top: 10%;
+}
+
+.senai {
+    width: 21vw;
+}
+
+.titulo {
+    color: #f5f5f5;
+    justify-content: center;
+    display: flex;
+    margin-top: 17%;
+}
+
+hr {
+    width: 50%;
+    border: 2px solid;
+    color: #f5f5f5;
+}
+
+.texto-left {
+    color: #f5f5f5;
+    font-size: 23px;
+    display: flex;
+    text-align: center;
+    margin: 0 20% 0 20%;
+    font-weight: 300;
+}
+
+.entrar {
+    margin: -54% 0 0 20%;
+
+}
+
+.cadastrar {
+    margin: -54% 0 0 -8%;
+
+}
+
+.buttonEntrar {
+    background-color: #f5f5f5;
+    padding: 15px;
+    border: 1px black solid ;
+    border-radius: 3rem;
+    color: black;
+    width: 14rem;
+    font-size: 15px;
+    transition: transform 0.3s ease;
+}
+
+.buttonEntrar:hover {
+    cursor: pointer ; 
+    transform: scale(1.1);
+}
+
+a:link {
+    color: black;
+}
+
+/* Para links visitados */
+a:visited {
+    color: black;
+}
+
+.buttonEntrar a,
+.buttoCadastrar a {
+    text-decoration: none; /* Remove o sublinhado do link */
+    color: inherit; /* Faz com que a cor do link herde a cor do botão */
+}
+
+
+.buttoCadastrar:hover {
+    cursor: pointer ; 
+    transform: scale(1.1);
+
+}
+
+.buttoCadastrar {
+    background-color: #407DD8;
+    padding: 15px;
+    color: #f5f5f5;
+    width: 14rem;
+    border-radius: 3rem;
+    border: none;
+    border: 1px #407DD8 solid ;
+    font-size: 15px;
+    transition: transform 0.3s ease;
+}
+
+.formulario {
+    margin-right: 70%;
+}
+    
+    </style>
+
+</head>
+<body>
+    
+    <div class="background">
+        <div class="left-side">
+            <div class="logo">
+                <img src="https://chat.google.com/u/0/api/get_attachment_url?url_type=FIFE_URL&content_type=image%2Fpng&attachment_token=AOo0EEXsc4KgCt%2B0qS9YPGGuWySaopJ2u%2BfeO%2BqUX7RPMBzYIaf6okSninHI9OsNtsSdvJXbXxu0xkxLgMFTL0AyVt3185f44k%2FPxi%2BRqPuPxj3NsKEuWGHm2fhUKCNC5gDu%2BU8eySAVDCeQmgrarAOolzYeG91LttTX36BNGKfzCH0DLZbVP0cmbZzP3uvjBKFIN5doStB%2Ftlceo4tVNkickd5gd0m6R5k2qO%2BRkukl%2FW1DNIaVoG7ZwhG1HRiXQOcGDAHdjkJTeHq7XXf%2F9nTvlmXP3ToqtpWUa67zGto3YH2Ljui%2FYhQ7Qvzs%2B3ER7T5NwocWPUlUgiqDV1ubBTfJ8mO3dNj%2BphDwM7On9ziJV15hmxbE15%2F2F32AB7m9%2Fj5S1pLo%2FpDfpDov0RaLR6%2BFxi9OxOt8i0G2mNWGjlbX%2B89wDl%2B%2BqQgdFy%2BYvg6eQwfpC5LG4p2C8kERchCwKcT9XMi9AV56eckv7eG6%2Bhc14aZ63EjqvLuPlP8EAwfBFjtJMnBn1QFqHg%2BlYC8IEFJ8NKhiG%2BWshCssVL5IW%2BdO3luvX2Ky%2Fvj%2FrsRq9BkwU54%3D&sz=w512" class="senai" alt="Logo Senai">
+            </div>\
+            <div class="titulo">
+                <h1>Bem Vindo</h1>
+            </div>
+            <hr>
+            <div class="texto-left">
+                <p>Cadastre em nosso sistema de gestão de ferramentas! Cadastre para conseguir usa-lo.</p>
+            </div>
         </div>
-        <form action="" method="post" class="row mt-4 p-4 round border shadow">
+        <div class="right-side">
+            <div class="entrar">
+                <a href="{{url_for('homepage')}}"><button class="buttonEntrar">Entrar</button></a>
+            </div>
+            <div class="cadastrar">
+                <a href="{{url_for('cadastro')}}"><button class="buttoCadastrar">Cadastrar</button></a>
+            </div>
+            
+            <div class="container">
+            
+            <form action="" class="formulario">
             {{form.csrf_token}}
 
             {{form.nome.label()}}
             {{form.nome(class="form-control")}}
 
-            {{form.email.label()}} 
+            {{form.email.label()}}
             {{form.email(class="form-control")}}
 
             {{form.senha.label()}}
@@ -21,6 +181,16 @@
             {{form.confirmacao_senha(class="form-control")}}
 
             {{form.btnSubmit(class="btn btn-primary col-12 mt-3")}}
-        </form>
-   </div>
-{% endblock %}
+            </form>
+            
+                
+                
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+
+
+
