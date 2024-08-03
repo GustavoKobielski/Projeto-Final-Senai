@@ -12,10 +12,36 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String, nullable=False)
     senha = db.Column(db.String, nullable=False)
     adm = db.Column(db.Boolean, default=False)
+    foto = db.Column(db.String,nullable=True)
 
 
+class Salas(db.Model, UserMixin):
+    id_salas = db.Column(db.Integer, primary_key=True)
+    nome_sala = db.Column(db.String, nullable=False,default="Sala Indigente")
+    capacidade_armario = db.Column(db.Integer,nullable=False,default=0)
+    foto_sala = db.Column(db.String, nullable=True)
+
+class Armario(db.Model, UserMixin):
+    id_armario = db.Column(db.Integer, primary_key=True)
+    numero = db.Column(db.Integer,default=1)
+    capacidade_ferramentas = db.Column(db.Integer,nullable=False,default=0)
+    foto_armario = db.Column(db.String,nullable=True)
+
+class Ferramentas(db.Model, UserMixin):
+    id_ferramentas = db.Column(db.Integer, primary_key=True)
+    nome_ferramenta = db.Column(db.String, nullable=False)
+    total_ferramenta = db.Column(db.Integer,nullable=False,default=0)
+    foto_ferramenta = db.Column(db.String,nullable=True)
 
 
+class FerramentasSuporte(db.Model, UserMixin):
+    id_ferramentas_sup = db.Column(db.Integer, primary_key=True)
+    nome_ferramenta_sup = db.Column(db.String, nullable=False)
+    sala_ferramenta_sup = db.Column(db.String, nullable=False,default="Sala Indigente")
+    defeito_ferramenta_sup = db.Column(db.String, nullable=False)
+    data_ocorrido_sup = db.Column(db.String, nullable=False)
+    ocorrido_ferramenta_sup = db.Column(db.String,nullable=False)
+    foto_ferramenta_sup = db.Column(db.String,nullable=True)
 
 
 

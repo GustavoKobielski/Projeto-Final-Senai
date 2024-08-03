@@ -1,151 +1,217 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 
     <style>
-        html, body {
-    height: 100%;
-    margin: 0;
-    overflow: hidden;
-}
-
-.dd {
-    background-color: red;
-}
-
-.background {
-    display: flex;
-    height: 100vh; /* Ocupa toda a altura da viewport */
-}
-
-.left-side {
-    background-color: #407DD8;
-    width: 40%; /* Lado esquerdo ocupa 50% da largura */
-    height: 100%;
-}
-
-.right-side {
-    background-color: #f5f5f5;
-    width: 60%; /* Lado direito ocupa 50% da largura */
-    height: 100%;
-    display: flex;
-    justify-content: center; /* Centraliza horizontalmente */
-    align-items: center; /* Centraliza verticalmente */
-}
-
-.container {
-    width: 100%; /* Ajuste a largura conforme necessário */
-    max-width: 500px; /* Define um tamanho máximo para o formulário */
-}
-
-.logo {
-   display: flex;
-   justify-content: center;
-   margin-top: 10%;
-}
-
-.senai {
-    width: 21vw;
-}
-
-.titulo {
-    color: #f5f5f5;
-    justify-content: center;
-    display: flex;
-    margin-top: 17%;
-}
-
-hr {
-    width: 50%;
-    border: 2px solid;
-    color: #f5f5f5;
-}
-
-.texto-left {
-    color: #f5f5f5;
-    font-size: 23px;
-    display: flex;
-    text-align: center;
-    margin: 0 20% 0 20%;
-    font-weight: 300;
-}
-
-.entrar {
-    margin: -54% 0 0 20%;
-
-}
-
-.cadastrar {
-    margin: -54% 0 0 -8%;
-
-}
-
-.buttonEntrar {
-    background-color: #f5f5f5;
-    padding: 15px;
-    border: 1px black solid ;
-    border-radius: 3rem;
-    color: black;
-    width: 14rem;
-    font-size: 15px;
-    transition: transform 0.3s ease;
-}
-
-.buttonEntrar:hover {
-    cursor: pointer ; 
-    transform: scale(1.1);
-}
-
-a:link {
-    color: black;
-}
-
-/* Para links visitados */
-a:visited {
-    color: black;
-}
-
-.buttonEntrar a,
-.buttoCadastrar a {
-    text-decoration: none; /* Remove o sublinhado do link */
-    color: inherit; /* Faz com que a cor do link herde a cor do botão */
-}
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+        }
 
 
-.buttoCadastrar:hover {
-    cursor: pointer ; 
-    transform: scale(1.1);
 
-}
+        .background {
+            display: flex;
+            height: 100vh;
+            /* Ocupa toda a altura da viewport */
+        }
 
-.buttoCadastrar {
-    background-color: #407DD8;
-    padding: 15px;
-    color: #f5f5f5;
-    width: 14rem;
-    border-radius: 3rem;
-    border: none;
-    border: 1px #407DD8 solid ;
-    font-size: 15px;
-    transition: transform 0.3s ease;
-}
+        .left-side {
+            background-color: #407DD8;
+            width: 40%;
+            /* Lado esquerdo ocupa 50% da largura */
+            height: 100%;
+        }
 
-.formulario {
-    margin-right: 70%;
-}
-    
+        .right-side {
+            background-color: #f5f5f5;
+            width: 60%;
+            /* Lado direito ocupa 50% da largura */
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            /* Centraliza horizontalmente */
+            align-items: center;
+            /* Centraliza verticalmente */
+        }
+
+        .container {
+            width: 100%;
+            /* Ajuste a largura conforme necessário */
+            max-width: 500px;
+            /* Define um tamanho máximo para o formulário */
+        }
+
+        .logo {
+            display: flex;
+            justify-content: center;
+            margin-top: 10%;
+        }
+
+        .senai {
+            width: 21vw;
+        }
+
+        .titulo {
+            color: #f5f5f5;
+            justify-content: center;
+            display: flex;
+            margin-top: 17%;
+        }
+
+        hr {
+            width: 50%;
+            border: 2px solid;
+            color: #f5f5f5;
+        }
+
+        .texto-left {
+            color: #f5f5f5;
+            font-size: 23px;
+            display: flex;
+            text-align: center;
+            margin: 0 20% 0 20%;
+            font-weight: 300;
+        }
+
+        .entrar {
+            margin: -70% 0 0 35%;
+
+        }
+
+        .cadastrar {
+            margin: -70% 0 0 -5%;
+
+        }
+
+        .buttonEntrar {
+            background-color: #f5f5f5;
+            padding: 20px;
+            border: 1px black solid;
+            border-radius: 3rem;
+            color: black;
+            width: 16rem;
+            font-size: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .buttonEntrar:hover {
+            cursor: pointer;
+            transform: scale(1.1);
+        }
+
+        a:link {
+            color: black;
+        }
+
+        /* Para links visitados */
+        a:visited {
+            color: black;
+        }
+
+        .buttonEntrar a,
+        .buttoCadastrar a {
+            text-decoration: none;
+            /* Remove o sublinhado do link */
+            color: inherit;
+            /* Faz com que a cor do link herde a cor do botão */
+        }
+
+
+        .buttoCadastrar:hover {
+            cursor: pointer;
+            transform: scale(1.1);
+
+        }
+
+        .buttoCadastrar {
+            background-color: #407DD8;
+            padding: 20px;
+            color: #f5f5f5;
+            width: 16rem;
+            border-radius: 3rem;
+            border: none;
+            border: 1px #407DD8 solid;
+            font-size: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .formulario {
+            margin: -20% 0 0 -95%;
+            width: 500px;
+        }
+
+        .form-control {
+            padding: 15px;
+            width: 100%;
+            margin-bottom: 20px;
+            font-size: 10px;
+            background-color: #EBEBEB;
+            border: 1px solid #CECECE;
+            border-radius: 5px;
+        }
+
+        .cor {
+            color: #407DD8;
+            font-size: 20px;
+        }
+
+        .button {
+            width: 108%;
+            padding: 10px;
+            border: 1px solid transparent;
+            margin-top: 8px;
+            background-color: #407DD8;
+            border-radius: 5px;
+            cursor: pointer;
+            color: #f5f5f5;
+            font-size: 20px;
+        }
+
+        input::placeholder {
+            font-size: 16px;
+            color: #999;
+            text-align: left;
+            margin: 0;
+            padding: 0;
+        }
+
+        .ou {
+            display: block;
+            text-align: center;
+            margin: 20px auto;
+        }
+
+        .google {
+            background-color: #f5f5f5;
+            padding: 10px;
+            width: 100%;
+            margin-top: 15%;
+            cursor: pointer;
+            font-size: 20px;
+            border: 3px solid #407DD8;
+            border-radius: 15px;
+        }
+
+        .google2 {
+            width: 8%;
+        }
     </style>
 
 </head>
+
 <body>
-    
+
     <div class="background">
         <div class="left-side">
             <div class="logo">
-                <img src="https://chat.google.com/u/0/api/get_attachment_url?url_type=FIFE_URL&content_type=image%2Fpng&attachment_token=AOo0EEXsc4KgCt%2B0qS9YPGGuWySaopJ2u%2BfeO%2BqUX7RPMBzYIaf6okSninHI9OsNtsSdvJXbXxu0xkxLgMFTL0AyVt3185f44k%2FPxi%2BRqPuPxj3NsKEuWGHm2fhUKCNC5gDu%2BU8eySAVDCeQmgrarAOolzYeG91LttTX36BNGKfzCH0DLZbVP0cmbZzP3uvjBKFIN5doStB%2Ftlceo4tVNkickd5gd0m6R5k2qO%2BRkukl%2FW1DNIaVoG7ZwhG1HRiXQOcGDAHdjkJTeHq7XXf%2F9nTvlmXP3ToqtpWUa67zGto3YH2Ljui%2FYhQ7Qvzs%2B3ER7T5NwocWPUlUgiqDV1ubBTfJ8mO3dNj%2BphDwM7On9ziJV15hmxbE15%2F2F32AB7m9%2Fj5S1pLo%2FpDfpDov0RaLR6%2BFxi9OxOt8i0G2mNWGjlbX%2B89wDl%2B%2BqQgdFy%2BYvg6eQwfpC5LG4p2C8kERchCwKcT9XMi9AV56eckv7eG6%2Bhc14aZ63EjqvLuPlP8EAwfBFjtJMnBn1QFqHg%2BlYC8IEFJ8NKhiG%2BWshCssVL5IW%2BdO3luvX2Ky%2Fvj%2FrsRq9BkwU54%3D&sz=w512" class="senai" alt="Logo Senai">
+                <img src="https://logodownload.org/wp-content/uploads/2019/08/senai-logo-1.png" class="senai">
             </div>\
             <div class="titulo">
                 <h1>Bem Vindo</h1>
@@ -162,35 +228,34 @@ a:visited {
             <div class="cadastrar">
                 <a href="{{url_for('cadastro')}}"><button class="buttoCadastrar">Cadastrar</button></a>
             </div>
-            
+
             <div class="container">
-            
-            <form action="" class="formulario">
-            {{form.csrf_token}}
 
-            {{form.nome.label()}}
-            {{form.nome(class="form-control")}}
+                <form action="" class="formulario">
+                    {{form.csrf_token}}
 
-            {{form.email.label()}}
-            {{form.email(class="form-control")}}
+                    {{form.nome.label(class="cor", style="margin-bottom: 10px; display:block;")}}
+                    {{form.nome(class="form-control", placeholder='Digite seu nome')}}
 
-            {{form.senha.label()}}
-            {{form.senha(class="form-control")}}
+                    {{form.email.label(class="cor",style="margin-bottom: 10px; display:block;")}}
+                    {{form.email(class="form-control", placeholder='Digite seu email')}}
 
-            {{form.confirmacao_senha.label()}}
-            {{form.confirmacao_senha(class="form-control")}}
+                    {{form.senha.label(class="cor",style="margin-bottom: 10px; display:block;")}}
+                    {{form.senha(class="form-control", placeholder='Digite sua senha')}}
 
-            {{form.btnSubmit(class="btn btn-primary col-12 mt-3")}}
-            </form>
-            
-                
-                
+                    {{form.confirmacao_senha.label(class="cor",style="margin-bottom: 10px; display:block;")}}
+                    {{form.confirmacao_senha(class="form-control", placeholder='Confirme sua senha')}}
+
+                    {{form.btnSubmit(class="button")}}
+                </form>
+                <h2 class="ou">OU</h2>
+                <button class="google">Inscrever-se com o Google</button>
+
+                <img src="https://logopng.com.br/logos/google-37.png" class="google2" alt="">
             </div>
         </div>
     </div>
 
 </body>
+
 </html>
-
-
-
