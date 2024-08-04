@@ -14,8 +14,6 @@
             overflow: hidden;
         }
 
-
-
         .background {
             display: flex;
             height: 100vh;
@@ -25,28 +23,17 @@
         .left-side {
             background-color: #407DD8;
             width: 40%;
-            /* Lado esquerdo ocupa 50% da largura */
             height: 100%;
         }
 
         .right-side {
             background-color: #f5f5f5;
             width: 60%;
-            /* Lado direito ocupa 50% da largura */
             height: 100%;
-            display: flex;
-            justify-content: center;
-            /* Centraliza horizontalmente */
-            align-items: center;
-            /* Centraliza verticalmente */
+            display: grid;
+            place-items: center;
         }
 
-        .container {
-            width: 100%;
-            /* Ajuste a largura conforme necessário */
-            max-width: 500px;
-            /* Define um tamanho máximo para o formulário */
-        }
 
         .logo {
             display: flex;
@@ -80,23 +67,12 @@
             font-weight: 300;
         }
 
-        .entrar {
-            margin: -70% 0 0 35%;
-
-        }
-
-        .cadastrar {
-            margin: -70% 0 0 -5%;
-
-        }
-
         .buttonEntrar {
             background-color: #f5f5f5;
             padding: 20px;
             border: 1px black solid;
             border-radius: 3rem;
             color: black;
-            width: 16rem;
             font-size: 15px;
             transition: transform 0.3s ease;
         }
@@ -134,7 +110,7 @@
             background-color: #407DD8;
             padding: 20px;
             color: #f5f5f5;
-            width: 16rem;
+            width: 100%;
             border-radius: 3rem;
             border: none;
             border: 1px #407DD8 solid;
@@ -142,19 +118,24 @@
             transition: transform 0.3s ease;
         }
 
-        .formulario {
-            margin: -20% 0 0 -95%;
-            width: 500px;
+        .entrar {
+            margin: -70% 0 0 35%;
+
+        }
+
+        .cadastrar {
+            margin: -70% 0 0 -5%;
+
         }
 
         .form-control {
             padding: 15px;
-            width: 100%;
-            margin-bottom: 20px;
+            margin-bottom: 28px;
             font-size: 10px;
             background-color: #EBEBEB;
             border: 1px solid #CECECE;
             border-radius: 5px;
+            width: 93%;
         }
 
         .cor {
@@ -163,10 +144,9 @@
         }
 
         .button {
-            width: 108%;
-            padding: 10px;
+            width: 100%;
+            padding: 15px;
             border: 1px solid transparent;
-            margin-top: 8px;
             background-color: #407DD8;
             border-radius: 5px;
             cursor: pointer;
@@ -185,14 +165,12 @@
         .ou {
             display: block;
             text-align: center;
-            margin: 20px auto;
         }
 
         .google {
             background-color: #f5f5f5;
             padding: 10px;
             width: 100%;
-            margin-top: 15%;
             cursor: pointer;
             font-size: 20px;
             border: 3px solid #407DD8;
@@ -200,7 +178,11 @@
         }
 
         .google2 {
-            width: 8%;
+            width: 3%;
+        }
+
+        .container {
+            width: 50%;
         }
     </style>
 
@@ -222,13 +204,10 @@
             </div>
         </div>
         <div class="right-side">
-            <div class="entrar">
-                <a href="{{url_for('homepage')}}"><button class="buttonEntrar">Entrar</button></a>
-            </div>
-            <div class="cadastrar">
-                <a href="{{url_for('cadastro')}}"><button class="buttoCadastrar">Cadastrar</button></a>
-            </div>
-
+                <a href="{{url_for('homepage')}}">
+                    <button class="buttonEntrar">Entrar</button></a>
+                <a href="{{url_for('cadastro')}}">
+                    <button class="buttoCadastrar">Cadastrar</button></a>
             <div class="container">
 
                 <form action="" class="formulario">
@@ -249,9 +228,8 @@
                     {{form.btnSubmit(class="button")}}
                 </form>
                 <h2 class="ou">OU</h2>
-                <button class="google">Inscrever-se com o Google</button>
-
-                <img src="https://logopng.com.br/logos/google-37.png" class="google2" alt="">
+                <button class="google">Inscrever-se com o Google <img src="https://logopng.com.br/logos/google-37.png"
+                        class="google2" alt=""></button>
             </div>
         </div>
     </div>
