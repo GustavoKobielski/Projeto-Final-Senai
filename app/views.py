@@ -48,8 +48,8 @@ from authlib.integrations.flask_client import OAuth
 oauth = OAuth(app)
 google = oauth.register(
     name='google',
-    client_id='',
-    client_secret='',
+    client_id='YOUR_CLIENT_ID',
+    client_secret='YOUR_CLIENT_SECRET',
     authorize_params=None,
     access_token_params=None,
     refresh_token_url=None,
