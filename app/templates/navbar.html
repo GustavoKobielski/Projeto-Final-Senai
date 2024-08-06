@@ -8,25 +8,42 @@
         height: 100%;
     }
     .senai{
-        width: 21vw;
+        width: 20vw;
+        display: flex;
+        justify-content: center;
     }
     .linha{
         border-bottom: 0.5px solid aliceblue;
         margin: 4%;
     }
 
+    a {
+        color: aliceblue;
+        text-decoration: none;
+        margin-left: 5%;
+    }
+
+    .logo1 {
+        display: flex;
+        justify-content: center;
+        margin-top: 5%;
+    }
+
 </style>
     <body>
         <div class="barraLateral">
-            <img src="https://logodownload.org/wp-content/uploads/2019/08/senai-logo-1.png" class="senai">
+            <div class="logo1">
+                <img src="https://logodownload.org/wp-content/uploads/2019/08/senai-logo-1.png" class="senai">
+            </div>
+            
             <div class="linha"></div>
-            <p class="d-flex justify-content-center text-decoration-none">Geral</p>
+            <p class="d-flex justify-content-center text-decoration-none" style="font-weight: 700;">Geral</p>
             <a href="{{url_for('homepage')}}">Home</a>
-            <a >Salas</a>
-            <a>Defeito Ferramentas</a>
-            <a>Logs</a>
+            <a href="{{url_for('homepage')}}">Salas</a>
+            <a href="{{url_for('homepage')}}">Defeito Ferramentas</a>
+            <a href="{{url_for('homepage')}}">Logs</a>
             <div class="linha"></div>
-            <p class="d-flex justify-content-center">Gerenciamento</p>
+            <p class="d-flex justify-content-center" style="font-weight: 700;">Gerenciamento</p>
             <a>Salas</a>
             <a>Pessoas</a>    
         </div>
