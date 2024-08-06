@@ -7,21 +7,19 @@ from app.forms import LoginForm, UserForm
 #Pagina Inicial
 @app.route('/', methods=['GET', 'POST'])
 def homepage():
-    usuario = 'Mateus'
-    idade = 17
-
     form = LoginForm()
 
+    # LOGIN
     if form.validate_on_submit():
         user = form.login()
         login_user(user, remember=True)
-        return redirect(url_for('homepage'))
+        return render_template('homepage.html')
 
-    context = {
-        'usuario': usuario,
-        'idade': idade
-    }
-    return render_template('index.html', context=context, form=form)
+    return render_template('index.html', form=form)
+
+#############################################
+######## CADASTRO/LOGIN SETUP ###############
+#############################################
 
 #Função de Cadastro
 @app.route('/cadastro/', methods=['GET', 'POST'])
