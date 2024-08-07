@@ -14,7 +14,7 @@ def homepage():
     if form.validate_on_submit():
         user = form.login()
         login_user(user, remember=True)
-        return render_template('homepage.html')
+        return redirect(url_for('home'))
 
     return render_template('index.html', form=form)
 
@@ -39,6 +39,10 @@ def logout():
     logout_user()
     return redirect(url_for('homepage'))
 
+
+@app.route('/home/')
+def home():
+    return render_template('homepage.html')
 
 #############################################
 ######## PAGE SALAS #########################
