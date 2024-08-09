@@ -1,0 +1,16 @@
+<button class="botaoNB ativo">
+            <img src="https://media.discordapp.net/attachments/1270516129692913716/1270522959169196032/casa_1.png?ex=66b40236&is=66b2b0b6&hm=5e21d65f1fde5e8febeb8d9ff89ebaed0d32054f4529bfd5f5f0e026d6da32c3&=&format=webp&quality=lossless" alt="a">
+            <a href="{{url_for('home')}}">Home</a>
+        </button>
+        <button class="botaoNB">
+            <img src="https://media.discordapp.net/attachments/1270516129692913716/1270525895525797981/caixa-de-entrega.png?ex=66b404f2&is=66b2b372&hm=d39d86fc91ef40735e55709214021652f1d30e6f812381acaea2b957c0ce9782&=&format=webp&quality=lossless" alt="a">
+            <a href="{{url_for('salas')}}">Salas</a>
+        </button>
+        <button class="botaoNB">
+            <img src="https://media.discordapp.net/attachments/1270516129692913716/1270526345952366623/chave-de-boca.png?ex=66b4055e&is=66b2b3de&hm=e8feeff9bb32388287664a4576d706e36a79f5e3cb8b6c33618a061ac502830f&=&format=webp&quality=lossless" class="sla" alt="a">
+            <a href="#">Defeito Ferramentas</a>
+        </button>
+        <button class="botaoNB">
+            <img src="https://media.discordapp.net/attachments/1270516129692913716/1270526974032351304/pergaminho-antigo.png?ex=66b405f3&is=66b2b473&hm=a066b3639e579fb67b4930aabd25928b78f383afd8201aa9d4e4918455f22169&=&format=webp&quality=lossless" alt="a">
+            <a href="{{url_for('salas')}}">Logs</a>
+        </button>
