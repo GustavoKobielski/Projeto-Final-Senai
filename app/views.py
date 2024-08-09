@@ -39,6 +39,9 @@ def logout():
     logout_user()
     return redirect(url_for('homepage'))
 
+#############################################
+######## PAGE HOMES #########################
+#############################################
 
 @app.route('/home/')
 def home():
@@ -57,7 +60,9 @@ def salas():
 ######## PAGE ARMARIOS ######################
 #############################################
 
-
+@app.route('/armarios/')
+def armarios():
+    return render_template('armarios.html')
 
 #############################################
 ######## PAGE FERRAMENTAS ###################
@@ -68,16 +73,30 @@ def ferramentas():
     return render_template('defeitoFerramentas.html')
 
 #############################################
-######## PAGE LOGS ###################
+######## PAGE LOGS ##########################
 #############################################
 
 @app.route('/logs/')
 def logs():
     return render_template('logs.html')
 
+##### gerenciamento
+
 #############################################
-######## PAGE LOGS ###################
+######## PAGE SALAS GERENCIAMENTO ###########
 #############################################
+
+@app.route('/gerenciamento/salas')
+def gerenciamento_salas():
+    return render_template('gerenciamento_salas.html')
+
+#############################################
+######## PAGE PESSOAS GERENCIAMENTO ###########
+#############################################
+
+@app.route('/gerenciamento/pessoas')
+def gerenciamento_pessoas():
+    return render_template('gerenciamento_pessoas.html')
 
 #############################################
 ######## GOOGLE SETUP #######################

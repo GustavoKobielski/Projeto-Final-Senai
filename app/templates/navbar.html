@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,8 +19,10 @@
             background-color: #407DD8;
             margin: 0;
             color: #f5f5f5;
-            height: 100vh; /* Ajustado para ocupar a altura total da visualização */
-            padding: 20px; /* Adiciona um pouco de espaço interno */
+            height: 100vh;
+            /* Ajustado para ocupar a altura total da visualização */
+            padding: 20px;
+            /* Adiciona um pouco de espaço interno */
             box-sizing: border-box;
             position: fixed;
             top: 0;
@@ -54,7 +57,8 @@
             text-align: center;
             font-weight: 700;
             font-size: 35px;
-            margin: 20px 0 0 0; /* Adiciona espaço superior e remove espaço inferior */
+            margin: 20px 0 0 0;
+            /* Adiciona espaço superior e remove espaço inferior */
         }
 
         .a:hover {
@@ -68,7 +72,8 @@
             background-color: #407DD8;
             border: 0;
             text-align: left;
-            margin: 15px 0; /* Remove margem superior */
+            margin: 15px 0;
+            /* Remove margem superior */
         }
 
         .botaoNB.ativo {
@@ -84,7 +89,7 @@
 
         .botaoNB a {
             font-size: 32.5px;
-            margin-left: 6.5%;  
+            margin-left: 6.5%;
         }
 
         .botaoNB img {
@@ -99,11 +104,12 @@
         }
 
         .botaoNB .txt-link {
-            margin-left: 10px; /* Ajusta a distância entre o texto e o ícone */
+            margin-left: 10px;
+            /* Ajusta a distância entre o texto e o ícone */
         }
-        
     </style>
 </head>
+
 <body>
     <div class="barraLateral">
         <div class="logo2">
@@ -111,7 +117,7 @@
         </div>
         <div class="linha"></div>
         <p class="titulo">Geral</p>
-        
+
         <ul>
             <li class="botaoNB ativo">
                 <a href="{{url_for('home')}}">
@@ -140,10 +146,11 @@
                     <span class="txt-link">Logs</span>
                 </a>
             </li>
-            
+
         </ul>
 
-        
+
+        <div id="messageContainer"></div>
 
         <div class="linha"></div>
         <p class="titulo">Gerenciamento</p>
@@ -168,21 +175,36 @@
     <script>
         var menuItem = document.querySelectorAll('.botaoNB');
 
-        function selectLink() {
-            menuItem.forEach((item) =>
-                item.classList.remove('ativo')
-            );
-            this.classList.add('ativo');  
 
-            const link = this.querySelector('a');
-    if (link) {
-        link.click();
-    }
+        function highlightActiveLink() {
+            menuItem.forEach((item) => {
+                item.classList.remove('ativo');
+                const link = item.querySelector('a');
+                if (link && link.href === window.location.href) {
+                    item.classList.add('ativo');
+                }
+            });
         }
 
+
         menuItem.forEach((item) =>
-            item.addEventListener('click', selectLink)
+            item.addEventListener('click', function (event) {
+                event.preventDefault();
+                menuItem.forEach((item) => {
+                    item.classList.remove('ativo');
+                });
+                this.classList.add('ativo');
+
+                const link = this.querySelector('a');
+                if (link) {
+                    window.location.href = link.href;
+                }
+            })
         );
+
+        window.onload = highlightActiveLink;
+
     </script>
 </body>
+
 </html>
