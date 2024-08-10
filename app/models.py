@@ -14,6 +14,9 @@ class User(db.Model, UserMixin):
     adm = db.Column(db.Boolean, default=False)
     foto = db.Column(db.String, nullable=True)
 
+    def puxar_nome(self):
+        return self.nome
+
 class Salas(db.Model):
     id_salas = db.Column(db.Integer, primary_key=True)
     nome_sala = db.Column(db.String, nullable=False, default="Sala Indigente")

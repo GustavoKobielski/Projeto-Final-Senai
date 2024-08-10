@@ -43,7 +43,7 @@
 
         .linha {
             border-bottom: 0.5px solid aliceblue;
-            margin-bottom: 4%;
+            margin-bottom: -4%;
         }
 
         a {
@@ -88,8 +88,14 @@
         }
 
         .botaoNB a {
+            display: flex; /* Adicionado para usar Flexbox dentro do link */
+            align-items: center; /* Alinha os itens verticalmente */
+            text-align: center; /* Centraliza o texto dentro do link */
             font-size: 32.5px;
             margin-left: 6.5%;
+            color: inherit; /* Mantém a cor do texto herdada do pai */
+            text-decoration: none; /* Remove o sublinhado do link */
+
         }
 
         .botaoNB img {
@@ -104,13 +110,64 @@
         }
 
         .botaoNB .txt-link {
-            margin-left: 10px;
-            /* Ajusta a distância entre o texto e o ícone */
+            margin-left: 15px;
+            margin-bottom: 2%;
+            text-align: center;
+            flex-direction: row;
         }
+
+        .txt-link {
+            font-size: 1.75vw;
+        }
+
+        .pessoa {
+            display: flex;
+            align-items: center; 
+            justify-content: flex-end; 
+            margin: 1% 95%; 
+        }
+        
+        .iconHeader {
+            margin-right: 20px; 
+            font-size: 24px;
+        }
+        
+        .txt-header {
+            margin: 0;
+            font-size: 18px;
+            white-space: nowrap; 
+            color: #1D1D1D;
+        }
+        
+        .Seta {
+            margin-left: 20px; 
+            font-size: 24px;
+            color: #1D1D1D;
+        }
+        
+        .linhaHeader {
+            border-bottom: 1.0px solid #1D1D1D;
+            margin: 0 auto; 
+            width: 64rem;
+            position: relative;
+            left: 12%;
+           
+        }
+              
+
     </style>
 </head>
 
 <body>
+    <div class="header">
+        <div class="pessoa">
+            <span class="iconHeader"><i class="bi bi-person-circle"></i></span>
+            <p class="txt-header">{{ current_user.puxar_nome() }}</p>
+            <span class="Seta"><i class="bi bi-chevron-compact-down"></i></span>
+        </div>
+        <div class="linhaHeader"></div>
+    </div>
+
     <div class="barraLateral">
         <div class="logo2">
             <img src="https://logodownload.org/wp-content/uploads/2019/08/senai-logo-1.png" class="senai">
@@ -205,6 +262,7 @@
         window.onload = highlightActiveLink;
 
     </script>
+   
 </body>
 
 </html>

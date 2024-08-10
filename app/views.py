@@ -16,7 +16,11 @@ def homepage():
         login_user(user, remember=True)
         return redirect(url_for('home'))
 
-    return render_template('index.html', form=form)
+    return render_template('index.html', form=form, usuario=current_user)
+
+@app.context_processor
+def inject_user():
+    return dict(current_user=current_user)
 
 #############################################
 ######## CADASTRO/LOGIN SETUP ###############
