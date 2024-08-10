@@ -17,4 +17,4 @@ login_manager.login_view = 'homepage'
 bcrypt = Bcrypt(app)
 
 
-from app.views import homepage 
+from app.views import homepage

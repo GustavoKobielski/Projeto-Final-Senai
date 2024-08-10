@@ -1,6 +1,58 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
 {% include 'navbar.html' %}
-<a></a>
+
+<style>
+    .tituloHome {
+        display: flex;
+        justify-content:  center;
+        margin-top: 2%;
+        margin-right: 36.5%;
+        font-size: 2vw;
+    }
+
+    .img5 {
+        width: 66%;
+        height: 25rem;
+        margin: 1% 29%;
+    }
+
+    .escritArea {
+        background-color: #407DD8;
+        width: 22%;
+        height: 25rem;
+        padding: 4rem;
+        margin: -22.3% 73%;
+        position: relative;
+        border-bottom-right-radius: 10px;
+        border-top-right-radius: 10px;
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        text-align: center; 
+        clip-path: polygon(15% 0, 100% 0, 100% 100%, 0 100%); /* Corta na diagonal */
+
+    }
+    
+
+    .escrita {
+        font-size: 25px;
+        color: #f5f5f5;
+        text-align: center;
+    }
+
+</style>
+
+
+<h1 class="tituloHome">Home</h1>
+
+<div class="banner">
+    <img src="https://media.discordapp.net/attachments/1241227325765587067/1271920093936222318/bannerHome.png?ex=66b91765&is=66b7c5e5&hm=83bc1f0f8b1710e3af5d36ff76d5a6d0cb69f6f5238ebf7b618fb9be59931837&=&format=webp&quality=lossless" class="img5" alt="teste">
+    <div class="escritArea">
+        <p class="escrita">Seja bem vindo ao sistema gerenciador de ferramentas</p>
+    </div>
+</div>
+
 {% endblock %}
