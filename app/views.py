@@ -2,7 +2,7 @@ from app import app, db
 from flask import render_template, url_for, request, redirect, jsonify
 from flask_login import login_user, logout_user, current_user, login_required
 from app.forms import LoginForm, UserForm
-from app.models import User
+from app.models import User, Salas, Armario, Ferramentas, FerramentasSuporte
 
 
 #Pagina Inicial
@@ -49,7 +49,12 @@ def logout():
 
 @app.route('/home/')
 def home():
-    return render_template('homepage.html')
+    qtd_sala = Salas.contar_salas()
+    qtd_armario = Armario.contar_armarios()
+    qtd_ferramenta = Ferramentas.contar_ferramentas()
+    qtd_ferramenta_sup = FerramentasSuporte.contar_ferramentas_sup()
+
+    return render_template('homepage.html', qtd_sala=qtd_sala,  qtd_armario=qtd_armario, qtd_ferramenta=qtd_ferramenta, qtd_ferramenta_sup=qtd_ferramenta_sup)
 
 #############################################
 ######## PAGE SALAS #########################

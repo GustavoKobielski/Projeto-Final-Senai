@@ -18,3 +18,4 @@ bcrypt = Bcrypt(app)
 
 
 from app.views import homepage
+

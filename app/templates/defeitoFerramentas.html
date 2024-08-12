@@ -3,6 +3,66 @@
 {% block content %}
 {% include 'navbar.html' %}
 
-<h1>ferramentas</h1>
+<style>
+    .tituloDf {
+        display: flex;
+        justify-content:  center;
+        margin-top: 2%;
+        margin-right: 10%;
+        font-size: 2vw;
+    }
 
+    .txtDf {
+        display: flex;
+        justify-content:  center;
+        margin-top: 1%;
+        margin-left: 1%;
+        font-size: 25px;
+        color: #0000008f;
+    }
+
+    .botaoDF {
+        margin-left: 77.8%;
+        top: 10%;
+        background-color: #407DD8 ;
+        border-radius: 15px;
+        width: 17.3%;
+        padding: 0.3%;
+        position: absolute;
+    }
+
+    .botaoDF:hover {
+        cursor: pointer;
+    }
+
+    .txt-df {
+        font-size: 25px;
+        text-align: center;
+        justify-items: center;
+        
+    }
+
+    .iconDF > i {
+        font-size: 25px;
+        margin-right: 2%;
+    }
+
+    .iconDF > i .txtDF {
+        text-align: center;
+        display: flex;
+        justify-content: center;
+
+    }
+
+</style>
+
+<h1 class="tituloDf">Ferramentas  nescessitando suporte</h1>
+<p class="txtDf">Aqui você consegue pedir um suporte ou ver algum para as ferramentas.</p>
+
+<div class="botaoDF">
+    <a href="{{url_for('home')}}">
+        <span class="iconDF"><i class="bi bi-plus-circle"></i></span>
+        <span class="txt-df">Adicionar Ferramentas</span>
+    </a>
+</div>
 {% endblock %}

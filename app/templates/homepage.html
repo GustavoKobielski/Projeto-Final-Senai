@@ -43,16 +43,84 @@
         text-align: center;
     }
 
+    .escritArea2 {
+        height: 10rem ;
+        width: 17.9rem;
+        background-color: #407DD8;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        padding: 1rem;   
+    }
+    
+    ul.gst {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between; 
+        margin: 30rem 29%;
+        gap: 2rem; 
+        list-style-type: none; 
+        padding: 0; 
+    }
+    
+
+    li {
+        list-style-type: none;
+    }
+
+    .conteudo {
+        font-size: 25px;
+        color: #f5f5f5;
+        text-align: center;
+    }
+
+   
+
 </style>
 
 
 <h1 class="tituloHome">Home</h1>
 
 <div class="banner">
-    <img src="https://media.discordapp.net/attachments/1241227325765587067/1271920093936222318/bannerHome.png?ex=66b91765&is=66b7c5e5&hm=83bc1f0f8b1710e3af5d36ff76d5a6d0cb69f6f5238ebf7b618fb9be59931837&=&format=webp&quality=lossless" class="img5" alt="teste">
+    <img src="https://chat.google.com/u/0/api/get_attachment_url?url_type=FIFE_URL&content_type=image%2Fpng&attachment_token=AOo0EEW7S00HhCBQi8I4NHuvwKrnN5DXTmoRrbItrQ5JGGh7rfGSzJsnMJOfINj%2BzBE3M2BOrylGDo%2BTkOpHTjiJyLkChz0jjtJtvZ%2FZz0zSBNeXc7QYUEJdCLtVwGZ6sdlc0t8K2Px2xQPydXw5096jkuL%2BWzRpkrZeBZPfBsV%2BM8c9poDYuI0yGIkwTDNhxGG51%2FB348bPKa2lV5cvsd9suJuiWUxY9%2B1k%2FVxfTPxrkaSFJ8A7y2GYz5WVgizE1RrGxiqCTL3JiwbtJZR%2BOFYbqxzKcEUocIyLXTdNAWC3lEkIAoOu2GHLU%2FFd1%2B6YUuNy2fwZiv5EUUYDnU3pXFFBdWL5GpTVSHDROfFHcnadM38U8frbv1kCyvCA2Q4xcvyAVGGnW5JEv0hcJwkgMuCJoglUzUKJtxm%2BXb0t1jNsUiEPuyF8068WqRvEp%2BMjUfQJ9O%2BZh00ot4p1QQm8nKjIpEDKPrnZ92RrayCbE6OVEaMidWM33vMmsxs10JDW3K4F9cNNBylPd7zMLLBHp%2BMRgTK6cWRxk%2BiqiNSeiw3JCftDctxp%2BwUsJYbwxWV5QtMfEtJi1170DYD45O%2BXkCwC2ZH9m8ZECeg6uwIHkppl&sz=w1920-h953" class="img5" alt="teste">
     <div class="escritArea">
         <p class="escrita">Seja bem vindo ao sistema gerenciador de ferramentas</p>
     </div>
 </div>
+    <ul class="gst">
+        <li>
+            <div class="escritArea2">
+                <h1 class="conteudo">Total de Salas</h1>
+                <h1 class="conteudo">{{qtd_sala}}
+                </h1>
+            </div>
+        </li>   
 
+        <li>
+            <div class="escritArea2">
+                <h1 class="conteudo">Total de Armários</h1>
+                <h1 class="conteudo">{{qtd_armario}}
+            </div>
+        </li>
+
+        <li>
+            <div class="escritArea2">
+                <h1 class="conteudo">Total de Ferramentas</h1>
+                <h1 class="conteudo">{{qtd_ferramenta}}
+            </div>
+        </li>
+
+        <li>
+            <div class="escritArea2">
+                <h1 class="conteudo">Ferramentas Defeituosas</h1>
+                <h1 class="conteudo">{{qtd_ferramenta_sup}}
+            </div>
+        </li>
+
+        
+
+    </ul>
+    
 {% endblock %}
