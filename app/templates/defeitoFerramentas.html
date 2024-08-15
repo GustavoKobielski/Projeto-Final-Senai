@@ -41,7 +41,7 @@
     }
 
     .box {
-        width: 280px;
+        width: 250px;
         height: 280px;
         position: relative;
         display: flex;
@@ -51,6 +51,7 @@
         border: 1px solid #ddd;
         border-radius: 15px;
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        margin-top: 4%;
     }
 
     .group {
@@ -100,7 +101,26 @@
         top: 199px;
         font-size: 20px;
         height: 51px;
+        padding: 5%;
+        background-color: #02247b77;
+        width: 70%;
+        display: flex;
+        justify-content: center;
+        margin-left: 15%;
+        border-radius: 15px;
+        gap: 5%;
+        cursor: pointer;
     }
+
+    .txtInfo {
+        font-size: 18px;
+    }
+
+    .iconInfo {
+        font-size: 18px;
+    }
+
+ 
 
     .image {
         width: 100%;
@@ -109,11 +129,12 @@
         border-radius: 0 0 15px 15px;
         position: absolute;
     }
+
+    
 </style>
 
 <h1 class="tituloDf">Ferramentas necessitando suporte</h1>
 <p class="txtDf">Aqui você consegue pedir um suporte ou ver algum para as ferramentas.</p>
-
 {% if ferramentas %}
     <div class="container">
         {% for ferramenta in ferramentas %}
@@ -124,8 +145,10 @@
                     <img class="image" src="{{ ferramenta.foto_ferramenta_sup or 'https://chat.google.com/u/0/api/get_attachment_url?url_type=FIFE_URL&content_type=image%2Fpng&attachment_token=AOo0EEW2fM59rDKA2AHCn6wrRp0ujvRIFBVGZR2I0xMCGZzLmG69ry2dLmmpiT7%2FPiIvLFVmEHaFYQccEImxQZQmsm7y36XPvXDapygQevUfEpyS%2F%2FLwmZfEJcyGQuDbaM%2BfTZI1EhS2eWQXGJIHGeYcqyiin020RlHkgLi%2BKDn4i6GgOFAAfC0nYPZiDnAavJg8TBdh%2F4O2hdhccGyR3GmaIfKaRMz11fTDDrIUeu%2BybGhrCBL%2BPwfWCJscyGMt7VCl9LK2CoucHd3o53tedAFMcbLafH5BXt7rFIOYCKa0VmoJlbvBdt5cy2laN0qoaHcZBE99VvNENLTCBRV%2FhGDBdDGUi7iK0NCPT9CIGuxBL%2FeIzeStksol4sY891mv3d2loq2eObmY0kvE6HFagTtRlAYqs1TMo1AiGuOdNGvHnRrpMyNZau5%2B3pECEzckeVPaYEmcoLcB881EEkgu0Id6JzOE68WTbI3qHiA124cl%2BbK3momxaexa7eEnQTDcBT1htIUo386mMS%2BIykvvyFlHMmwiMyqNCYbB59v1LkW9mudx0pt8vY9r1uKVga%2FwdxOkghRP&sz=w1366-h641' }}" />
                     <div class="text-wrapper">{{ ferramenta.nome_ferramenta_sup }}</div>
                     <div class="total-de-arm-rios">
-                        Informações:<br />
-                        
+                        <a href="{{url_for('home')}}">
+                            <span class="iconInfo"><i class="bi bi-info-circle"></i></span>
+                            <span class="txtInfo">Informações</span>
+                        </a>
                     </div>
                 </div>
             </div>
