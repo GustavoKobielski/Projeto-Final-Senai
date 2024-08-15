@@ -100,7 +100,7 @@ def logs():
 
 @app.route('/gerenciamento/salas')
 def gerenciamento_salas():
-    return render_template('gerenciamento_salas.html')
+    return render_template('gerenciamentoSalas.html')
 
 #############################################
 ######## PAGE PESSOAS GERENCIAMENTO ###########
@@ -108,7 +108,7 @@ def gerenciamento_salas():
 
 @app.route('/gerenciamento/pessoas')
 def gerenciamento_pessoas():
-    return render_template('gerenciamento_pessoas.html')
+    return render_template('gerenciamentoessoas.html')
 
 #############################################
 ######## GOOGLE SETUP #######################

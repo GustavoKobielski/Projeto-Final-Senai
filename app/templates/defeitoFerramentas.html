@@ -5,136 +5,180 @@
 
 <style>
     body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-    }
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
 
-    .tituloDf {
-        margin: 0;
-        width: 70%;
-        font-size: 32px;
-        margin-top: 1%;
-        margin-left: 30%;
-        box-sizing: border-box;
-    }
+.tituloDf {
+    display: flex;
+    justify-content: center;
+    margin-top: 2%;
+    margin-right: 9.2%;
+    font-size: 40px;
+}
 
-    .txtDf {
-        margin: 0;
-        width: 70%;
-        font-size: 20px;
-        color: #0000008f;
-        margin-left: 30%;
-        box-sizing: border-box;
-    }
+.txtDf {
+    margin-top: 1%;
+    margin-left: 29.1%;
+    width: 70%;
+    font-size: 20px;
+    color: #0000008f;
+}
 
-    .container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px; /* Espaço entre as caixas */
-        justify-content: center; /* Alinha as caixas no centro do contêiner */
-        width: 70vw; /* Define a largura do contêiner como 70% da largura da tela */
-        margin-left: 30vw; /* Move o contêiner para a direita, deixando 30% da tela livre */
-        box-sizing: border-box;
-        max-height: 80vh; /* Define a altura máxima do contêiner */
-        overflow-y: auto; /* Adiciona uma barra de rolagem vertical se necessário */
-    }
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px; /* Espaço aumentado entre as caixas */
+    justify-content: flex-start; /* Alinha as caixas à esquerda */
+    width: 70vw; /* Define a largura do contêiner como 70% da largura da tela */
+    margin-left: 30vw; /* Mantém a posição do contêiner */
+    box-sizing: border-box;
+    max-height: 80vh; /* Define a altura máxima do contêiner */
+    overflow-y: auto; /* Adiciona uma barra de rolagem vertical se necessário */
+}
 
-    .box {
-        width: 250px;
-        height: 280px;
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        background-color: #fff;
-        border: 1px solid #ddd;
+.box {
+    width: 250px;
+    height: 280px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 4%;
+    margin-left: 0; /* Remover margem negativa */
+}
+
+.group {
+    width: 100%;
+    height: 100%;
+    color: white;
+    position: relative;
+}
+
+.rectangle,
+.div {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    border-radius: 15px;
+}
+
+.rectangle {
+    background-color: #3f7cd7;
+    height: 100%;
+    box-shadow: 0px 7px 4px #00000040;
+}
+
+.div {
+    height: 124px;
+    background-color: #d9d9d9;
+    border-radius: 15px 15px 0 0;
+    top: 0;
+}
+
+    .botaoDF {
+        margin-left: 78.1%;
+        top: 13%;
+        background-color: #407DD8;
         border-radius: 15px;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-        margin-top: 4%;
-    }
-
-    .group {
-        width: 100%;
-        height: 100%;
-        color: white;
-        position: relative;
-    }
-
-    .rectangle,
-    .div {
+        width: 17%;
+        padding: 0.3%;
         position: absolute;
-        width: 100%;
-        left: 0;
-        border-radius: 15px;
+        display: flex; 
+        justify-content: center; 
+        gap: 10px; /* Espaçamento entre o ícone e o texto */
     }
 
-    .rectangle {
-        background-color: #3f7cd7;
-        height: 100%;
-        box-shadow: 0px 7px 4px #00000040;
-    }
-
-    .div {
-        height: 124px;
-        background-color: #d9d9d9;
-        border-radius: 15px 15px 0 0;
-        top: 0;
-    }
-
-    .text-wrapper {
-        position: absolute;
-        width: 100%;
-        color: #fff;
-        font-family: "Poppins-Regular", Helvetica;
-        text-align: center;
-        top: 138px;
-        font-size: 24px;
-    }
-
-    .total-de-arm-rios {
-        position: absolute;
-        width: 100%;
-        color: #fff;
-        font-family: "Poppins-Regular", Helvetica;
-        text-align: center;
-        top: 199px;
-        font-size: 20px;
-        height: 51px;
-        padding: 5%;
-        background-color: #02247b77;
-        width: 70%;
+    .botaoDF a {
         display: flex;
-        justify-content: center;
-        margin-left: 15%;
-        border-radius: 15px;
-        gap: 5%;
+        align-items: center; 
+        text-decoration: none; 
+        color: white; 
+    }
+
+    .botaoDF:hover {
         cursor: pointer;
     }
 
-    .txtInfo {
-        font-size: 18px;
+    .iconDF {
+        position: relative;
+        left: -10px;
+        font-size: 24px; 
+        margin-right: 8px; 
     }
 
-    .iconInfo {
-        font-size: 18px;
+    .txt-df {
+        position: relative;
+        font-size: 22px;
+        right: 10px;
     }
 
- 
+.text-wrapper {
+    position: absolute;
+    width: 100%;
+    color: #fff;
+    font-family: "Poppins-Regular", Helvetica;
+    text-align: center;
+    top: 138px;
+    font-size: 24px;
+}
 
-    .image {
-        width: 100%;
-        height: 132px;
-        object-fit: cover;
-        border-radius: 0 0 15px 15px;
-        position: absolute;
-    }
+.total-de-arm-rios {
+    position: absolute;
+    width: 100%;
+    color: #fff;
+    font-family: "Poppins-Regular", Helvetica;
+    text-align: center;
+    top: 199px;
+    font-size: 20px;
+    height: 51px;
+    padding: 5%;
+    background-color: #02247b77;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+    gap: 5%;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.txtInfo {
+    font-size: 18px;
+}
+
+.iconInfo {
+    font-size: 18px;
+}
+
+.image {
+    width: 100%;
+    height: 132px;
+    object-fit: cover;
+    border-radius: 0 0 15px 15px;
+    position: absolute;
+}
+
 
     
 </style>
 
 <h1 class="tituloDf">Ferramentas necessitando suporte</h1>
 <p class="txtDf">Aqui você consegue pedir um suporte ou ver algum para as ferramentas.</p>
+
+    <div class="botaoDF">
+        <a href="{{url_for('home')}}">
+            <span class="iconDF"><i class="bi bi-plus-circle"></i></span>
+            <span class="txt-df">Adicionar Ferramentas</span>
+        </a>
+    </div>
+
 {% if ferramentas %}
     <div class="container">
         {% for ferramenta in ferramentas %}
@@ -152,6 +196,8 @@
                     </div>
                 </div>
             </div>
+
+
         {% endfor %}
     </div>
 {% else %}

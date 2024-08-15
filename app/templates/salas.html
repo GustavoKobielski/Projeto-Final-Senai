@@ -11,34 +11,33 @@
     }
 
     .tituloSalas {
-        margin: 0;
-        width: 70%;
-        font-size: 32px;
-        margin-top: 1%;
-        margin-left: 30%;
-        box-sizing: border-box;
+        display: flex;
+        justify-content:  center;
+        margin-top: 2%;
+        margin-right: 36.8%;
+        font-size: 40px;
     }
 
     .txtSalas {
-        margin: 0;
+        margin-top: 1%;
+        margin-left: 29.1%;
         width: 70%;
         font-size: 20px;
         color: #0000008f;
-        margin-left: 30%;
-        box-sizing: border-box;
     }
 
     .container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px; /* Espaço entre as caixas */
-        justify-content: center; /* Alinha as caixas no centro do contêiner */
-        width: 70vw; /* Define a largura do contêiner como 70% da largura da tela */
-        margin-left: 30vw; /* Move o contêiner para a direita, deixando 30% da tela livre */
-        box-sizing: border-box;
-        max-height: 80vh; /* Define a altura máxima do contêiner */
-        overflow-y: auto; /* Adiciona uma barra de rolagem vertical se necessário */
-    }
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Espaço entre as caixas */
+    justify-content: flex-start; /* Alinha os itens à esquerda */
+    width: 70vw; /* Define a largura do contêiner como 70% da largura da tela */
+    margin-left: 30vw; /* Mantém a posição do contêiner */
+    box-sizing: border-box;
+    max-height: 80vh; /* Define a altura máxima do contêiner */
+    overflow-y: auto; /* Adiciona uma barra de rolagem vertical se necessário */
+}
+
 
     .box {
         width: 250px;
@@ -101,34 +100,79 @@
         font-size: 20px;
         height: 51px;
     }
-.image {
+    .image {
         width: 100%;
         height: 132px;
         object-fit: cover;
         border-radius: 0 0 15px 15px;
         position: absolute;
-        
     }
+
+    .botaoSalas {
+        margin-left: 81.2%;
+        top: 13%;
+        background-color: #407DD8;
+        border-radius: 15px;
+        width: 14%;
+        padding: 0.3%;
+        position: absolute;
+        display: flex; 
+        justify-content: center; 
+        gap: 10px; 
+    }
+
+    .botaoSalas a {
+        display: flex;
+        align-items: center; 
+        text-decoration: none; 
+        color: white; 
+    }
+
+    .botaoSalas:hover {
+        cursor: pointer;
+    }
+
+    .iconSalas {
+        position: relative;
+        left: -10px;
+        font-size: 24px; 
+        margin-right: 8px; 
+    }
+
+    .txt-salas {
+        position: relative;
+        font-size: 22px;
+        right: 10px;
+    }
+
+    
 </style>
 
 <h1 class="tituloSalas">Salas</h1>
 <p class="txtSalas">Aqui você consegue ver as salas existentes, e clicar nelas para verificar os armários.</p>
 
-<div class="container">
-    {% for sala in salas %}
-        <div class="box">
-            <div class="group">
-                <div class="rectangle"></div>
-                <div class="div"></div>
-                <img class="image" src="{{ sala.foto_sala or 'https://chat.google.com/u/0/api/get_attachment_url?url_type=FIFE_URL&content_type=image%2Fpng&attachment_token=AOo0EEXq7Tsdql5W%2BU5GJKZBn18yTK3o1b8JoiRUnSW%2BW9SSI3KRws8%2FPFy8Kbq2CdjtxXwnyRWBzc4K%2FjcT5U2HOEngVpu85x3T%2Fiwc0w%2FcIZuhZfSh0plqeUGQPPonhLb9B8vZbp2du%2Fud1foZiHCMFOdFTxIGEEQ%2B%2Fa4exvJA%2FZynrfeYuG7exVK%2BCR%2Fmd%2FUXf9csGniCUACF7H7cD1UlKnzSyeoYIfTwUxraEgSnznFyXWqdlbv2AIuTxUqKR9Mbk%2BxtoEShw8OVDlbu2sSJG0L8O8YC5RRC9G%2BJyuhIhc471R%2B45FBYunGuRl4zC6AOCqsJO91yCCpZAgp5hNcMTKBZDHRjMdVk%2Fh8SgIMFssdYGjVD18An1ZE5swejVnfhR5y69XF3GIwyYqC7TTzhQjGG%2BImp%2FSftgnKFJGyj%2B5fEV0SyJKMSJqJLSLE1WHR5kxT0o4lKj8o3UZJ0upisJo1TAaULM%2BGXpJ%2Bq2rIKapjQRdHzytpE6K88wRLhAV1fIv0bY6TIuBAJL0XAkM4%2B3iqLj7rw4Yx8d89SwhECWJ4qBw%2BeeQJkzWb%2FEWp%2FqCkBlQ%3D%3D&sz=w1366-h641' }}" />
-                <div class="text-wrapper">{{ sala.nome_sala }}</div>
-                <div class="total-de-arm-rios">
-                    Total de armários:<br />
-                    {{ sala.capacidade_armario }}
+    <div class="botaoSalas">
+        <a href="{{url_for('home')}}">
+            <span class="iconSalas"><i class="bi bi-plus-circle"></i></span>
+            <span class="txt-salas">Adicionar Salas</span>
+        </a>
+    </div>
+
+    <div class="container">
+        {% for sala in salas %}
+            <div class="box">
+                <div class="group">
+                    <div class="rectangle"></div>
+                    <div class="div"></div>
+                    <img class="image" src="{{ sala.foto_sala or url_for('static', filename='imgs/bannerHome.png')  }}" />
+                    <div class="text-wrapper">{{ sala.nome_sala }}</div>
+                    <div class="total-de-arm-rios">
+                        Total de armários:<br />
+                        {{ sala.capacidade_armario }}
+                    </div>
                 </div>
             </div>
-        </div>
-    {% endfor %}
-</div>
+        {% endfor %}
+    </div>
 
 {% endblock %}
