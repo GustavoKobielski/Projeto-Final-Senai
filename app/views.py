@@ -62,7 +62,9 @@ def home():
 
 @app.route('/salas/')
 def salas():
-    return render_template('salas.html')
+
+    salas = Salas.query.all()
+    return render_template('salas.html', salas=salas)
 
 
 #############################################
@@ -79,7 +81,8 @@ def armarios():
 
 @app.route('/ferramentas/')
 def ferramentas():
-    return render_template('defeitoFerramentas.html')
+    ferramentas = FerramentasSuporte.query.all()
+    return render_template('defeitoFerramentas.html', ferramentas=ferramentas)
 
 #############################################
 ######## PAGE LOGS ##########################

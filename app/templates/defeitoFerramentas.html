@@ -4,65 +4,135 @@
 {% include 'navbar.html' %}
 
 <style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
     .tituloDf {
-        display: flex;
-        justify-content:  center;
-        margin-top: 2%;
-        margin-right: 10%;
-        font-size: 2vw;
+        margin: 0;
+        width: 70%;
+        font-size: 32px;
+        margin-top: 1%;
+        margin-left: 30%;
+        box-sizing: border-box;
     }
 
     .txtDf {
-        display: flex;
-        justify-content:  center;
-        margin-top: 1%;
-        margin-left: 1%;
-        font-size: 25px;
+        margin: 0;
+        width: 70%;
+        font-size: 20px;
         color: #0000008f;
+        margin-left: 30%;
+        box-sizing: border-box;
     }
 
-    .botaoDF {
-        margin-left: 77.8%;
-        top: 10%;
-        background-color: #407DD8 ;
+    .container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px; /* Espaço entre as caixas */
+        justify-content: center; /* Alinha as caixas no centro do contêiner */
+        width: 70vw; /* Define a largura do contêiner como 70% da largura da tela */
+        margin-left: 30vw; /* Move o contêiner para a direita, deixando 30% da tela livre */
+        box-sizing: border-box;
+        max-height: 80vh; /* Define a altura máxima do contêiner */
+        overflow-y: auto; /* Adiciona uma barra de rolagem vertical se necessário */
+    }
+
+    .box {
+        width: 280px;
+        height: 280px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #fff;
+        border: 1px solid #ddd;
         border-radius: 15px;
-        width: 17.3%;
-        padding: 0.3%;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .group {
+        width: 100%;
+        height: 100%;
+        color: white;
+        position: relative;
+    }
+
+    .rectangle,
+    .div {
+        position: absolute;
+        width: 100%;
+        left: 0;
+        border-radius: 15px;
+    }
+
+    .rectangle {
+        background-color: #3f7cd7;
+        height: 100%;
+        box-shadow: 0px 7px 4px #00000040;
+    }
+
+    .div {
+        height: 124px;
+        background-color: #d9d9d9;
+        border-radius: 15px 15px 0 0;
+        top: 0;
+    }
+
+    .text-wrapper {
+        position: absolute;
+        width: 100%;
+        color: #fff;
+        font-family: "Poppins-Regular", Helvetica;
+        text-align: center;
+        top: 138px;
+        font-size: 24px;
+    }
+
+    .total-de-arm-rios {
+        position: absolute;
+        width: 100%;
+        color: #fff;
+        font-family: "Poppins-Regular", Helvetica;
+        text-align: center;
+        top: 199px;
+        font-size: 20px;
+        height: 51px;
+    }
+
+    .image {
+        width: 100%;
+        height: 132px;
+        object-fit: cover;
+        border-radius: 0 0 15px 15px;
         position: absolute;
     }
-
-    .botaoDF:hover {
-        cursor: pointer;
-    }
-
-    .txt-df {
-        font-size: 25px;
-        text-align: center;
-        justify-items: center;
-        
-    }
-
-    .iconDF > i {
-        font-size: 25px;
-        margin-right: 2%;
-    }
-
-    .iconDF > i .txtDF {
-        text-align: center;
-        display: flex;
-        justify-content: center;
-
-    }
-
 </style>
 
-<h1 class="tituloDf">Ferramentas  nescessitando suporte</h1>
+<h1 class="tituloDf">Ferramentas necessitando suporte</h1>
 <p class="txtDf">Aqui você consegue pedir um suporte ou ver algum para as ferramentas.</p>
 
-<div class="botaoDF">
-    <a href="{{url_for('home')}}">
-        <span class="iconDF"><i class="bi bi-plus-circle"></i></span>
-        <span class="txt-df">Adicionar Ferramentas</span>
-    </a>
-</div>
+{% if ferramentas %}
+    <div class="container">
+        {% for ferramenta in ferramentas %}
+            <div class="box">
+                <div class="group">
+                    <div class="rectangle"></div>
+                    <div class="div"></div>
+                    <img class="image" src="{{ ferramenta.foto_ferramenta_sup or 'https://chat.google.com/u/0/api/get_attachment_url?url_type=FIFE_URL&content_type=image%2Fpng&attachment_token=AOo0EEW2fM59rDKA2AHCn6wrRp0ujvRIFBVGZR2I0xMCGZzLmG69ry2dLmmpiT7%2FPiIvLFVmEHaFYQccEImxQZQmsm7y36XPvXDapygQevUfEpyS%2F%2FLwmZfEJcyGQuDbaM%2BfTZI1EhS2eWQXGJIHGeYcqyiin020RlHkgLi%2BKDn4i6GgOFAAfC0nYPZiDnAavJg8TBdh%2F4O2hdhccGyR3GmaIfKaRMz11fTDDrIUeu%2BybGhrCBL%2BPwfWCJscyGMt7VCl9LK2CoucHd3o53tedAFMcbLafH5BXt7rFIOYCKa0VmoJlbvBdt5cy2laN0qoaHcZBE99VvNENLTCBRV%2FhGDBdDGUi7iK0NCPT9CIGuxBL%2FeIzeStksol4sY891mv3d2loq2eObmY0kvE6HFagTtRlAYqs1TMo1AiGuOdNGvHnRrpMyNZau5%2B3pECEzckeVPaYEmcoLcB881EEkgu0Id6JzOE68WTbI3qHiA124cl%2BbK3momxaexa7eEnQTDcBT1htIUo386mMS%2BIykvvyFlHMmwiMyqNCYbB59v1LkW9mudx0pt8vY9r1uKVga%2FwdxOkghRP&sz=w1366-h641' }}" />
+                    <div class="text-wrapper">{{ ferramenta.nome_ferramenta_sup }}</div>
+                    <div class="total-de-arm-rios">
+                        Informações:<br />
+                        
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>Nenhuma ferramenta encontrada.</p>
+{% endif %}
+
 {% endblock %}
