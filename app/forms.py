@@ -3,7 +3,7 @@ from app import db, bcrypt,app
 from wtforms import StringField, SubmitField, PasswordField, FileField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
 
-from app.models import Salas, User
+from app.models import Armario, Ferramentas, FerramentasSuporte, Salas, User
 
 # Cadastro do Usuario
 class UserForm(FlaskForm):
@@ -60,6 +60,52 @@ class SalasForm(FlaskForm):
         db.session.commit()
         return salas
     
+
+class ArmarioForm(FlaskForm):
+    numero = StringField('Numero do Armario', validators=[DataRequired()])
+    capacidade_ferramentas = StringField('Capacidade de Ferramentas no Armario', validators=[DataRequired()])
+
+    def save(self):
+        armario = Armario(
+            nome_sala = self.numero.data,
+            capacidade_armarios = self.capacidade_ferramentas.data
+        )
+        db.session.add(armario)
+        db.session.commit()
+        return armario   
+    
+
+class FerramentaForm(FlaskForm):
+    nome_ferramenta = StringField('Nome da Ferramenta', validators=[DataRequired()])
+    total_ferramenta = StringField('Total de Ferramentas', validators=[DataRequired()])
+
+    def save(self):
+        ferramenta = Ferramentas(
+            nome_sala = self.nome_ferramenta.data,
+            capacidade_armarios = self.total_ferramenta.data
+        )
+        db.session.add(ferramenta)
+        db.session.commit()
+        return ferramenta   
+
+class FerramentaSuporteForm(FlaskForm):
+    nome_ferramenta_sup = StringField('Nome da Ferramenta', validators=[DataRequired()])
+    sala_ferramenta_sup = StringField('Sala que está a Ferramenta', validators=[DataRequired()])
+    defeito_ferramenta_sup = StringField('Defeito da Ferramenta', validators=[DataRequired()])
+    data_ocorrido_sup = StringField('Data que foi danificada', validators=[DataRequired()])
+    ocorrido_ferramenta_sup = StringField('Ocorrido', validators=[DataRequired()])
+
+    def save(self):
+        ferramentaSuporte = FerramentasSuporte(
+            nome_ferramenta_sup = self.nome_ferramenta_sup.data,
+            sala_ferramenta_sup = self.sala_ferramenta_sup.data,
+            defeito_ferramenta_sup = self.defeito_ferramenta_sup,
+            data_ocorrido_sup = self.data_ocorrido_sup.data,
+            ocorrido_ferramenta_sup = self.ocorrido_ferramenta_sup.data
+        )
+        db.session.add(ferramentaSuporte)
+        db.session.commit()
+        return ferramentaSuporte   
 
 
 
