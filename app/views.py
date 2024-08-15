@@ -162,3 +162,11 @@ def authorize_google():
 
     # Se houver algum problema, redirecione o usuário para uma página de erro ou para a página de login novamente
     return redirect(url_for('login_google'))
+
+#############################################
+######## Adicionar Ferramentas ##############
+#############################################
+
+@app.route('/adicionar/ferramentas')
+def adicionarFerramentas():
+    return render_template('adicionarFerramentas.html')
