@@ -1,7 +1,7 @@
 from app import app, db
 from flask import render_template, url_for, request, redirect, jsonify
 from flask_login import login_user, logout_user, current_user, login_required
-from app.forms import LoginForm, UserForm
+from app.forms import CadastrarSala, LoginForm, UserForm
 from app.models import User, Salas, Armario, Ferramentas, FerramentasSuporte
 
 
@@ -62,9 +62,12 @@ def home():
 
 @app.route('/salas/')
 def salas():
-
+    form = CadastrarSala()
+    if form.validate_on_submit():
+        form.save()
+        return redirect(url_for('salas'))
     salas = Salas.query.all()
-    return render_template('salas.html', salas=salas)
+    return render_template('salas.html', salas=salas, form=form)
 
 
 #############################################
@@ -109,6 +112,15 @@ def gerenciamento_salas():
 @app.route('/gerenciamento/pessoas')
 def gerenciamento_pessoas():
     return render_template('gerenciamentoessoas.html')
+
+
+#############################################
+######## PAGE PROFILE #######################
+#############################################
+
+@app.route('/profile/')
+def user_profile():
+    return render_template('profile.html')
 
 #############################################
 ######## GOOGLE SETUP #######################

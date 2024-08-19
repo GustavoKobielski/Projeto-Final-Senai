@@ -165,6 +165,25 @@
     position: absolute;
 }
 
+@media(min-width:1360px) and (max-width: 1500px) {
+
+    .tituloDF {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        margin-right: 10%;
+        left: 50%;
+    }
+
+    .txt-df {
+        font-size: 18px;
+    }
+
+    .iconDF {
+        font-size: 18px;
+    }
+}
+
 
     
 </style>
@@ -186,7 +205,7 @@
                 <div class="group">
                     <div class="rectangle"></div>
                     <div class="div"></div>
-                    <img class="image" src="{{ ferramenta.foto_ferramenta_sup or 'https://chat.google.com/u/0/api/get_attachment_url?url_type=FIFE_URL&content_type=image%2Fpng&attachment_token=AOo0EEW2fM59rDKA2AHCn6wrRp0ujvRIFBVGZR2I0xMCGZzLmG69ry2dLmmpiT7%2FPiIvLFVmEHaFYQccEImxQZQmsm7y36XPvXDapygQevUfEpyS%2F%2FLwmZfEJcyGQuDbaM%2BfTZI1EhS2eWQXGJIHGeYcqyiin020RlHkgLi%2BKDn4i6GgOFAAfC0nYPZiDnAavJg8TBdh%2F4O2hdhccGyR3GmaIfKaRMz11fTDDrIUeu%2BybGhrCBL%2BPwfWCJscyGMt7VCl9LK2CoucHd3o53tedAFMcbLafH5BXt7rFIOYCKa0VmoJlbvBdt5cy2laN0qoaHcZBE99VvNENLTCBRV%2FhGDBdDGUi7iK0NCPT9CIGuxBL%2FeIzeStksol4sY891mv3d2loq2eObmY0kvE6HFagTtRlAYqs1TMo1AiGuOdNGvHnRrpMyNZau5%2B3pECEzckeVPaYEmcoLcB881EEkgu0Id6JzOE68WTbI3qHiA124cl%2BbK3momxaexa7eEnQTDcBT1htIUo386mMS%2BIykvvyFlHMmwiMyqNCYbB59v1LkW9mudx0pt8vY9r1uKVga%2FwdxOkghRP&sz=w1366-h641' }}" />
+                    <img class="image" src="{{ sala.foto_sala or url_for('static', filename='imgs/bannerHome.png') }}" />
                     <div class="text-wrapper">{{ ferramenta.nome_ferramenta_sup }}</div>
                     <div class="total-de-arm-rios">
                         <a href="{{url_for('home')}}">

@@ -75,13 +75,13 @@
         }
 
         .botaoNB a {
-            display: flex; 
-            align-items: center; 
-            text-align: center; 
+            display: flex;
+            align-items: center;
+            text-align: center;
             font-size: 32.5px;
             margin-left: 6.5%;
-            color: inherit; 
-            text-decoration: none; 
+            color: inherit;
+            text-decoration: none;
         }
 
         .botaoNB.ativo {
@@ -119,39 +119,40 @@
 
         .pessoa {
             display: flex;
-            align-items: center; 
-            justify-content: flex-end; 
-            margin: 1% 95%; 
+            align-items: center;
+            justify-content: flex-end;
+            margin: 1% 95%;
         }
-        
+
         .iconHeader {
-            margin-right: 20px; 
-            font-size: 24px;
+            margin-right: 20px;
+            font-size: 32px;
         }
-        
+
         .txt-header {
             margin: 0;
-            font-size: 18px;
-            white-space: nowrap; 
+            font-size: 22px;
+            white-space: nowrap;
             color: #1D1D1D;
         }
-        
+
         .Seta {
             position: relative;
-            margin-left: 20px; 
+            margin-left: 20px;
             font-size: 24px;
             color: #1D1D1D;
+            cursor: pointer;
         }
-        
+
         .linhaHeader {
             border-bottom: 1.0px solid #1D1D1D;
-            margin: 0 auto; 
+            margin: 0 auto;
             width: 66.1%;
             position: relative;
             left: 12%;
-           
+
         }
-        
+
         .sair {
             width: 6.5%;
             max-height: 6%;
@@ -161,24 +162,57 @@
             top: 6%;
             left: 88.6%;
             position: absolute;
-            border: 0.4px solid #1D1D1D;
-            border-radius: 15px;
+            border-radius: 5px 5px 10px 10px;
+            display: none;
+            cursor: pointer;
+        }
+
+        .juncao {
+            display: flex;
+            gap: 10px;
+        }
+
+        .popup-link {
+            color: black;
+            text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 10%;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
         }
 
         .txt-sair {
             font-size: 25px;
-            font-weight: 500px;
+            font-weight: 500;
         }
 
         .iconSair {
             font-size: 25px;
-            font-weight: 500px;
+            font-weight: 500;
         }
 
+        #popup {
+            user-select: none;
+        }
 
+        @media(min-width: 1300px) and (max-width: 1500px) {
+            .barraLateral {
+                width: 25%;
+            }
+
+            .botaoNB {
+                width: 90%;
+            }
+
+            .txt-link {
+                font-size: 18px;
+            }
+
+            .botaoNB .icon {
+                font-size: 25px;
+            }
+        }
     </style>
 </head>
 
@@ -186,8 +220,10 @@
     <div class="header">
         <div class="pessoa">
             <span class="iconHeader"><i class="bi bi-person-circle"></i></span>
-            <p class="txt-header">{{ current_user.puxar_nome() }}</p>
-            <span class="Seta"><i class="bi bi-chevron-compact-down"></i></span>
+            <a href="{{url_for('user_profile')}}" class="txt-header">{{ current_user.puxar_nome() }}</a>
+            <span class="Seta" onclick="togglePopup()">
+                <i class="bi bi-chevron-compact-down"></i>
+            </span>
         </div>
         <div class="linhaHeader"></div>
     </div>
@@ -257,19 +293,81 @@
 
 
 
-    <div class="sair">
-        <span class="iconSair"><i class="bi bi-box-arrow-right"></i></span>
-        <span class="txt-sair">Sair</span>
+    <div id="popup" class="sair">
+        <a href="{{url_for('logout')}}" class="popup-link" onclick="togglePopup()">
+            <div class="juncao">
+                <span class="iconSair"><i class="bi bi-box-arrow-right"></i></span>
+                <span class="txt-sair">Sair</span>
+            </div>
+        </a>
     </div>
 
 
 
 
+
     <script>
-        function _0x2a7c(){const _0x30d82f=['23231cvfbDH','location','10561720ojtwUd','6654270bChaKc','8xoQGvO','click','forEach','ativo','onload','20IJgdkp','9629397wHbOdY','19011322bvLmrA','querySelector','remove','.botaoNB','add','12IGwajO','3640497vHVduw','classList','6qgPLwR','addEventListener','1013076OeebvL','querySelectorAll','href'];_0x2a7c=function(){return _0x30d82f;};return _0x2a7c();}function _0xc631(_0x1fa0fb,_0x5a5465){const _0x2a7c8c=_0x2a7c();return _0xc631=function(_0xc6316,_0x18882e){_0xc6316=_0xc6316-0xbb;let _0x4590e7=_0x2a7c8c[_0xc6316];return _0x4590e7;},_0xc631(_0x1fa0fb,_0x5a5465);}const _0x3b51ab=_0xc631;(function(_0x55f09a,_0x2e9635){const _0x25664e=_0xc631,_0x3818d1=_0x55f09a();while(!![]){try{const _0x35f538=parseInt(_0x25664e(0xd0))/0x1*(parseInt(_0x25664e(0xc1))/0x2)+parseInt(_0x25664e(0xcd))/0x3*(-parseInt(_0x25664e(0xc8))/0x4)+parseInt(_0x25664e(0xbb))/0x5*(parseInt(_0x25664e(0xcb))/0x6)+parseInt(_0x25664e(0xc9))/0x7+-parseInt(_0x25664e(0xbc))/0x8*(parseInt(_0x25664e(0xc2))/0x9)+-parseInt(_0x25664e(0xd2))/0xa+parseInt(_0x25664e(0xc3))/0xb;if(_0x35f538===_0x2e9635)break;else _0x3818d1['push'](_0x3818d1['shift']());}catch(_0xb3d7e3){_0x3818d1['push'](_0x3818d1['shift']());}}}(_0x2a7c,0xa4264));var menuItem=document[_0x3b51ab(0xce)](_0x3b51ab(0xc6));function highlightActiveLink(){const _0x50cacd=_0x3b51ab;menuItem[_0x50cacd(0xbe)](_0x44d47e=>{const _0x52b9de=_0x50cacd;_0x44d47e['classList'][_0x52b9de(0xc5)]('ativo');const _0x3f86e8=_0x44d47e['querySelector']('a');_0x3f86e8&&_0x3f86e8[_0x52b9de(0xcf)]===window[_0x52b9de(0xd1)][_0x52b9de(0xcf)]&&_0x44d47e['classList'][_0x52b9de(0xc7)]('ativo');});}menuItem[_0x3b51ab(0xbe)](_0x1d9ae0=>_0x1d9ae0[_0x3b51ab(0xcc)](_0x3b51ab(0xbd),function(_0x45096a){const _0x4cc490=_0x3b51ab;_0x45096a['preventDefault'](),menuItem[_0x4cc490(0xbe)](_0x48e5ca=>{const _0x25f747=_0x4cc490;_0x48e5ca[_0x25f747(0xca)][_0x25f747(0xc5)]('ativo');}),this[_0x4cc490(0xca)]['add'](_0x4cc490(0xbf));const _0x2c2a98=this[_0x4cc490(0xc4)]('a');_0x2c2a98&&(window[_0x4cc490(0xd1)]['href']=_0x2c2a98[_0x4cc490(0xcf)]);})),window[_0x3b51ab(0xc0)]=highlightActiveLink;
+        var menuItem = document.querySelectorAll('.botaoNB');
+
+
+        function highlightActiveLink() {
+            menuItem.forEach((item) => {
+                item.classList.remove('ativo');
+                const link = item.querySelector('a');
+                if (link && link.href === window.location.href) {
+                    item.classList.add('ativo');
+                }
+            });
+        }
+
+
+        menuItem.forEach((item) =>
+            item.addEventListener('click', function (event) {
+                event.preventDefault();
+                menuItem.forEach((item) => {
+                    item.classList.remove('ativo');
+                });
+                this.classList.add('ativo');
+
+                const link = this.querySelector('a');
+                if (link) {
+                    window.location.href = link.href;
+                }
+            })
+        );
+
+        window.onload = highlightActiveLink;
+
+
+        function togglePopup() {
+            var popup = document.getElementById('popup');
+            if (popup.style.display === 'block') {
+                popup.style.display = 'none';
+            } else {
+                popup.style.display = 'block';
+            }
+        }
+
+        // Fechar o popup ao clicar fora dele
+        document.addEventListener('click', function (event) {
+            var popup = document.getElementById('popup');
+            if (popup.style.display === 'block') {
+                var targetElement = event.target;
+                // Verifica se o clique foi fora do popup
+                if (targetElement.closest('#popup') === null && targetElement.closest('.Seta') === null) {
+                    popup.style.display = 'none';
+                }
+            }
+        });
+
+        // Adicionar evento de clique ao ícone para parar a propagação do evento
+        document.querySelector('.iconSair').addEventListener('click', function (event) {
+            event.stopPropagation();
+            togglePopup();
+        });
 
     </script>
-   
+
 </body>
 
 </html>
