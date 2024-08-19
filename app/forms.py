@@ -3,7 +3,7 @@ from app import db, bcrypt,app
 from wtforms import StringField, SubmitField, PasswordField, FileField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
 
-from app.models import User
+from app.models import User, Salas
 
 # Cadastro do Usuario
 class UserForm(FlaskForm):
@@ -44,3 +44,19 @@ class LoginForm(FlaskForm):
                     raise Exception('Senha Incorreta!!!')
         else:
             raise Exception('Usuario nao encontrado')
+        
+
+class CadastrarSala(FlaskForm):
+    nome_sala = StringField('Nome da Sala', validators=[DataRequired()])
+    capacidade_armario = StringField('Quantos armarios tem a sala', validators=[DataRequired()])
+    btnSubmit = SubmitField('Cadastrar')
+
+
+    def save(self):
+        sala = Salas(
+            nome_sala = self.nome_sala.data,
+            capacidade_armario = self.capacidade_armario.data
+        )
+        db.session.add(sala)
+        db.session.commit()
+        return sala

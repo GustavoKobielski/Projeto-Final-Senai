@@ -5,16 +5,15 @@
 {% include 'navbar.html' %}
 
 <style>
-
     body {
         font-family: Arial, sans-serif;
         margin: 0;
         padding: 0;
     }
-    
+
     .tituloHome {
         display: flex;
-        justify-content:  center;
+        justify-content: center;
         margin-top: 2%;
         margin-right: 36.8%;
         font-size: 40px;
@@ -31,18 +30,19 @@
         width: 22%;
         height: 25rem;
         padding: 4rem;
-        margin: -22.3% 73%;
+        margin: -21.83% 73%;
         position: relative;
         border-bottom-right-radius: 10px;
         border-top-right-radius: 10px;
-        display: flex; 
-        align-items: center; 
-        justify-content: center; 
-        text-align: center; 
-        clip-path: polygon(15% 0, 100% 0, 100% 100%, 0 100%); /* Corta na diagonal */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        clip-path: polygon(15% 0, 100% 0, 100% 100%, 0 100%);
+        /* Corta na diagonal */
 
     }
-    
+
 
     .escrita {
         font-size: 25px;
@@ -51,7 +51,7 @@
     }
 
     .escritArea2 {
-        height: 10rem ;
+        height: 10rem;
         width: 17.9rem;
         background-color: #407DD8;
         display: flex;
@@ -59,19 +59,19 @@
         align-items: center;
         justify-content: center;
         border-radius: 10px;
-        padding: 1rem;   
+        padding: 1rem;
     }
-    
+
     ul.gst {
         display: flex;
         flex-direction: row;
-        justify-content: space-between; 
+        justify-content: space-between;
         margin: 30rem 29%;
-        gap: 2rem; 
-        list-style-type: none; 
-        padding: 0; 
+        gap: 2rem;
+        list-style-type: none;
+        padding: 0;
     }
-    
+
 
     li {
         list-style-type: none;
@@ -83,6 +83,35 @@
         text-align: center;
     }
 
+    @media(min-width: 1300px) and (max-width: 1500px) {
+
+        .tituloHome {
+            position: relative;
+            left: 1%;
+        }
+
+        .img5 {
+            height: 45%;
+        }
+
+        .escritArea {
+            position: absolute;
+            bottom: 70.7%;
+            ;
+            height: 46.49%;
+            left: 0.2%;
+        }
+
+        ul.gst {
+            margin-left: 29.2%;
+            margin-top: 6%;
+        }
+
+        .escritArea2 {
+            width: 12.5rem;
+            height: 8rem;
+        }
+    }
 </style>
 
 
@@ -94,38 +123,38 @@
         <p class="escrita">Seja bem vindo ao sistema gerenciador de ferramentas</p>
     </div>
 </div>
-    <ul class="gst">
-        <li>
-            <div class="escritArea2">
-                <h1 class="conteudo">Total de Salas</h1>
-                <h1 class="conteudo">{{qtd_sala}}
-                </h1>
-            </div>
-        </li>   
+<ul class="gst">
+    <li>
+        <div class="escritArea2">
+            <h1 class="conteudo">Total de Salas</h1>
+            <h1 class="conteudo">{{qtd_sala}}
+            </h1>
+        </div>
+    </li>
 
-        <li>
-            <div class="escritArea2">
-                <h1 class="conteudo">Total de Armários</h1>
-                <h1 class="conteudo">{{qtd_armario}}
-            </div>
-        </li>
+    <li>
+        <div class="escritArea2">
+            <h1 class="conteudo">Total de Armários</h1>
+            <h1 class="conteudo">{{qtd_armario}}
+        </div>
+    </li>
 
-        <li>
-            <div class="escritArea2">
-                <h1 class="conteudo">Total de Ferramentas</h1>
-                <h1 class="conteudo">{{qtd_ferramenta}}
-            </div>
-        </li>
+    <li>
+        <div class="escritArea2">
+            <h1 class="conteudo">Total de Ferramentas</h1>
+            <h1 class="conteudo">{{qtd_ferramenta}}
+        </div>
+    </li>
 
-        <li>
-            <div class="escritArea2">
-                <h1 class="conteudo">Ferramentas Defeituosas</h1>
-                <h1 class="conteudo">{{qtd_ferramenta_sup}}
-            </div>
-        </li>
+    <li>
+        <div class="escritArea2">
+            <h1 class="conteudo">Ferramentas Defeituosas</h1>
+            <h1 class="conteudo">{{qtd_ferramenta_sup}}
+        </div>
+    </li>
 
-        
 
-    </ul>
-    
+
+</ul>
+
 {% endblock %}

@@ -5,81 +5,88 @@
 
 <style>
     body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-}
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
 
-.tituloDf {
-    display: flex;
-    justify-content: center;
-    margin-top: 2%;
-    margin-right: 9.2%;
-    font-size: 40px;
-}
+    .tituloDf {
+        display: flex;
+        justify-content: center;
+        margin-top: 2%;
+        margin-right: 9.2%;
+        font-size: 40px;
+    }
 
-.txtDf {
-    margin-top: 1%;
-    margin-left: 29.1%;
-    width: 70%;
-    font-size: 20px;
-    color: #0000008f;
-}
+    .txtDf {
+        margin-top: 1%;
+        margin-left: 29.1%;
+        width: 70%;
+        font-size: 20px;
+        color: #0000008f;
+    }
 
-.container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 30px; /* Espaço aumentado entre as caixas */
-    justify-content: flex-start; /* Alinha as caixas à esquerda */
-    width: 70vw; /* Define a largura do contêiner como 70% da largura da tela */
-    margin-left: 30vw; /* Mantém a posição do contêiner */
-    box-sizing: border-box;
-    max-height: 80vh; /* Define a altura máxima do contêiner */
-    overflow-y: auto; /* Adiciona uma barra de rolagem vertical se necessário */
-}
+    .container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+        /* Espaço aumentado entre as caixas */
+        justify-content: flex-start;
+        /* Alinha as caixas à esquerda */
+        width: 70vw;
+        /* Define a largura do contêiner como 70% da largura da tela */
+        margin-left: 30vw;
+        /* Mantém a posição do contêiner */
+        box-sizing: border-box;
+        max-height: 80vh;
+        /* Define a altura máxima do contêiner */
+        overflow-y: auto;
+        /* Adiciona uma barra de rolagem vertical se necessário */
+    }
 
-.box {
-    width: 250px;
-    height: 280px;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 15px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    margin-top: 4%;
-    margin-left: 0; /* Remover margem negativa */
-}
+    .box {
+        width: 250px;
+        height: 280px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 15px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        margin-top: 4%;
+        margin-left: 0;
+        /* Remover margem negativa */
+    }
 
-.group {
-    width: 100%;
-    height: 100%;
-    color: white;
-    position: relative;
-}
+    .group {
+        width: 100%;
+        height: 100%;
+        color: white;
+        position: relative;
+    }
 
-.rectangle,
-.div {
-    position: absolute;
-    width: 100%;
-    left: 0;
-    border-radius: 15px;
-}
+    .rectangle,
+    .div {
+        position: absolute;
+        width: 100%;
+        left: 0;
+        border-radius: 15px;
+    }
 
-.rectangle {
-    background-color: #3f7cd7;
-    height: 100%;
-    box-shadow: 0px 7px 4px #00000040;
-}
+    .rectangle {
+        background-color: #3f7cd7;
+        height: 100%;
+        box-shadow: 0px 7px 4px #00000040;
+    }
 
-.div {
-    height: 124px;
-    background-color: #d9d9d9;
-    border-radius: 15px 15px 0 0;
-    top: 0;
-}
+    .div {
+        height: 124px;
+        background-color: #d9d9d9;
+        border-radius: 15px 15px 0 0;
+        top: 0;
+    }
 
     .botaoDF {
         margin-left: 78.1%;
@@ -89,16 +96,17 @@
         width: 17%;
         padding: 0.3%;
         position: absolute;
-        display: flex; 
-        justify-content: center; 
-        gap: 10px; /* Espaçamento entre o ícone e o texto */
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        /* Espaçamento entre o ícone e o texto */
     }
 
     .botaoDF a {
         display: flex;
-        align-items: center; 
-        text-decoration: none; 
-        color: white; 
+        align-items: center;
+        text-decoration: none;
+        color: white;
     }
 
     .botaoDF:hover {
@@ -108,8 +116,8 @@
     .iconDF {
         position: relative;
         left: -10px;
-        font-size: 24px; 
-        margin-right: 8px; 
+        font-size: 24px;
+        margin-right: 8px;
     }
 
     .txt-df {
@@ -118,90 +126,106 @@
         right: 10px;
     }
 
-.text-wrapper {
-    position: absolute;
-    width: 100%;
-    color: #fff;
-    font-family: "Poppins-Regular", Helvetica;
-    text-align: center;
-    top: 138px;
-    font-size: 24px;
-}
+    .text-wrapper {
+        position: absolute;
+        width: 100%;
+        color: #fff;
+        font-family: "Poppins-Regular", Helvetica;
+        text-align: center;
+        top: 138px;
+        font-size: 24px;
+    }
 
-.total-de-arm-rios {
-    position: absolute;
-    width: 100%;
-    color: #fff;
-    font-family: "Poppins-Regular", Helvetica;
-    text-align: center;
-    top: 199px;
-    font-size: 20px;
-    height: 51px;
-    padding: 5%;
-    background-color: #02247b77;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 15px;
-    gap: 5%;
-    cursor: pointer;
-    box-sizing: border-box;
-}
+    .total-de-arm-rios {
+        position: absolute;
+        width: 100%;
+        color: #fff;
+        font-family: "Poppins-Regular", Helvetica;
+        text-align: center;
+        top: 199px;
+        font-size: 20px;
+        height: 51px;
+        padding: 5%;
+        background-color: #02247b77;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 15px;
+        gap: 5%;
+        cursor: pointer;
+        box-sizing: border-box;
+    }
 
-.txtInfo {
-    font-size: 18px;
-}
+    .txtInfo {
+        font-size: 18px;
+    }
 
-.iconInfo {
-    font-size: 18px;
-}
+    .iconInfo {
+        font-size: 18px;
+    }
 
-.image {
-    width: 100%;
-    height: 132px;
-    object-fit: cover;
-    border-radius: 0 0 15px 15px;
-    position: absolute;
-}
+    .image {
+        width: 100%;
+        height: 132px;
+        object-fit: cover;
+        border-radius: 0 0 15px 15px;
+        position: absolute;
+    }
 
+    @media(min-width:1360px) and (max-width: 1500px) {
 
-    
+        .tituloDF {
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            margin-right: 10%;
+            left: 50%;
+        }
+
+        .txt-df {
+            font-size: 18px;
+        }
+
+        .iconDF {
+            font-size: 18px;
+        }
+    }
 </style>
 
 <h1 class="tituloDf">Ferramentas necessitando suporte</h1>
 <p class="txtDf">Aqui você consegue pedir um suporte ou ver algum para as ferramentas.</p>
 
-    <div class="botaoDF">
-        <a href="{{url_for('home')}}">
-            <span class="iconDF"><i class="bi bi-plus-circle"></i></span>
-            <span class="txt-df">Adicionar Ferramentas</span>
-        </a>
-    </div>
+<div class="botaoDF">
+    <a href="{{url_for('home')}}">
+        <span class="iconDF"><i class="bi bi-plus-circle"></i></span>
+        <span class="txt-df">Adicionar Ferramentas</span>
+    </a>
+</div>
 
 {% if ferramentas %}
-    <div class="container">
-        {% for ferramenta in ferramentas %}
-            <div class="box">
-                <div class="group">
-                    <div class="rectangle"></div>
-                    <div class="div"></div>
-                    <img class="image" src="{{ ferramenta.foto_ferramenta_sup or 'https://chat.google.com/u/0/api/get_attachment_url?url_type=FIFE_URL&content_type=image%2Fpng&attachment_token=AOo0EEW2fM59rDKA2AHCn6wrRp0ujvRIFBVGZR2I0xMCGZzLmG69ry2dLmmpiT7%2FPiIvLFVmEHaFYQccEImxQZQmsm7y36XPvXDapygQevUfEpyS%2F%2FLwmZfEJcyGQuDbaM%2BfTZI1EhS2eWQXGJIHGeYcqyiin020RlHkgLi%2BKDn4i6GgOFAAfC0nYPZiDnAavJg8TBdh%2F4O2hdhccGyR3GmaIfKaRMz11fTDDrIUeu%2BybGhrCBL%2BPwfWCJscyGMt7VCl9LK2CoucHd3o53tedAFMcbLafH5BXt7rFIOYCKa0VmoJlbvBdt5cy2laN0qoaHcZBE99VvNENLTCBRV%2FhGDBdDGUi7iK0NCPT9CIGuxBL%2FeIzeStksol4sY891mv3d2loq2eObmY0kvE6HFagTtRlAYqs1TMo1AiGuOdNGvHnRrpMyNZau5%2B3pECEzckeVPaYEmcoLcB881EEkgu0Id6JzOE68WTbI3qHiA124cl%2BbK3momxaexa7eEnQTDcBT1htIUo386mMS%2BIykvvyFlHMmwiMyqNCYbB59v1LkW9mudx0pt8vY9r1uKVga%2FwdxOkghRP&sz=w1366-h641' }}" />
-                    <div class="text-wrapper">{{ ferramenta.nome_ferramenta_sup }}</div>
-                    <div class="total-de-arm-rios">
-                        <a href="{{url_for('home')}}">
-                            <span class="iconInfo"><i class="bi bi-info-circle"></i></span>
-                            <span class="txtInfo">Informações</span>
-                        </a>
-                    </div>
-                </div>
+<div class="container">
+    {% for ferramenta in ferramentas %}
+    <div class="box">
+        <div class="group">
+            <div class="rectangle"></div>
+            <div class="div"></div>
+            <img class="image" src="{{ sala.foto_sala or url_for('static', filename='imgs/bannerHome.png') }}" />
+            <div class="text-wrapper">{{ ferramenta.nome_ferramenta_sup }}</div>
+            <div class="total-de-arm-rios">
+                <a href="{{url_for('home')}}">
+                    <span class="iconInfo"><i class="bi bi-info-circle"></i></span>
+                    <span class="txtInfo">Informações</span>
+                </a>
             </div>
-
-
-        {% endfor %}
+        </div>
     </div>
+
+
+    {% endfor %}
+</div>
 {% else %}
-    <p>Nenhuma ferramenta encontrada.</p>
+<p>Nenhuma ferramenta encontrada.</p>
 {% endif %}
 
 {% endblock %}
