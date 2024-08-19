@@ -1,14 +1,43 @@
 from app import app, db
-from flask import render_template, url_for, request, redirect, jsonify
+from flask import render_template, send_from_directory, url_for, request, redirect, jsonify
 from flask_login import login_user, logout_user, current_user, login_required
-from app.forms import CadastrarSala, LoginForm, UserForm
+from app.forms import CadastrarSala, LoginForm, UserForm, CadastrarSuporte
 from app.models import User, Salas, Armario, Ferramentas, FerramentasSuporte
+from datetime import datetime
 
+
+from werkzeug.utils import secure_filename
+
+
+
+
+import os
+
+
+
+
+UPLOAD_FOLDER = os.path.join(app.root_path, 'static', 'uploads')
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'jfif', 'gif'}
+
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+
+
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 #Pagina Inicial
 @app.route('/', methods=['GET', 'POST'])
 def homepage():
     form = LoginForm()
+
 
     # LOGIN
     if form.validate_on_submit():
@@ -16,15 +45,19 @@ def homepage():
         login_user(user, remember=True)
         return redirect(url_for('home'))
 
+
     return render_template('index.html', form=form, usuario=current_user)
+
 
 @app.context_processor
 def inject_user():
     return dict(current_user=current_user)
 
+
 #############################################
 ######## CADASTRO/LOGIN SETUP ###############
 #############################################
+
 
 #Função de Cadastro
 @app.route('/cadastro/', methods=['GET', 'POST'])
@@ -36,6 +69,7 @@ def cadastro():
         return redirect(url_for('homepage'))
     return render_template('cadastro.html', form=form)
 
+
 # Função de dar logout
 @app.route('/sair/')
 @login_required
@@ -43,9 +77,11 @@ def logout():
     logout_user()
     return redirect(url_for('homepage'))
 
+
 #############################################
 ######## PAGE HOMES #########################
 #############################################
+
 
 @app.route('/home/')
 def home():
@@ -54,18 +90,35 @@ def home():
     qtd_ferramenta = Ferramentas.contar_ferramentas()
     qtd_ferramenta_sup = FerramentasSuporte.contar_ferramentas_sup()
 
+
     return render_template('homepage.html', qtd_sala=qtd_sala,  qtd_armario=qtd_armario, qtd_ferramenta=qtd_ferramenta, qtd_ferramenta_sup=qtd_ferramenta_sup)
+
 
 #############################################
 ######## PAGE SALAS #########################
 #############################################
 
-@app.route('/salas/')
+
+@app.route('/salas/', methods=['GET', 'POST'])
 def salas():
     form = CadastrarSala()
     if form.validate_on_submit():
-        form.save()
+        file = request.files.get('foto_sala')  # Obtém o arquivo do request
+        filename = None
+
+
+        # Verifica se o arquivo é permitido e se tem um nome
+        if file and file.filename != '' and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+           
+            # Salva o arquivo no diretório de uploads
+            file.save(file_path)
+       
+        # Salva os dados da sala, incluindo o nome do arquivo
+        form.save(filename)
         return redirect(url_for('salas'))
+   
     salas = Salas.query.all()
     return render_template('salas.html', salas=salas, form=form)
 
@@ -74,57 +127,73 @@ def salas():
 ######## PAGE ARMARIOS ######################
 #############################################
 
+
 @app.route('/armarios/')
 def armarios():
     return render_template('armarios.html')
+
 
 #############################################
 ######## PAGE FERRAMENTAS ###################
 #############################################
 
+
 @app.route('/ferramentas/')
 def ferramentas():
     ferramentas = FerramentasSuporte.query.all()
-    return render_template('defeitoFerramentas.html', ferramentas=ferramentas)
+    form = CadastrarSuporte()
+    return render_template('defeitoFerramentas.html', ferramentas=ferramentas, form=form)
+
 
 #############################################
 ######## PAGE LOGS ##########################
 #############################################
 
+
 @app.route('/logs/')
 def logs():
     return render_template('logs.html')
 
+
 ##### gerenciamento
+
 
 #############################################
 ######## PAGE SALAS GERENCIAMENTO ###########
 #############################################
 
+
 @app.route('/gerenciamento/salas')
 def gerenciamento_salas():
     return render_template('gerenciamentoSalas.html')
 
+
 #############################################
 ######## PAGE PESSOAS GERENCIAMENTO ###########
 #############################################
+
 
 @app.route('/gerenciamento/pessoas')
 def gerenciamento_pessoas():
     return render_template('gerenciamentoessoas.html')
 
 
+
+
 #############################################
 ######## PAGE PROFILE #######################
 #############################################
+
 
 @app.route('/profile/')
 def user_profile():
     return render_template('profile.html')
 
+
 #############################################
 ######## GOOGLE SETUP #######################
 #############################################
+
 
 from authlib.integrations.flask_client import OAuth
 oauth = OAuth(app)
@@ -141,15 +210,18 @@ google = oauth.register(
     server_metadata_url='https://accounts.google.com/.well-known/openid-configuration'  # URL dos metadados do servidor do Google OAuth
 )
 
+
 @app.route('/login/google')
 def login_google():
     redirect_uri = url_for('authorize_google', _external=True)
     return google.authorize_redirect(redirect_uri, prompt='select_account')
 
+
 @app.route('/login/google/callback')
 def authorize_google():
     token = google.authorize_access_token()
     print("Token de Acesso do Google:", token)
+
 
     # Verifique se o token foi obtido corretamente
     if 'access_token' in token:
@@ -157,10 +229,12 @@ def authorize_google():
         resp = google.get('https://www.googleapis.com/oauth2/v1/userinfo', token=token)
         user_info = resp.json()
 
+
         # Verifique se as informações do usuário foram obtidas corretamente
         if user_info:
             # Verifique se o usuário já existe no banco de dados com base no e-mail fornecido pelo Google
             user = User.query.filter_by(email=user_info['email']).first()
+
 
             if not user:
                 # Se o usuário não existir, crie um novo registro no banco de dados
@@ -169,18 +243,23 @@ def authorize_google():
                 db.session.add(user)
                 db.session.commit()
 
+
             # Faça login do usuário
             login_user(user, remember=True)
+
 
             # Redirecione o usuário para a página principal
             return redirect(url_for('homepage'))
 
+
     # Se houver algum problema, redirecione o usuário para uma página de erro ou para a página de login novamente
     return redirect(url_for('login_google'))
+
 
 #############################################
 ######## Adicionar Ferramentas ##############
 #############################################
+
 
 @app.route('/adicionar/ferramentas')
 def adicionarFerramentas():
