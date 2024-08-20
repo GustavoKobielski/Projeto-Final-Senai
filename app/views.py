@@ -1,11 +1,28 @@
 from app import app, db, socketio
-from flask import render_template, url_for, request, redirect, jsonify
+from flask import session, send_from_directory, render_template, url_for, request, redirect, jsonify, flash
 from flask_login import login_user, logout_user, current_user, login_required
 from flask_socketio import join_room, leave_room, emit
-from app.forms import CadastrarSala, LoginForm, UserForm
+from app.forms import CadastrarSala, CadastrarSuporte, EditarInformacoes, LoginForm, UserForm
 from app.models import User, Salas, Armario, Ferramentas, FerramentasSuporte, Message, Group, GroupUser, GroupMessage
 
 from datetime import datetime
+
+from werkzeug.utils import secure_filename
+
+import os
+
+UPLOAD_FOLDER = os.path.join(app.root_path, 'static', 'uploads')
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'jfif', 'gif'}
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 #Pagina Inicial
@@ -17,6 +34,7 @@ def homepage():
     if form.validate_on_submit():
         user = form.login()
         login_user(user, remember=True)
+        
         return redirect(url_for('home'))
 
     return render_template('index.html', form=form, usuario=current_user)
@@ -63,12 +81,26 @@ def home():
 ######## PAGE SALAS #########################
 #############################################
 
-@app.route('/salas/')
+@app.route('/salas/', methods=['GET', 'POST'])
 def salas():
     form = CadastrarSala()
     if form.validate_on_submit():
-        form.save()
+        file = request.files.get('foto_sala')  # Obtém o arquivo do request
+        filename = None
+
+
+        # Verifica se o arquivo é permitido e se tem um nome
+        if file and file.filename != '' and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+           
+            # Salva o arquivo no diretório de uploads
+            file.save(file_path)
+       
+        # Salva os dados da sala, incluindo o nome do arquivo
+        form.save(filename)
         return redirect(url_for('salas'))
+   
     salas = Salas.query.all()
     return render_template('salas.html', salas=salas, form=form)
 
@@ -88,7 +120,8 @@ def armarios():
 @app.route('/ferramentas/')
 def ferramentas():
     ferramentas = FerramentasSuporte.query.all()
-    return render_template('defeitoFerramentas.html', ferramentas=ferramentas)
+    form = CadastrarSuporte()
+    return render_template('defeitoFerramentas.html', ferramentas=ferramentas, form=form)
 
 #############################################
 ######## PAGE LOGS ##########################
@@ -121,9 +154,33 @@ def gerenciamento_pessoas():
 ######## PAGE PROFILE #######################
 #############################################
 
-@app.route('/profile/')
-def user_profile():
-    return render_template('profile.html')
+@app.route('/profile', methods=['GET', 'POST'])
+@login_required
+def editar_perfil():
+    form = EditarInformacoes(obj=current_user) 
+    if form.validate_on_submit():
+        try:
+            file = request.files.get('foto')  # Obtém o arquivo do request
+            filename = None
+
+            # Verifica se o arquivo é permitido e se tem um nome
+            if file and file.filename != '' and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+
+                # Salva o arquivo no diretório de uploads
+                file.save(file_path)
+            
+            # Salva as alterações no perfil do usuário
+            form.save(current_user, filename)
+
+            flash('Perfil atualizado com sucesso!', 'success')
+            return redirect(url_for('editar_perfil'))
+        except ValueError as e:
+            flash(str(e), 'danger')
+    
+    return render_template('profile.html', form=form)
+
 
 #############################################
 ######## GOOGLE SETUP #######################
@@ -350,9 +407,7 @@ def handle_create_group(data):
 
     db.session.commit()
 
-    # Notificar todos os clientes sobre o novo grupo
-    print('Emitting group_created event')
-    # Emite para todos os clientes conectados, ajustando para o contexto atual
+
     socketio.emit('group_created', {'group_id': group.id, 'group_name': group_name}, room=None)
 
 @socketio.on('load_group_messages')
@@ -438,3 +493,4 @@ def get_last_active_display(user):
     else:
         hours_ago = minutes_ago // 60
         return f"{hours_ago} hora(s) atrás"
+    

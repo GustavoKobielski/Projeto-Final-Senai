@@ -1,13 +1,19 @@
 {% extends 'base.html' %}
 
+
+
+
 {% block content %}
 {% include 'navbar.html' %}
+
+
+
 
 <style>
     body {
         font-family: Arial, sans-serif;
-        margin: 0;
         padding: 0;
+        overflow: auto;
     }
 
     .tituloSalas {
@@ -18,6 +24,9 @@
         font-size: 40px;
     }
 
+
+
+
     .txtSalas {
         margin-top: 1%;
         margin-left: 29.1%;
@@ -26,21 +35,26 @@
         color: #0000008f;
     }
 
+
+
+
     .container {
         display: flex;
         flex-wrap: wrap;
-        gap: 20px;
+        gap: 4%;
         justify-content: flex-start;
         width: 70vw;
         margin-left: 28.5vw;
         box-sizing: border-box;
-        max-height: 80vh;
-        overflow-y: auto;
+        
     }
 
+
+
+
     .box {
-        width: 250px;
-        height: 270px;
+        width: 20.5vw;
+        height: 40vh;
         position: relative;
         display: flex;
         flex-direction: column;
@@ -49,8 +63,12 @@
         border: 1px solid #ddd;
         border-radius: 15px;
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-        margin-top: 4%;
+        margin-top: 2%;
+        margin-bottom: 3%;
     }
+
+
+
 
     .group {
         width: 100%;
@@ -58,6 +76,9 @@
         color: white;
         position: relative;
     }
+
+
+
 
     .rectangle,
     .div {
@@ -67,11 +88,17 @@
         border-radius: 15px;
     }
 
+
+
+
     .rectangle {
         background-color: #3f7cd7;
         height: 100%;
         box-shadow: 0px 7px 4px #00000040;
     }
+
+
+
 
     .div {
         height: 124px;
@@ -79,6 +106,9 @@
         border-radius: 15px 15px 0 0;
         top: 0;
     }
+
+
+
 
     .text-wrapper,
     .total-de-arm-rios {
@@ -89,16 +119,25 @@
         text-align: center;
     }
 
+
+
+
     .text-wrapper {
         top: 138px;
         font-size: 24px;
     }
+
+
+
 
     .total-de-arm-rios {
         top: 199px;
         font-size: 20px;
         height: 51px;
     }
+
+
+
 
     .image {
         width: 100%;
@@ -108,6 +147,12 @@
         border-top-left-radius: 15px;
         border-top-right-radius: 15px;
     }
+
+
+
+
+
+
 
 
     .botaoSalas {
@@ -123,6 +168,9 @@
         gap: 10px;
     }
 
+
+
+
     .botaoSalas a {
         display: flex;
         align-items: center;
@@ -130,9 +178,15 @@
         color: white;
     }
 
+
+
+
     .botaoSalas:hover {
         cursor: pointer;
     }
+
+
+
 
     .iconSalas {
         position: relative;
@@ -141,11 +195,17 @@
         margin-right: 8px;
     }
 
+
+
+
     .txt-salas {
         position: relative;
         font-size: 22px;
         right: 10px;
     }
+
+
+
 
     .containerSala {
         position: fixed;
@@ -161,6 +221,9 @@
         border: 1.5px solid black;
         display: none;
     }
+   
+
+
 
 
     .tituloSala {
@@ -169,22 +232,41 @@
         margin-bottom: 20px;
     }
 
+
+
+
     .content {
         display: flex;
         align-items: flex-start;
         justify-content: space-between;
     }
 
-    .foto {
-        width: 40%;
-        display: flex;
-        justify-content: center;
-    }
 
-    .addFoto {
-        max-width: 70%;
-        height: auto;
+
+
+    .foto {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 50%;
     }
+   
+    .addFoto {
+        width: 40%;        
+        height: auto; /* Mantém a proporção da imagem */
+        margin-bottom: 10px; /* Espaço entre a imagem e o botão */
+    }
+   
+    .addImg {
+        position: relative;
+        left: -85%;
+        margin-top: 10px; /* Espaço acima do botão, se necessário */
+        font-size: 1vw;
+    }
+   
+
+
+
 
     .addFoto:hover {
         cursor: pointer;
@@ -201,11 +283,17 @@
         width: 100%;
     }
 
+
+
+
     input::placeholder {
         font-size: 16px !important;
         color: #999 !important;
         text-align: left;
     }
+
+
+
 
     .buttonSala {
         width: 100%;
@@ -219,11 +307,15 @@
         border: none;
     }
 
+
+
+
     .corSala {
         color: #407DD8;
         font-size: 20px;
         margin-top: 2%;
     }
+
 
     .closePopup {
         position: absolute;
@@ -234,22 +326,23 @@
         color: #407DD8;
     }
 
+
     .overlay {
         position: fixed;
         top: 0;
         left: 0;
         width: 100vw;
         height: 100vh;
-        background-color: rgba(0, 0, 0, 0.5);
-        /* Cor preta com opacidade */
-        z-index: 1000;
-        /* Abaixo do popup */
-        display: none;
-        /* Inicialmente oculto */
+        background-color: rgba(0, 0, 0, 0.5); /* Cor preta com opacidade */
+        z-index: 1000; /* Abaixo do popup */
+        display: none; /* Inicialmente oculto */
     }
 
-    @media(min-width: 1300px) and (max-width: 1500px) {
 
+
+
+    @media(min-width: 1300px) and (max-width: 1670px) and (min-height: 598px) and (max-height:900px) {
+       
         .tituloSalas {
             position: relative;
             left: 1%;
@@ -266,11 +359,42 @@
         .container {
             margin-left: 28.2vw;
         }
+
+        .box {
+            width: 20.2vw;
+            height: 43vh;
+        }
+
+        body {
+            margin-bottom: 2%;
+        }
+
+        .botaoSalas {
+            position: absolute;
+            top: 15%;
+        }
+
+        .image {
+            position: relative;
+            left: -0.0.8%;
+            bottom: 9.8%;
+        }
+
     }
+
+
+
+
 </style>
+
+
+
 
 <h1 class="tituloSalas">Salas</h1>
 <p class="txtSalas">Aqui você consegue ver as salas existentes, e clicar nelas para verificar os armários.</p>
+
+
+
 
 <div class="botaoSalas">
     <a href="javascript:void(0)" id="openPopup">
@@ -279,35 +403,43 @@
     </a>
 </div>
 
+
+
+
 <div class="container">
     {% for sala in salas %}
-    <div class="box">
-        <div class="group">
-            <div class="rectangle"></div>
-            <div class="div"></div>
-            <img class="image" src="{{ sala.foto_sala or url_for('static', filename='imgs/bannerHome.png') }}" />
-            <div class="text-wrapper">{{ sala.nome_sala }}</div>
-            <div class="total-de-arm-rios">
-                Total de armários:<br />
-                {{ sala.capacidade_armario }}
+        <div class="box">
+            <div class="group">
+                <a href="{{url_for('editar_perfil')}}">
+                    <div class="rectangle"></div>
+                    <div class="div"></div>
+                    <img class="image" src="{{ url_for('uploaded_file', filename=sala.foto_sala) if sala.foto_sala else url_for('static', filename='imgs/bannerHome.png') }}" />
+                    <div class="text-wrapper">{{ sala.nome_sala }}</div>
+                    <div class="total-de-arm-rios">
+                        Total de armários:<br />
+                        {{ sala.capacidade_armario }}
+                    </div>
+                </a>
             </div>
         </div>
-    </div>
     {% endfor %}
 </div>
 
 <div class="overlay" id="overlay"></div>
 
+
 <div class="containerSala" id="popupSala">
     <h1 class="tituloSala">Adicionar Sala</h1>
     <span class="closePopup" id="closePopup">&times;</span>
 
+
     <div class="content">
         <div class="foto">
-            <img src="{{ url_for('static', filename='imgs/addFoto.png')}}" class="addFoto" alt="Adicionar Foto">
+            <img class="addFoto" src="{{ url_for('static', filename='imgs/addFoto.png')}}" alt="">
+           
         </div>
 
-        <form action="" method="POST" class="formSalas">
+        <form action="" method="POST" class="formSalas" enctype="multipart/form-data">
             {{form.csrf_token}}
 
             {{form.nome_sala.label(class="corSala", style="margin-bottom: 10px; display:block;")}}
@@ -316,10 +448,15 @@
             {{form.capacidade_armario.label(class="corSala", style="margin-bottom: 10px; display:block;")}}
             {{form.capacidade_armario(class="form-control", placeholder='Quantos armários tem a sala')}}
 
+            {{ form.foto_sala(class="addImg", style="display: block;") }}
+
             {{form.btnSubmit(class="buttonSala")}}
         </form>
     </div>
 </div>
+
+
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -328,11 +465,17 @@
         const popup = document.getElementById('popupSala');
         const overlay = document.getElementById('overlay');
 
+
+
+
         // Função para abrir o popup e o overlay
         function openPopup() {
             popup.style.display = 'block';
             overlay.style.display = 'block';
         }
+
+
+
 
         // Função para fechar o popup e o overlay
         function closePopup() {
@@ -340,22 +483,32 @@
             overlay.style.display = 'none';
         }
 
+
+
+
         // Abre o popup ao clicar no botão "Adicionar Salas"
-        openPopupBtn.addEventListener('click', function (event) {
+        openPopupBtn.addEventListener('click', function(event) {
             event.preventDefault(); // Evita que o link redirecione
             openPopup(); // Exibe o popup e o overlay
         });
 
+
+
+
         // Fecha o popup ao clicar no botão "×"
-        closePopupBtn.addEventListener('click', function () {
+        closePopupBtn.addEventListener('click', function() {
             closePopup(); // Oculta o popup e o overlay
         });
 
+
+
+
         // Fecha o popup ao clicar fora do conteúdo
-        overlay.addEventListener('click', function () {
+        overlay.addEventListener('click', function() {
             closePopup(); // Oculta o popup e o overlay
         });
     });
 </script>
+
 
 {% endblock %}

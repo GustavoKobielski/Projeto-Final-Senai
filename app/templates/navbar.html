@@ -10,7 +10,6 @@
         body {
             height: 100%;
             margin: 0;
-            overflow: hidden;
         }
 
         .barraLateral {
@@ -213,14 +212,24 @@
                 font-size: 25px;
             }
         }
+
+        .iconHeader img {
+    width: 8vh; /* Define a largura com base na altura da viewport */
+    height: 8vh; /* Define a altura com base na altura da viewport */
+    border-radius: 50%;
+    object-fit: cover; /* Mantém a imagem cortada, mas sem distorcer */
+    object-position: center; /* Centraliza a imagem no contêiner */
+}
     </style>
 </head>
 
 <body>
     <div class="header">
         <div class="pessoa">
-            <span class="iconHeader"><i class="bi bi-person-circle"></i></span>
-            <a href="{{url_for('user_profile')}}" class="txt-header">{{ current_user.puxar_nome() }}</a>
+            <span class="iconHeader">
+                <img src="{{ current_user.obter_foto() }}" alt="{{ current_user.puxar_nome() }}" class="profile-img">
+            </span>
+            <a href="{{url_for('editar_perfil')}}" class="txt-header">{{ current_user.puxar_nome() }}</a>
             <span class="Seta" onclick="togglePopup()">
                 <i class="bi bi-chevron-compact-down"></i>
             </span>
