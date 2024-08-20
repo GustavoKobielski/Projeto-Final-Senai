@@ -26,30 +26,6 @@
         margin: 1% 29%;
     }
 
-    .escritArea {
-        background-color: #407DD8;
-        width: 22%;
-        height: 25rem;
-        padding: 4rem;
-        margin: -21.83% 73%;
-        position: relative;
-        border-bottom-right-radius: 10px;
-        border-top-right-radius: 10px;
-        display: flex; 
-        align-items: center; 
-        justify-content: center; 
-        text-align: center; 
-        clip-path: polygon(15% 0, 100% 0, 100% 100%, 0 100%); /* Corta na diagonal */
-
-    }
-    
-
-    .escrita {
-        font-size: 25px;
-        color: #f5f5f5;
-        text-align: center;
-    }
-
     .escritArea2 {
         height: 10rem ;
         width: 17.9rem;
@@ -62,7 +38,7 @@
         padding: 1rem;   
     }
     
-    ul.gst {
+    ul.infos {
         display: flex;
         flex-direction: row;
         justify-content: space-between; 
@@ -83,7 +59,7 @@
         text-align: center;
     }
 
-    @media(min-width: 1300px) and (max-width: 1500px) and (min-height: 760px) and (max-height:900px) {
+    @media(min-width: 1300px) and (max-width: 1500px) and (min-height: 598px) and (max-height:900px) {
 
         .tituloHome {
             position: relative;
@@ -91,7 +67,8 @@
         }
 
         .img5 {
-            height: 40vh;
+            width: 66%;
+            height: 18rem;
         }
 
         .escritArea {
@@ -102,16 +79,23 @@
             height: 40vh;
         }
 
-        ul.gst {
+        ul.infos {
             margin-left: 29.2%;
             margin-top: 4%;
             display: flex;
             gap: 3rem;
+            margin: 4rem 29%;
         }
 
         .escritArea2 {
-            width: 12.5rem;
-            height: 8rem;
+            width: 11.9rem;
+            height: 7.5rem;
+            position: relative;
+            top: -2.5rem;
+        }
+
+        .conteudo {
+            font-size: 20px;
         }
     }
 
@@ -122,11 +106,8 @@
 
 <div class="banner">
     <img src="{{ url_for('static', filename='imgs/bannerHome.png') }}" class="img5" alt="teste">
-    <div class="escritArea">
-        <p class="escrita">Seja bem vindo ao sistema gerenciador de ferramentas</p>
-    </div>
 </div>
-    <ul class="gst">
+    <ul class="infos">
         <li>
             <div class="escritArea2">
                 <h1 class="conteudo">Total de Salas</h1>
