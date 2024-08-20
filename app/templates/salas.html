@@ -341,7 +341,7 @@
 
 
 
-    @media(min-width: 1300px) and (max-width: 1670px) and (min-height: 760px) and (max-height:900px) {
+    @media(min-width: 1300px) and (max-width: 1670px) and (min-height: 598px) and (max-height:900px) {
        
         .tituloSalas {
             position: relative;
@@ -362,11 +362,22 @@
 
         .box {
             width: 20.2vw;
-            height: 40vh;
+            height: 43vh;
         }
 
         body {
-            margin-bottom: 10%;
+            margin-bottom: 2%;
+        }
+
+        .botaoSalas {
+            position: absolute;
+            top: 15%;
+        }
+
+        .image {
+            position: relative;
+            left: -0.0.8%;
+            bottom: 9.8%;
         }
 
     }
@@ -397,36 +408,29 @@
 
 <div class="container">
     {% for sala in salas %}
-    <div class="box">
-        <div class="group">
-            <div class="rectangle"></div>
-            <div class="div"></div>
-            <img class="image" src="{{ url_for('uploaded_file', filename=sala.foto_sala) if sala.foto_sala else url_for('static', filename='imgs/bannerHome.png') }}" />
-            <div class="text-wrapper">{{ sala.nome_sala }}</div>
-            <div class="total-de-arm-rios">
-                Total de armários:<br />
-                {{ sala.capacidade_armario }}
+        <div class="box">
+            <div class="group">
+                <a href="{{url_for('user_profile')}}">
+                    <div class="rectangle"></div>
+                    <div class="div"></div>
+                    <img class="image" src="{{ url_for('uploaded_file', filename=sala.foto_sala) if sala.foto_sala else url_for('static', filename='imgs/bannerHome.png') }}" />
+                    <div class="text-wrapper">{{ sala.nome_sala }}</div>
+                    <div class="total-de-arm-rios">
+                        Total de armários:<br />
+                        {{ sala.capacidade_armario }}
+                    </div>
+                </a>
             </div>
         </div>
-    </div>
     {% endfor %}
 </div>
 
-
-
-
-
-
 <div class="overlay" id="overlay"></div>
-
-
 
 
 <div class="containerSala" id="popupSala">
     <h1 class="tituloSala">Adicionar Sala</h1>
     <span class="closePopup" id="closePopup">&times;</span>
-
-
 
 
     <div class="content">
@@ -435,29 +439,16 @@
            
         </div>
 
-
-
-
         <form action="" method="POST" class="formSalas" enctype="multipart/form-data">
             {{form.csrf_token}}
-
-
-
 
             {{form.nome_sala.label(class="corSala", style="margin-bottom: 10px; display:block;")}}
             {{form.nome_sala(class="form-control", placeholder='Digite o nome da sala')}}
 
-
-
-
             {{form.capacidade_armario.label(class="corSala", style="margin-bottom: 10px; display:block;")}}
             {{form.capacidade_armario(class="form-control", placeholder='Quantos armários tem a sala')}}
 
-
             {{ form.foto_sala(class="addImg", style="display: block;") }}
-
-
-
 
             {{form.btnSubmit(class="buttonSala")}}
         </form>
