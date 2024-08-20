@@ -64,6 +64,8 @@
             padding: 10px;
             border-bottom: 1px solid #ddd;
             cursor: pointer;
+            position: relative;
+            left: -4vh;
         }
 
         .contact img,
@@ -162,6 +164,30 @@
             color: blue;
             /* Cor azul para o ícone */
         }
+
+        .selected-contact {
+            background-color: #e0f7fa; /* Cor de fundo azul clara, ajuste conforme necessário */
+        }
+
+        #createGroupBtn {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid black;
+            position: relative;
+            left: 2.8vh;
+            top: -0.3vh;
+        }
+
+        #createGroupBtn:hover {
+            cursor: pointer;
+            transform: scale(1.1);
+        }
+
+        #ctt-title {
+            position: relative;
+            left: 35%;
+        }
+
     </style>
 </head>
 
@@ -189,7 +215,8 @@
     </div>
 
     <div id="contacts">
-        <h2>Contatos <button id="createGroupBtn">Criar grupo</button></h2>
+        <h2 id="ctt-title">Contatos 
+        <button id="createGroupBtn">Criar grupo</button></h2>
         <input id="searchInput" type="text" placeholder="Buscar contatos..."
             style="width: 100%; padding: 10px; box-sizing: border-box;">
         <ul id="contactList">
@@ -349,25 +376,37 @@
             });
 
             socket.on('messages_loaded', function (data) {
-                console.log(data);  // Check data content
-                $('#messageArea').empty();
-                data.messages.forEach(msg => {
-                    const displayName = msg.to === currentUserId ? 'Você' : msg.from_name;
-                    const viewedBy = Array.isArray(msg.viewed_by) ? msg.viewed_by : [];
-                    const statusIcon = viewedBy.includes(currentUserId) ?
-                        '<i class="bi bi-check2-all" style="color: blue; font-size: 1.2em;"></i>' :
-                        '<i class="bi bi-check2-all" font-size: 1.2em;"></i>'; // Default icon for 'Não visualizado'
-
-                    $('#messageArea').append(`
-            <div id="message_${msg.message_id}">
-                <strong>${displayName}:</strong> ${msg.content}
-                <small>(${msg.time})</small>
-                <span id="status_${msg.message_id}">${statusIcon}</span>
+    $('#messageArea').empty();
+    data.messages.forEach(msg => {
+        const displayName = msg.to === currentUserId ? 'Você' : msg.from_name;
+        const messageClass = msg.to === currentUserId ? 'message sent' : 'message received';
+        const statusIcon = Array.isArray(msg.viewed_by) && msg.viewed_by.includes(currentUserId) ?
+            '<i class="bi bi-check2-all status-icon" style="color: blue; font-size: 1.2em;"></i>' :
+            '<i class="bi bi-check2-all status-icon" style="font-size: 1.2em;"></i>';
+        
+        $('#messageArea').append(`
+            <div id="message_${msg.message_id}" class="${messageClass}" style="display: flex; align-items: flex-start; margin-bottom: 10px;">
+                <div class="message-content" style="display: flex; align-items: center; background: ${msg.to === currentUserId ? '#dcf8c6' : '#ffffff'}; padding: 10px; border-radius: 5px; max-width: 70%; margin-${msg.to === currentUserId ? 'left' : 'right'}: 10px;">
+                    ${msg.to !== currentUserId ? '<img src="' + msg.from_foto + '" alt="' + msg.from_name + '" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;">' : ''}
+                    <div style="flex: 1;">
+                        <div style="margin-bottom: 5px;">
+                            <strong>${displayName}:</strong>
+                        </div>
+                        <div style="margin-bottom: 5px;">
+                            ${msg.content}
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <small>(${msg.time})</small>
+                            <span id="status_${msg.message_id}">${statusIcon}</span>
+                        </div>
+                    </div>
+                </div>
+                ${msg.to === currentUserId ? '<img src="' + msg.from_foto + '" alt="' + msg.from_name + '" style="width: 30px; height: 30px; border-radius: 50%; margin-left: 10px;">' : ''}
             </div>
         `);
-                });
-                $('#messageArea').scrollTop($('#messageArea')[0].scrollHeight);
-            });
+    });
+    $('#messageArea').scrollTop($('#messageArea')[0].scrollHeight);
+});
 
 
 
@@ -384,23 +423,34 @@
 
             // Atualizar as mensagens em tempo real
             socket.on('message_received', function (data) {
-                const displayName = data.from_name === currentUserId ? 'Você' : data.from_name;
-                $('#messageArea').append(`
-        <div id="message_${data.message_id}">
-            <strong>${displayName}:</strong> ${data.content}
-            <small>(${data.time})</small>
-            <span id="status_${data.message_id}">
-                <i class="bi bi-check2-all" font-size: 1.2em;"></i> <!-- Icone para 'Não visualizado' -->
-            </span>
+    const displayName = data.from_name === currentUserId ? 'Você' : data.from_name;
+    const statusIcon = '<i class="bi bi-check2-all status-icon" style="font-size: 1.2em;"></i>'; // Default icon for 'Não visualizado'
+    
+    $('#messageArea').append(`
+        <div id="message_${data.message_id}" class="message received" style="display: flex; align-items: center; margin-bottom: 10px;">
+            <img src="${data.from_foto}" alt="${data.from_name}" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;">
+            <div class="message-content" style="background: #ffffff; padding: 10px; border-radius: 5px; max-width: 70%; flex: 1;">
+                <div style="margin-bottom: 5px;">
+                    <strong>${displayName}:</strong>
+                </div>
+                <div style="margin-bottom: 5px;">
+                    ${data.content}
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <small>(${data.time})</small>
+                    <span id="status_${data.message_id}">${statusIcon}</span>
+                </div>
+            </div>
         </div>
     `);
-                $('#messageArea').scrollTop($('#messageArea')[0].scrollHeight);
+    $('#messageArea').scrollTop($('#messageArea')[0].scrollHeight);
 
-                // Verificar se o usuário está no chat com o remetente
-                if (chatType === 'user' && data.from_name !== 'Você' && selectedId === data.from_id) {
-                    socket.emit('mark_message_as_viewed', { message_id: data.message_id });
-                }
-            });
+    // Verificar se o usuário está no chat com o remetente
+    if (chatType === 'user' && data.from_name !== 'Você' && selectedId === data.from_id) {
+        socket.emit('mark_message_as_viewed', { message_id: data.message_id });
+    }
+});
+
 
 
 
@@ -436,6 +486,26 @@
                     <span>${data.group_name}</span>
                 </li>`);
             });
+
+            // Clique em um contato
+            $('#contactList').on('click', '.contact', function () {
+                // Remove a classe de destaque de todos os contatos
+                $('.contact').removeClass('selected-contact');
+
+                // Adiciona a classe de destaque ao contato selecionado
+                $(this).addClass('selected-contact');
+
+                chatType = 'user';
+                selectedId = $(this).data('user-id');
+                selectedName = $(this).data('user-name');
+
+                $('#chatTitle').text(selectedName);
+                $('#lastActiveInfo').show();
+                $('#messageArea').html('');
+                socket.emit('get_last_active', { user_id: selectedId });
+                socket.emit('load_messages', { to: selectedId });
+            });
+
 
         });
     </script>

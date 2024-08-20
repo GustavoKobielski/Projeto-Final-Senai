@@ -277,21 +277,31 @@ def handle_message(data):
         db.session.add(message)
         db.session.commit()
 
+        # Obtém informações sobre o remetente e o destinatário
+        sender = User.query.get(sender_id)
+        recipient = User.query.get(recipient_id)
+        
+        # Cria URLs para as fotos
+        sender_photo_url = url_for('static', filename='uploads/' + sender.foto)
+        recipient_photo_url = url_for('static', filename='uploads/' + recipient.foto) if recipient.foto else url_for('static', filename='uploads/default.png')
+
         # Emit message to the recipient
         emit('message_received', {
             'content': message.content,
-            'from_name': current_user.nome,
+            'from_name': sender.nome,
             'time': message.timestamp.strftime('%H:%M'),
             'message_id': message.id,
-            'from_id': sender_id
+            'from_id': sender_id,
+            'from_foto': sender_photo_url
         }, room=recipient_id)
 
         # Emit message to the sender
         emit('message_received', {
             'content': message.content,
-            'from_name': current_user.nome,
+            'from_name': sender.nome,
             'time': message.timestamp.strftime('%H:%M'),
-            'message_id': message.id
+            'message_id': message.id,
+            'from_foto': sender_photo_url
         }, room=sender_id)
 
         # Mark message as viewed if chat is open
@@ -322,6 +332,8 @@ def load_messages(data):
     messages_data = []
     for message in messages:
         sender = User.query.get(message.sender_id)
+        sender_photo_url = url_for('static', filename='uploads/' + sender.foto)
+        
         if current_user.id == recipient_id and current_user.id not in message.viewed_by:
             message.viewed_by.append(current_user.id)
             db.session.commit()
@@ -332,6 +344,7 @@ def load_messages(data):
             'to': message.recipient_id,
             'time': message.timestamp.strftime('%H:%M'),
             'message_id': message.id,
+            'from_foto': sender_photo_url,
             'viewed_by': message.viewed_by
         })
 

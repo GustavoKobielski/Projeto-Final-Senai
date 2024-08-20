@@ -16,7 +16,7 @@ class UserForm(FlaskForm):
     btnSubmit = SubmitField('Cadastrar')
 
     def validate_email(self, email):
-        if '@edu.sesisenai.org.br' not in email.data:
+        if '@edu.sc.senai.br' not in email.data:
             raise ValidationError('O e-mail deve ser do domínio @edu.sesisenai.org.br!')
         if User.query.filter_by(email=email.data).first():
             raise ValidationError('Usuário já cadastrado com esse e-mail!')
