@@ -162,13 +162,14 @@
             top: 6%;
             left: 88.6%;
             position: absolute;
-            border: 0.4px solid #1D1D1D;
             border-radius: 5px 5px 10px 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
             display: none;
+            cursor: pointer;
+        }
+
+        .juncao {
+            display: flex;
+            gap: 10px;
         }
 
         .popup-link {
@@ -191,16 +192,26 @@
             font-weight: 500;
         }
 
-
-        .sair {
-            cursor: pointer;
-            /* Mãozinha ao passar o mouse */
-        }
-
-
-
         #popup {
             user-select: none;
+        }
+
+        @media(min-width: 1300px) and (max-width: 1500px) {
+            .barraLateral {
+                width: 25%;
+            }
+
+            .botaoNB {
+                width: 90%;
+            }
+
+            .txt-link {
+                font-size: 18px;
+            }
+
+            .botaoNB .icon {
+                font-size: 25px;
+            }
         }
     </style>
 </head>
@@ -284,8 +295,10 @@
 
     <div id="popup" class="sair">
         <a href="{{url_for('logout')}}" class="popup-link" onclick="togglePopup()">
-            <span class="iconSair"><i class="bi bi-box-arrow-right"></i></span>
-            <span class="txt-sair">Sair</span>
+            <div class="juncao">
+                <span class="iconSair"><i class="bi bi-box-arrow-right"></i></span>
+                <span class="txt-sair">Sair</span>
+            </div>
         </a>
     </div>
 

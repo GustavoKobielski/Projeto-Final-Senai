@@ -349,16 +349,26 @@
             });
 
             socket.on('messages_loaded', function (data) {
-                console.log(data);  // Verifique o conteúdo dos dados recebidos
+                console.log(data);  // Check data content
                 $('#messageArea').empty();
                 data.messages.forEach(msg => {
                     const displayName = msg.to === currentUserId ? 'Você' : msg.from_name;
                     const viewedBy = Array.isArray(msg.viewed_by) ? msg.viewed_by : [];
-                    const statusIcon = viewedBy.includes(currentUserId) ? '<i class="bi bi-check2-all status-visualizado"></i>' : '';
-                    $('#messageArea').append(`<div><strong>${displayName}:</strong> ${msg.content} <small>(${msg.time})</small> ${statusIcon}</div>`);
+                    const statusIcon = viewedBy.includes(currentUserId) ?
+                        '<i class="bi bi-check2-all" style="color: blue; font-size: 1.2em;"></i>' :
+                        '<i class="bi bi-check2-all" font-size: 1.2em;"></i>'; // Default icon for 'Não visualizado'
+
+                    $('#messageArea').append(`
+            <div id="message_${msg.message_id}">
+                <strong>${displayName}:</strong> ${msg.content}
+                <small>(${msg.time})</small>
+                <span id="status_${msg.message_id}">${statusIcon}</span>
+            </div>
+        `);
                 });
                 $('#messageArea').scrollTop($('#messageArea')[0].scrollHeight);
             });
+
 
 
 
@@ -372,13 +382,18 @@
             });
 
 
-
-
-
             // Atualizar as mensagens em tempo real
             socket.on('message_received', function (data) {
                 const displayName = data.from_name === currentUserId ? 'Você' : data.from_name;
-                $('#messageArea').append(`<div id="message_${data.message_id}"><strong>${displayName}:</strong> ${data.content} <small>(${data.time})</small> <span id="status_${data.message_id}">Não visualizado</span></div>`);
+                $('#messageArea').append(`
+        <div id="message_${data.message_id}">
+            <strong>${displayName}:</strong> ${data.content}
+            <small>(${data.time})</small>
+            <span id="status_${data.message_id}">
+                <i class="bi bi-check2-all" font-size: 1.2em;"></i> <!-- Icone para 'Não visualizado' -->
+            </span>
+        </div>
+    `);
                 $('#messageArea').scrollTop($('#messageArea')[0].scrollHeight);
 
                 // Verificar se o usuário está no chat com o remetente
@@ -386,6 +401,8 @@
                     socket.emit('mark_message_as_viewed', { message_id: data.message_id });
                 }
             });
+
+
 
 
             socket.on('group_message', function (data) {
@@ -396,16 +413,13 @@
 
             socket.on('message_viewed', function (data) {
                 const messageId = data.message_id;
-                const viewedBy = data.viewed_by;
                 const statusElement = $(`#status_${messageId}`);
 
-                if (viewedBy.includes(currentUserId)) {
-                    statusElement.html('<i class="bi bi-check2-all" style="color: blue; font-size: 1.2em;"></i>');
-                } else {
-                    statusElement.html('<span>Não visualizado</span>');
-                }
-
+                // Atualiza o status da mensagem para 'visualizado'
+                statusElement.html('<i class="bi bi-check2-all" style="color: blue; font-size: 1.2em;"></i>'); // Icone para 'Visualizado'
             });
+
+
 
 
 

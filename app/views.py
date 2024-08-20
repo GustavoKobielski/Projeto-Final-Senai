@@ -1,8 +1,11 @@
-from app import app, db
+from app import app, db, socketio
 from flask import render_template, url_for, request, redirect, jsonify
 from flask_login import login_user, logout_user, current_user, login_required
+from flask_socketio import join_room, leave_room, emit
 from app.forms import CadastrarSala, LoginForm, UserForm
-from app.models import User, Salas, Armario, Ferramentas, FerramentasSuporte
+from app.models import User, Salas, Armario, Ferramentas, FerramentasSuporte, Message, Group, GroupUser, GroupMessage
+
+from datetime import datetime
 
 
 #Pagina Inicial
@@ -217,7 +220,7 @@ def handle_message(data):
         db.session.add(message)
         db.session.commit()
 
-        # Emitir a mensagem para o destinatário
+        # Emit message to the recipient
         emit('message_received', {
             'content': message.content,
             'from_name': current_user.nome,
@@ -226,7 +229,7 @@ def handle_message(data):
             'from_id': sender_id
         }, room=recipient_id)
 
-        # Emitir a mensagem para o remetente
+        # Emit message to the sender
         emit('message_received', {
             'content': message.content,
             'from_name': current_user.nome,
@@ -234,15 +237,20 @@ def handle_message(data):
             'message_id': message.id
         }, room=sender_id)
 
-        # Emitir a visualização da mensagem para o destinatário (se for um chat individual)
-        if data.get('chat_type') == 'user':
-            emit('mark_message_as_viewed', {'message_id': message.id}, room=recipient_id)
+        # Mark message as viewed if chat is open
+        if data.get('chat_type') == 'user' and data.get('chat_open', False):
+            message.viewed_by.append(recipient_id)
+            db.session.commit()
+
+            # Emit viewed status to sender
+            emit('message_viewed', {
+                'message_id': message.id,
+                'viewed_by': message.viewed_by
+            }, room=sender_id)
 
     except Exception as e:
         print(f"Error saving message: {e}")
         db.session.rollback()
-
-
 
 
 @socketio.on('load_messages')
@@ -267,11 +275,10 @@ def load_messages(data):
             'to': message.recipient_id,
             'time': message.timestamp.strftime('%H:%M'),
             'message_id': message.id,
-            'viewed_by': message.viewed_by  # Enviar a lista de quem viu a mensagem
+            'viewed_by': message.viewed_by
         })
 
     emit('messages_loaded', {'messages': messages_data}, room=current_user.id)
-
 
 @socketio.on('mark_message_as_viewed')
 def mark_message_as_viewed(data):
@@ -282,6 +289,7 @@ def mark_message_as_viewed(data):
         message.viewed_by.append(current_user.id)
         db.session.commit()
         
+        # Emit viewed status to the recipient
         emit('message_viewed', {
             'message_id': message.id,
             'viewed_by': message.viewed_by
@@ -290,6 +298,7 @@ def mark_message_as_viewed(data):
 
 
 
+ 
 @socketio.on('get_last_active')
 def handle_last_active(data):
     user_id = data['user_id']

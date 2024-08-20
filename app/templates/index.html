@@ -74,23 +74,27 @@
             color: #f5f5f5;
             font-size: 15px;
             transition: transform 0.3s ease;
-            width: 180px; /* Largura do botão */
+            width: 180px;
+            /* Largura do botão */
             position: relative;
             z-index: 0;
             margin-top: -15%;
         }
 
         .buttonCadastrar {
-            background-color: #f5f5f5;;
+            background-color: #f5f5f5;
+            ;
             border: 1px #999 solid;
             padding: 13px;
             color: black;
             border-radius: 3rem;
             font-size: 15px;
             transition: transform 0.3s ease;
-            width: 180px; /* Largura do botão */
+            width: 180px;
+            /* Largura do botão */
             position: relative;
-            left: -30px; /* Move o botão para a esquerda */
+            left: -30px;
+            /* Move o botão para a esquerda */
             z-index: 1;
             margin-top: -15%;
         }
@@ -164,7 +168,7 @@
         }
 
         input {
-            font-size: 18px; 
+            font-size: 18px;
             color: #999;
             border: #8E8080;
         }
@@ -195,6 +199,8 @@
             width: 50%;
             max-width: 400px;
             margin-bottom: 15%;
+            position: relative;
+            bottom: 5%;
         }
 
         .botoesfds {
@@ -225,14 +231,14 @@
                 <p>Entre em nosso sistema de gestão de ferramentas!</p>
             </div>
         </div>
-        <div class="right-side">    
+        <div class="right-side">
             <div class="botoesfds">
                 <a href="{{url_for('homepage')}}">
                     <button class="buttonEntrar">Entrar</button></a>
                 <a href="{{url_for('cadastro')}}">
                     <button class="buttonCadastrar">Cadastrar</button></a>
             </div>
-            
+
             <div class="container">
 
                 <form action="" method="POST" class="formulario">
@@ -247,8 +253,8 @@
                     {{form.btnSubmit(class="button")}}
                 </form>
                 <h2 class="ou">OU</h2>
-                <button class="google"><img src="https://logopng.com.br/logos/google-37.png"
-                    class="google2" alt="">Inscrever-se com o Google </button>
+                <button class="google"><img src="https://logopng.com.br/logos/google-37.png" class="google2"
+                        alt="">Inscrever-se com o Google </button>
             </div>
         </div>
     </div>
