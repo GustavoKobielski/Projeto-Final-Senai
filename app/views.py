@@ -175,7 +175,7 @@ def gerenciamento_salas():
 
 @app.route('/gerenciamento/pessoas')
 def gerenciamento_pessoas():
-    return render_template('gerenciamentoessoas.html')
+    return render_template('gerenciamentoPessoas.html')
 
 
 
