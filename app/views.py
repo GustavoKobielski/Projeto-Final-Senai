@@ -17,7 +17,7 @@ import os
 
 
 UPLOAD_FOLDER = os.path.join(app.root_path, 'static', 'uploads')
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'jfif', 'gif'}
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'jfif', 'gif', 'avif'}
 
 
 @app.route('/uploads/<filename>')
@@ -142,6 +142,7 @@ def armarios():
 def ferramentas():
     ferramentas = FerramentasSuporte.query.all()
     form = CadastrarSuporte()
+    formInfo = CadastrarSuporte()
     if form.validate_on_submit():
         file = request.files.get('foto_ferramenta_sup')
         filename = None
@@ -157,8 +158,7 @@ def ferramentas():
 
         form.save(filename)
         return redirect(url_for('ferramentas'))
-    return render_template('defeitoFerramentas.html', ferramentas=ferramentas, form=form)
-
+    return render_template('defeitoFerramentas.html', ferramentas=ferramentas, form=form, formInfo=formInfo)
 
 #############################################
 ######## PAGE LOGS ##########################
