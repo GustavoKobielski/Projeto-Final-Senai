@@ -1,13 +1,10 @@
 from flask_wtf import FlaskForm
 from app import db, bcrypt,app
 from wtforms import StringField, SubmitField, PasswordField, FileField
-from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
-from flask_wtf.file import FileField
+from flask_wtf.file import FileField, FileAllowed
+from wtforms.validators import DataRequired, Email, Length, EqualTo, Optional, ValidationError
+
 from app.models import User, Salas, FerramentasSuporte
-
-
-
-
 
 
 # Cadastro do Usuario
@@ -19,9 +16,11 @@ class UserForm(FlaskForm):
     btnSubmit = SubmitField('Cadastrar')
 
 
-    def validade_email(self, email):
-        if User.query.filter(email=email.data).first():
-            return ValidationError('Usuário já cadastradado com esse E-mail!!!')
+    def validate_email(self, email):
+        if '@edu.sc.senai.br' not in email.data:
+            raise ValidationError('O e-mail deve ser do domínio @edu.sesisenai.org.br!')
+        if User.query.filter_by(email=email.data).first():
+            raise ValidationError('Usuário já cadastrado com esse e-mail!')
 
 
     def save(self):
@@ -85,13 +84,40 @@ class CadastrarSuporte(FlaskForm):
 
     def save(self, filename=None):
         suporte = FerramentasSuporte(
-            nome_ferramenta=self.nome_ferramenta_sup.data,
-            sala_ferramenta=self.sala_ferramenta_sup.data,
-            defeito_ferramenta=self.defeito_ferramenta_sup.data,
-            data_ocorrido=self.data_ocorrido_sup.data,
-            ocorrido_ferramenta=self.ocorrido_ferramenta_sup.data,
-            foto_ferramenta=filename
+            nome_ferramenta_sup=self.nome_ferramenta_sup.data,
+            sala_ferramenta_sup=self.sala_ferramenta_sup.data,
+            defeito_ferramenta_sup=self.defeito_ferramenta_sup.data,
+            data_ocorrido_sup=self.data_ocorrido_sup.data,
+            ocorrido_ferramenta_sup=self.ocorrido_ferramenta_sup.data,
+            foto_ferramenta_sup=filename
         )
         db.session.add(suporte)
         db.session.commit()
         return suporte
+    
+class EditarInformacoes(FlaskForm):
+    nome = StringField('Nome', validators=[DataRequired(), Length(min=2, max=100)])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    senha_atual = PasswordField('Senha Atual', validators=[Optional()])
+    nova_senha = PasswordField('Nova Senha', validators=[Optional(), Length(min=6)])
+    confirmar_senha = PasswordField('Confirmar Nova Senha', validators=[Optional(), EqualTo('nova_senha', message='As senhas devem corresponder.')])
+    foto = FileField('Foto de Perfil', validators=[FileAllowed(['png', 'jpg', 'jpeg', 'jfif', 'gif'], 'Somente imagens são permitidas.')])
+    submit = SubmitField('Salvar Alterações')
+
+    def save(self, user, filename=None):
+        # Atualiza as informações do usuário
+        user.nome = self.nome.data
+        user.email = self.email.data
+
+        # Verifica se a senha atual foi fornecida e se é válida
+        if self.senha_atual.data:
+            if not bcrypt.check_password_hash(user.senha, self.senha_atual.data):
+                raise ValueError('Senha atual incorreta.')
+            if self.nova_senha.data:
+                user.senha = bcrypt.generate_password_hash(self.nova_senha.data).decode('utf-8')
+
+        if filename:
+            user.foto = filename
+
+        db.session.commit()
+        return user

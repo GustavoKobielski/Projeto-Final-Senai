@@ -1,7 +1,7 @@
 from app import app, db
-from flask import render_template, send_from_directory, url_for, request, redirect, jsonify
+from flask import render_template, send_from_directory, url_for, request, redirect, jsonify, flash
 from flask_login import login_user, logout_user, current_user, login_required
-from app.forms import CadastrarSala, LoginForm, UserForm, CadastrarSuporte
+from app.forms import CadastrarSala, EditarInformacoes, LoginForm, UserForm, CadastrarSuporte
 from app.models import User, Salas, Armario, Ferramentas, FerramentasSuporte
 from datetime import datetime
 
@@ -138,10 +138,25 @@ def armarios():
 #############################################
 
 
-@app.route('/ferramentas/')
+@app.route('/ferramentas/', methods=['GET', 'POST'])
 def ferramentas():
     ferramentas = FerramentasSuporte.query.all()
     form = CadastrarSuporte()
+    if form.validate_on_submit():
+        file = request.files.get('foto_ferramenta_sup')
+        filename = None
+
+
+        if file and file.filename != '' and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+
+
+            file.save(file_path)
+
+
+        form.save(filename)
+        return redirect(url_for('ferramentas'))
     return render_template('defeitoFerramentas.html', ferramentas=ferramentas, form=form)
 
 
@@ -185,9 +200,35 @@ def gerenciamento_pessoas():
 #############################################
 
 
-@app.route('/profile/')
-def user_profile():
-    return render_template('profile.html')
+@app.route('/profile', methods=['GET', 'POST'])
+@login_required
+def editar_perfil():
+    form = EditarInformacoes(obj=current_user)
+    if form.validate_on_submit():
+        try:
+            file = request.files.get('foto')  # Obtém o arquivo do request
+            filename = None
+
+
+
+            if file and file.filename != '' and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+
+
+
+                file.save(file_path)
+
+
+            form.save(current_user, filename)
+
+
+            flash('Perfil atualizado com sucesso!', 'success')
+            return redirect(url_for('editar_perfil'))
+        except ValueError as e:
+            flash(str(e), 'danger')
+
+    return render_template('profile.html', form=form)
 
 
 #############################################

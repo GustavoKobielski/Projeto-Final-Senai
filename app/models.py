@@ -1,6 +1,7 @@
 from app import db, login_manager
 from flask_login import UserMixin
 from datetime import datetime
+from flask import url_for
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -16,6 +17,12 @@ class User(db.Model, UserMixin):
 
     def puxar_nome(self):
         return self.nome
+
+    def obter_foto(self):
+        if self.foto:
+            return url_for('static', filename='uploads/' + self.foto)
+        else:
+            return url_for('static', filename='default.png')
 
 
 class Salas(db.Model):
