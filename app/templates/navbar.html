@@ -209,22 +209,27 @@
             }
 
             .botaoNB .icon {
-                font-size: 25px;
+                font-size: 28px;
             }
 
             .sair {
                 position: fixed;
                 top: 10%;
+                width: 7%;
             }
+
+            
         }
 
         .iconHeader img {
-    width: 8vh; /* Define a largura com base na altura da viewport */
-    height: 8vh; /* Define a altura com base na altura da viewport */
-    border-radius: 50%;
-    object-fit: cover; /* Mantém a imagem cortada, mas sem distorcer */
-    object-position: center; /* Centraliza a imagem no contêiner */
-}
+            width: 8vh; /* Define a largura com base na altura da viewport */
+            height: 8vh; /* Define a altura com base na altura da viewport */
+            border-radius: 50%;
+            object-fit: cover; /* Mantém a imagem cortada, mas sem distorcer */
+            object-position: center; /* Centraliza a imagem no contêiner */
+        }
+
+
     </style>
 </head>
 
@@ -265,7 +270,7 @@
             </li>
 
             <li class="botaoNB">
-                <a href="{{url_for('ferramentas')}}">
+                <a href="{{url_for('ferramentasSuporte')}}">
                     <span class="icon"><i class="bi bi-wrench"></i></span>
                     <span class="txt-link">Defeito Ferramentas</span>
                 </a>

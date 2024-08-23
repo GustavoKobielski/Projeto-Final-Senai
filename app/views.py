@@ -1,7 +1,7 @@
 from app import app, db
 from flask import render_template, send_from_directory, url_for, request, redirect, jsonify, flash
 from flask_login import login_user, logout_user, current_user, login_required
-from app.forms import CadastrarSala, EditarInformacoes, LoginForm, UserForm, CadastrarSuporte
+from app.forms import CadastrarSala, CadastroArmario, CadastroFerramenta, EditarInformacoes, LoginForm, UserForm, CadastrarSuporte
 from app.models import User, Salas, Armario, Ferramentas, FerramentasSuporte
 from datetime import datetime
 
@@ -128,18 +128,67 @@ def salas():
 #############################################
 
 
-@app.route('/armarios/')
-def armarios():
-    return render_template('armarios.html')
+@app.route('/armarios/<int:sala_id>', methods=['GET', 'POST'])
+def armarios(sala_id):
+    form = CadastroArmario()
+    armarios = Armario.query.filter_by(sala_id=sala_id).all()
+
+    if form.validate_on_submit():
+        file = request.files.get('foto_armario')  # Obtém o arquivo do request
+        filename = None
+
+
+        # Verifica se o arquivo é permitido e se tem um nome
+        if file and file.filename != '' and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+           
+            # Salva o arquivo no diretório de uploads
+            file.save(file_path)
+       
+        # Salva os dados da sala, incluindo o nome do arquivo
+        form.save(sala_id=sala_id, filename=filename)
+        return redirect(url_for('armarios', sala_id=sala_id))
+    
+    return render_template('armarios.html', armarios=armarios, form=form)
 
 
 #############################################
 ######## PAGE FERRAMENTAS ###################
 #############################################
 
+@app.route('/ferramentas/<int:armario_id>', methods=['GET', 'POST'])
+def ferramentas(armario_id):
+    ferramentas = Ferramentas.query.filter_by(armario_id=armario_id).all()
+    form = CadastroFerramenta()
+    if form.validate_on_submit():
+        file = request.files.get('foto_ferramenta')  # Obtém o arquivo do request
+        filename = None
 
-@app.route('/ferramentas/', methods=['GET', 'POST'])
-def ferramentas():
+
+        # Verifica se o arquivo é permitido e se tem um nome
+        if file and file.filename != '' and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+           
+            # Salva o arquivo no diretório de uploads
+            file.save(file_path)
+       
+        # Salva os dados da sala, incluindo o nome do arquivo
+        form.save(armario_id=armario_id, filename=filename)
+        return redirect(url_for('armarios', armario_id=armario_id))
+
+    return render_template('ferramentas.html', ferramentas=ferramentas, form=form)
+
+
+
+#############################################
+######## PAGE FERRAMENTAS SUPORTE ###########
+#############################################
+
+
+@app.route('/ferramentas/suporte', methods=['GET', 'POST'])
+def ferramentasSuporte():
     ferramentas = FerramentasSuporte.query.all()
     form = CadastrarSuporte()
     formInfo = CadastrarSuporte()
@@ -295,13 +344,3 @@ def authorize_google():
 
     # Se houver algum problema, redirecione o usuário para uma página de erro ou para a página de login novamente
     return redirect(url_for('login_google'))
-
-
-#############################################
-######## Adicionar Ferramentas ##############
-#############################################
-
-
-@app.route('/adicionar/ferramentas')
-def adicionarFerramentas():
-    return render_template('adicionarFerramentas.html')

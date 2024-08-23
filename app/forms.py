@@ -4,7 +4,7 @@ from wtforms import StringField, SubmitField, PasswordField, FileField
 from flask_wtf.file import FileField, FileAllowed
 from wtforms.validators import DataRequired, Email, Length, EqualTo, Optional, ValidationError
 
-from app.models import User, Salas, FerramentasSuporte
+from app.models import Armario, Ferramentas, User, Salas, FerramentasSuporte
 
 
 # Cadastro do Usuario
@@ -121,3 +121,40 @@ class EditarInformacoes(FlaskForm):
 
         db.session.commit()
         return user
+    
+
+class CadastroArmario(FlaskForm):
+    numero = StringField("Numero do Armario", validators=[DataRequired()])
+    capacidade_ferramentas = StringField('Quantas ferramentas tem a sala', validators=[DataRequired()])
+    foto_armario = FileField('Foto do Armario')
+    btnSubmit = SubmitField('Cadastrar')
+
+
+    def save(self, sala_id, filename=None):
+        armario = Armario(
+            numero=self.numero.data,
+            capacidade_ferramentas=self.capacidade_ferramentas.data,
+            foto_armario=filename,
+            sala_id=sala_id
+        )
+        db.session.add(armario)
+        db.session.commit()
+        return armario
+
+class CadastroFerramenta(FlaskForm):
+    nome_ferramenta = StringField("Nome das ferramentas", validators=[DataRequired()])
+    total_ferramenta = StringField('Quantas ferramentas tem total', validators=[DataRequired()])
+    foto_ferramenta = FileField('Foto do Armario')
+    btnSubmit = SubmitField('Cadastrar')
+
+
+    def save(self, armario_id, filename=None):
+        ferramentas = Ferramentas(
+            nome_ferramenta=self.nome_ferramenta.data,
+            total_ferramenta=self.total_ferramenta.data,
+            foto_ferramenta=filename,
+            armario_id=armario_id
+        )
+        db.session.add(ferramentas)
+        db.session.commit()
+        return ferramentas

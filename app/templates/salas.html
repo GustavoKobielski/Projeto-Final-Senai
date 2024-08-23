@@ -254,9 +254,6 @@
         margin-top: 10px; /* Espaço acima do botão, se necessário */
         font-size: 1vw;
     }
-   
-
-
 
 
     .addFoto:hover {
@@ -375,6 +372,14 @@
             bottom: 9.8%;
         }
 
+        .text-wrapper {
+            font-size: 24px;
+        }
+
+        .total-de-arm-rios {
+            font-size: 18px;
+        }
+
     }
 
 
@@ -405,7 +410,7 @@
     {% for sala in salas %}
         <div class="box">
             <div class="group">
-                <a href="{{url_for('editar_perfil')}}">
+                <a href="{{ url_for('armarios', sala_id=sala.id_salas) }}">
                     <div class="rectangle"></div>
                     <div class="div"></div>
                     <img class="image" src="{{ url_for('uploaded_file', filename=sala.foto_sala) if sala.foto_sala else url_for('static', filename='imgs/bannerHome.png') }}" />
