@@ -11,44 +11,58 @@
     }
 
     .container {
-        margin-left: 250px; 
+        margin-left: 15%; 
     }
 
     .form-container {
         max-width: 800px; 
         margin-left: auto;
         margin-right: auto;
+        margin-top: 1%;
+    }
+
+    .tituloPerfil {
+        position: relative;
+        left: 29%;
+        margin-top: 2%;
+        color:#407DD8;
+        font-weight: bold;
+    }
+
+    .tituloForm {
+        margin-top: 2%;
+        margin-bottom: 1%;
     }
 
 </style>
 
+<h1 class="tituloPerfil">Editar Perfil</h1>
 <div class="container">
     <div class="form-container">
-        <h1>Editar Perfil</h1>
         <form method="POST" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
             <div class="form-group">
-                {{ form.nome.label }}
+                {{form.nome.label  (class="tituloForm")  }}
                 {{ form.nome(class="form-control") }}
             </div>
             <div class="form-group">
-                {{ form.email.label }}
+                {{ form.email.label (class="tituloForm") }}
                 {{ form.email(class="form-control") }}
             </div>
             <div class="form-group">
-                {{ form.senha_atual.label }}
+                {{ form.senha_atual.label (class="tituloForm")  }}
                 {{ form.senha_atual(class="form-control") }}
             </div>
             <div class="form-group">
-                {{ form.nova_senha.label }}
+                {{ form.nova_senha.label (class="tituloForm")  }}
                 {{ form.nova_senha(class="form-control") }}
             </div>
             <div class="form-group">
-                {{ form.confirmar_senha.label }}
+                {{ form.confirmar_senha.label  (class="tituloForm")  }}
                 {{ form.confirmar_senha(class="form-control") }}
             </div>
             <div class="form-group">
-                {{ form.foto.label }}
+                {{ form.foto.label  (class="tituloForm")  }}
                 {{ form.foto(class="form-control") }}
             </div>
             <div class="form-group">

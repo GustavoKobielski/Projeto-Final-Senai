@@ -4,26 +4,26 @@
 {% include 'navbar.html' %}
 
 <style>
-    .tituloArmarios {
-        margin: 0 auto; 
+    .tituloFerramentas {
+        margin-top: 1%;
         width: 68%;
         position: relative;
-        left: 12%;
+        left: 29%;
         font-size: 32px;
         margin-top: 1%;
     }
 
-    .txtArmarios {
-        margin: 0 auto; 
+    .txtFerramentas {
+        margin-top: 1%;
         width: 68%;
         position: relative;
-        left: 12%;
+        left: 29%;
         font-size: 20px;
         color: #0000008f;
     }
 
     .box {
-        width: 20.5vw;
+        width: 20.2vw;
         height: 40vh;
         position: relative;
         display: flex;
@@ -76,9 +76,10 @@
     }
 
     .text-wrapper {
-        top: 138px;
+        bottom: 40%;
         left: calc(50% - 116.5px);
-        font-size: 24px;
+        font-size: 30px;
+        text-transform: capitalize;
     }
 
     .total-de-ferramentas {
@@ -109,26 +110,27 @@
     }
 
     .capacidade-ferramentas {
-        top: 25%;
+        top: 60%;
+        left: 10%;
         font-size: 20px;
         height: 51px;
         position: relative;
-        
     }
 
     .txt-capacidade {
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        position: relative;
+        left: 36%;
+        margin-top: 12%;
     }
 
     .title-capac {
         position: relative;
-        left: 7.3%;
+        left: 16%;
         margin: 0;
+        top: 50%;
     }
 
-    .botaoSalas {
+    .botaoFerramentas {
         margin-left: 79.2%;
         top: 15%;
         background-color: #407DD8;
@@ -144,14 +146,14 @@
 
 
 
-    .botaoSalas a {
+    .botaoFerramentas a {
         display: flex;
         align-items: center;
         text-decoration: none;
         color: white;
     }
 
-    .botaoSalas:hover {
+    .botaoFerramentas:hover {
         cursor: pointer;
     }
 
@@ -309,14 +311,14 @@
     }
 </style>
 
-<h1 class="tituloArmarios">Armários</h1>
-<p class="txtArmarios">Aqui você consegue ver os armários existentes, e clicar neles para verificar as ferramentas.</p>
+<h1 class="tituloFerramentas">Ferramentas</h1>
+<p class="txtFerramentas">Aqui você consegue ver as ferramentas existentes.</p>
 
 
-<div class="botaoSalas">
+<div class="botaoFerramentas">
     <a href="javascript:void(0)" id="openPopup">
         <span class="iconSalas"><i class="bi bi-plus-circle"></i></span>
-        <span class="txt-salas">Adicionar Armario</span>
+        <span class="txt-salas">Adicionar Ferramenta</span>
     </a>
 </div>
 
@@ -327,10 +329,10 @@
           <div class="group">
               <div class="rectangle"></div>
               <div class="div"></div>
-              <img class="image" src="{{ url_for('uploaded_file', filename=ferramenta.foto_ferramenta) if ferramenta.foto_ferramenta else url_for('static', filename='imgs/defaultFerramenta.png') }}" />
+              <img class="image" src="{{ url_for('uploaded_file', filename=ferramenta.foto_ferramenta) if ferramenta.foto_ferramenta else url_for('static', filename='imgs/defaultImage.jpg') }}" />
               <div class="text-wrapper">{{ ferramenta.nome_ferramenta }}</div>
               <div class="capacidade-ferramentas">
-                  <p class="title-capac"><strong>Total de Ferramentas:</strong><br></p>
+                  <p class="title-capac">Total de Ferramentas :<br></p>
                   <p class="txt-capacidade">{{ ferramenta.total_ferramenta }}</p>
               </div>
           </div>

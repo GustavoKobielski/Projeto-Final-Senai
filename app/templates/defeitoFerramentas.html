@@ -40,7 +40,7 @@
     }
 
     .box {
-        width: 20.5vw;
+        width: 20vw;
         height: 40vh;
         position: relative;
         display: flex;
@@ -380,16 +380,22 @@
         color: #407DD8;
         position: relative;
         left: 40%;
+        overflow: hidden; /* Garante que a imagem não ultrapasse os limites */
     }
 
     #fotoFerramenta {
-        width: 90%;
-        position: relative;
-        margin-top: 9%;
-        margin-left: 5%;
-        border-radius: 15px;
-        object-fit: cover;
+        position: absolute; /* Permite posicionar a imagem dentro do contêiner */
+        top: 50%; /* Posiciona a imagem na metade do contêiner verticalmente */
+        left: 50%; /* Posiciona a imagem na metade do contêiner horizontalmente */
+        transform: translate(-50%, -50%); /* Ajusta a posição para centralizar a imagem */
+        max-width: calc(100% - 20px); /* Ajusta a largura máxima da imagem, considerando a margem */
+        max-height: calc(100% - 20px); /* Ajusta a altura máxima da imagem, considerando a margem */
+        object-fit: contain; /* Mantém a proporção da imagem dentro do contêiner */
+        padding: 10px; /* Adiciona espaço interno ao redor da imagem */
+        box-sizing: border-box; /* Inclui o padding no cálculo da largura e altura */
     }
+    
+    
 
     .tituloInfo {
         display: flex;
@@ -398,6 +404,13 @@
         font-weight: 600;
         font-size: 3vw;
         text-transform: uppercase;
+    }
+    
+    #calenderDate {
+        position: relative;
+        left: 90%;
+        bottom: 17%;
+        font-size: 20px;
     }
 
     @media(min-width: 1300px) and (max-width: 1500px) and (min-height: 598px) and (max-height: 900px) {
@@ -542,7 +555,7 @@
             <div class="rectangle"></div>
             <div class="div"></div>
             <img class="image"
-                src="{{ url_for('uploaded_file', filename=ferramenta.foto_ferramenta_sup) if ferramenta.foto_ferramenta_sup else url_for('static', filename='imgs/bannerHome.png') }}" />
+                src="{{ url_for('uploaded_file', filename=ferramenta.foto_ferramenta_sup) if ferramenta.foto_ferramenta_sup else url_for('static', filename='imgs/defaultImage.jpg') }}" />
             <div class="text-wrapper">{{ ferramenta.nome_ferramenta_sup }}</div>
             <div id="teste">
                 <a class="kobi" href="javascript:void(0)" data-id="{{ ferramenta.id_ferramentas_sup }}"
@@ -598,7 +611,7 @@
                 {{form.sala_ferramenta_sup(class="form-control", placeholder='Digite a sala')}}
 
                 {{form.data_ocorrido_sup.label(class="corCF", style="margin-bottom: 10px; display:block;")}}
-                {{form.data_ocorrido_sup(class="form-control", placeholder='Data do ocorrido')}}
+                {{ form.data_ocorrido_sup(class="form-control", id="data_ocorrido", placeholder='Data do ocorrido')}}
             </div>
 
             <div style="width: 100%;">
@@ -648,6 +661,9 @@
 
 </div>
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pt.js"></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -704,6 +720,17 @@
         // Fecha o popup ao clicar fora do conteúdo
         overlay.addEventListener('click', function () {
             closePopup(); // Oculta o popup e o overlay
+        });
+
+        flatpickr("#data_ocorrido", {
+            dateFormat: "d/m/Y", // Formato desejado para exibição
+            locale: 'pt',       // Locale para português
+            disableMobile: true,
+            onChange: function (selectedDates, dateStr, instance) {
+                // Atualiza o valor do campo do formulário com a data selecionada
+                let formattedDate = instance.formatDate(selectedDates[0], "d/m/Y");
+                document.getElementById('data_ocorrido').value = formattedDate;
+            }
         });
     });
 

@@ -120,7 +120,10 @@ def salas():
         return redirect(url_for('salas'))
    
     salas = Salas.query.all()
-    return render_template('salas.html', salas=salas, form=form)
+    armarios_por_sala = {}
+    for sala in salas:
+        armarios_por_sala[sala.id_salas] = Armario.contar_armarios_na_sala(sala.id_salas)
+    return render_template('salas.html', salas=salas, form=form, armarios_por_sala=armarios_por_sala)
 
 
 #############################################
@@ -132,25 +135,24 @@ def salas():
 def armarios(sala_id):
     form = CadastroArmario()
     armarios = Armario.query.filter_by(sala_id=sala_id).all()
+    sala = Salas.query.get_or_404(sala_id)
 
     if form.validate_on_submit():
         file = request.files.get('foto_armario')  # Obtém o arquivo do request
         filename = None
 
-
-        # Verifica se o arquivo é permitido e se tem um nome
         if file and file.filename != '' and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-           
-            # Salva o arquivo no diretório de uploads
             file.save(file_path)
-       
-        # Salva os dados da sala, incluindo o nome do arquivo
+
         form.save(sala_id=sala_id, filename=filename)
         return redirect(url_for('armarios', sala_id=sala_id))
-    
-    return render_template('armarios.html', armarios=armarios, form=form)
+
+    # Cria um dicionário para armazenar a contagem de ferramentas em cada armário
+    ferramentas_por_armario = {armario.id_armario: Ferramentas.contar_ferramentas_no_armario(armario.id_armario) for armario in armarios}
+
+    return render_template('armarios.html', sala=sala, armarios=armarios, form=form, ferramentas_por_armario=ferramentas_por_armario)
 
 
 #############################################
@@ -176,7 +178,7 @@ def ferramentas(armario_id):
        
         # Salva os dados da sala, incluindo o nome do arquivo
         form.save(armario_id=armario_id, filename=filename)
-        return redirect(url_for('armarios', armario_id=armario_id))
+        return redirect(url_for('ferramentas', armario_id=armario_id))
 
     return render_template('ferramentas.html', ferramentas=ferramentas, form=form)
 
@@ -206,7 +208,7 @@ def ferramentasSuporte():
 
 
         form.save(filename)
-        return redirect(url_for('ferramentas'))
+        return redirect(url_for('ferramentasSuporte'))
     return render_template('defeitoFerramentas.html', ferramentas=ferramentas, form=form, formInfo=formInfo)
 
 #############################################
@@ -229,7 +231,12 @@ def logs():
 
 @app.route('/gerenciamento/salas')
 def gerenciamento_salas():
-    return render_template('gerenciamentoSalas.html')
+    salas = Salas.query.all()
+    armarios_por_sala = {}
+    for sala in salas:
+        armarios_por_sala[sala.id_salas] = Armario.contar_armarios_na_sala(sala.id_salas)
+    return render_template('gerenciamentoSalas.html',salas=salas, armarios_por_sala=armarios_por_sala)
+
 
 
 #############################################

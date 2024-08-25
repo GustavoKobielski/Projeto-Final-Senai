@@ -5,25 +5,24 @@
 
 <style>
     .tituloArmarios {
-        margin: 0 auto; 
+        margin-top: 1%;
         width: 68%;
         position: relative;
-        left: 12%;
+        left: 29%;
         font-size: 32px;
-        margin-top: 1%;
     }
 
     .txtArmarios {
-        margin: 0 auto; 
+        margin-top: 1%;
         width: 68%;
         position: relative;
-        left: 12%;
+        left: 29%;
         font-size: 20px;
         color: #0000008f;
     }
 
     .box {
-        width: 20.5vw;
+        width: 20.2vw;
         height: 40vh;
         position: relative;
         display: flex;
@@ -76,9 +75,10 @@
     }
 
     .text-wrapper {
-        top: 138px;
+        bottom: 40%;
         left: calc(50% - 116.5px);
-        font-size: 24px;
+        font-size: 30px;
+        text-transform: capitalize;
     }
 
     .total-de-ferramentas {
@@ -95,6 +95,7 @@
         position: absolute;
         border-top-left-radius: 15px;
         border-top-right-radius: 15px;
+        right: 0.01%;
     }
 
 
@@ -106,26 +107,28 @@
         width: 70vw;
         margin-left: 28.4vw;
         box-sizing: border-box;
+        overflow: hidden;
     }
 
     .capacidade-ferramentas {
-        top: 25%;
+        top: 60%;
+        left: 10%;
         font-size: 20px;
         height: 51px;
         position: relative;
-        
     }
 
     .txt-capacidade {
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        position: relative;
+        left: 36%;
+        margin-top: 3%;
     }
 
     .title-capac {
         position: relative;
         left: 7.3%;
         margin: 0;
+        bottom: 1%;
     }
 
     .botaoSalas {
@@ -328,11 +331,11 @@
                 <a href="{{ url_for('ferramentas', armario_id=armario.id_armario) }}">
                 <div class="rectangle"></div>
                 <div class="div"></div>
-                <img class="image" src="{{ url_for('uploaded_file', filename=armario.foto_armario) if armario.foto_armario else url_for('static', filename='imgs/defaultArmario.png') }}" />
-                <div class="text-wrapper">{{ armario.numero }}</div>
+                <img class="image" src="{{ url_for('uploaded_file', filename=armario.foto_armario) if armario.foto_armario else url_for('static', filename='imgs/defaultImage.jpg') }}" />
+                <div class="text-wrapper">{{ sala.nome_sala }} - {{ armario.numero }}</div>
                 <div class="capacidade-ferramentas">
-                    <p class="title-capac"><strong>Capacidade de Ferramentas:</strong><br></p>
-                    <p class="txt-capacidade">{{ armario.capacidade_ferramentas }}</p>
+                    <p class="title-capac">Capacidade de Ferramentas : <br></p>
+                    <p class="txt-capacidade">{{ ferramentas_por_armario[armario.id_armario] }}</p>
                 </div>
                 </a>
             </div>

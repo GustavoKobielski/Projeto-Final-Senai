@@ -49,7 +49,7 @@
     }
 
     .box {
-        width: 20.5vw;
+        width: 20vw;
         height: 40vh;
         position: relative;
         display: flex;
@@ -413,11 +413,11 @@
                 <a href="{{ url_for('armarios', sala_id=sala.id_salas) }}">
                     <div class="rectangle"></div>
                     <div class="div"></div>
-                    <img class="image" src="{{ url_for('uploaded_file', filename=sala.foto_sala) if sala.foto_sala else url_for('static', filename='imgs/bannerHome.png') }}" />
+                    <img class="image" src="{{ url_for('uploaded_file', filename=sala.foto_sala) if sala.foto_sala else url_for('static', filename='imgs/defaultImage.jpg') }}" />
                     <div class="text-wrapper">{{ sala.nome_sala }}</div>
                     <div class="total-de-arm-rios">
                         Total de armários:<br />
-                        {{ sala.capacidade_armario }}
+                        {{ armarios_por_sala[sala.id_salas] }}
                     </div>
                 </a>
             </div>
