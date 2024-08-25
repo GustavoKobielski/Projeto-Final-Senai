@@ -14,6 +14,7 @@ class User(db.Model, UserMixin):
     senha = db.Column(db.String, nullable=True)
     adm = db.Column(db.Boolean, default=False)
     foto = db.Column(db.String, nullable=True)
+    ultimo_visto = db.Column(db.DateTime, default=lambda: datetime.now())
 
     def puxar_nome(self):
         return self.nome
@@ -73,3 +74,39 @@ class FerramentasSuporte(db.Model):
 
     def contar_ferramentas_sup():
         return FerramentasSuporte.query.count()
+
+class Message(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    recipient_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    content = db.Column(db.String(500), nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.now())
+    viewed_by = db.Column(db.PickleType, default=[])
+
+    sender = db.relationship('User', foreign_keys=[sender_id])
+    recipient = db.relationship('User', foreign_keys=[recipient_id])
+
+
+class Group(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.now)
+    
+    # Relacionamento com os usuários (muitos para muitos)
+    users = db.relationship('User', secondary='group_user', backref='groups')
+
+class GroupUser(db.Model):
+    __tablename__ = 'group_user'
+    group_id = db.Column(db.Integer, db.ForeignKey('group.id'), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+
+
+class GroupMessage(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    group_id = db.Column(db.Integer, db.ForeignKey('group.id'), nullable=False)
+    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    content = db.Column(db.String(500), nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.now)
+
+    group = db.relationship('Group', backref=db.backref('group_messages', lazy=True))
+    sender = db.relationship('User', foreign_keys=[sender_id])

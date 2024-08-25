@@ -1,0 +1,8 @@
+# Ignore Python bytecode and cache
+app/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignorar a pasta da virtual environment
+.venv/
