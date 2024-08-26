@@ -48,12 +48,30 @@
             box-sizing: border-box;
             padding: 10px;
             border-radius: 15px;
+            border: none;
+            position: relative;
+            top: 25%;
+            margin-left: 3%;
         }
 
         #sendButton {
-            width: 80px;
-            height: 40px;
-            margin-left: 10px;
+            width: 40px; 
+            height: 40px; 
+            border: none;
+            border-radius: 50%; 
+            background-color: #2870dd; 
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px; 
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        
+        #sendButton i {
+            margin: 0;
         }
 
         .contact,
@@ -251,6 +269,35 @@
             color: #969b92;
         }
 
+        .backSend {
+            background-color: #a9c1e6;
+            border-radius: 15px;
+        }
+
+        #iconE {
+            color: #407DD8;
+            font-size: 25px;
+            position: relative;
+            right: 11%;
+            top: 30%;
+        }
+
+        #iconE:hover {
+            cursor: pointer;
+        }
+
+        #iconA {
+            color: #407DD8;
+            font-size: 25px;
+            position: relative;
+            right: 12%;
+            top: 30%;
+        }
+
+        #iconA:hover {
+            cursor: pointer;
+        }
+
         @media(min-width: 1300px) and (max-width: 1500px) and (min-height: 598px) and (max-height:900px) {
 
             #createGroupBtn {
@@ -275,6 +322,11 @@
                 border: 1px solid #ccc;
             }
                 
+            #sendButton {
+                position: relative;
+                left: 92%;
+                bottom: 25%;
+            }
         }
 
     </style>
@@ -347,8 +399,15 @@
             <!-- Informação de status será atualizada aqui -->
         </div>
         <div id="messageArea"></div>
-        <input id="messageInput" type="text" placeholder="Digite uma mensagem...">
-        <button id="sendButton">Enviar</button>
+        <div class="backSend">
+            <input id="messageInput" type="text" placeholder="Digite uma mensagem...">
+            <i id="iconA" class="bi bi-paperclip"></i>
+            <i id="iconE" class="bi bi-emoji-smile"></i>
+            <button id="sendButton" aria-label="Send">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+       
     </div>
 
     <script>
