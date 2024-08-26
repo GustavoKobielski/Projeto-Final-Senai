@@ -332,6 +332,10 @@ def authorize_google():
 ######## CHATTTTTTTTTTTTTTT #################
 #############################################
 
+#############################################
+######## CHATTTTTTTTTTTTTTT #################
+#############################################
+
 @app.route('/chat')
 @login_required
 def chat():
@@ -362,8 +366,17 @@ def handle_message(data):
         recipient = User.query.get(recipient_id)
         
         # Cria URLs para as fotos
-        sender_photo_url = url_for('static', filename='uploads/' + sender.foto)
-        recipient_photo_url = url_for('static', filename='uploads/' + recipient.foto) if recipient.foto else url_for('static', filename='uploads/default.png')
+        if sender.foto:
+            sender_photo_url = url_for('static', filename='uploads/' + sender.foto)
+        else:
+            sender_photo_url = url_for('static', filename='imgs/defaultPeople.png')
+
+        # Determine photo URL for recipient
+        if recipient.foto:
+            recipient_photo_url = url_for('static', filename='uploads/' + recipient.foto)
+        else:
+            recipient_photo_url = url_for('static', filename='imgs/defaultPeople.png')
+
 
         # Emit message to the recipient
         emit('message_received', {
@@ -412,7 +425,10 @@ def load_messages(data):
     messages_data = []
     for message in messages:
         sender = User.query.get(message.sender_id)
-        sender_photo_url = url_for('static', filename='uploads/' + sender.foto)
+        if sender.foto:
+            sender_photo_url = url_for('static', filename='uploads/' + sender.foto)
+        else:
+            sender_photo_url = url_for('static', filename='imgs/defaultPeople.png')
         
         if current_user.id == recipient_id and current_user.id not in message.viewed_by:
             message.viewed_by.append(current_user.id)
@@ -429,6 +445,7 @@ def load_messages(data):
         })
 
     emit('messages_loaded', {'messages': messages_data}, room=current_user.id)
+
 
 @socketio.on('mark_message_as_viewed')
 def mark_message_as_viewed(data):

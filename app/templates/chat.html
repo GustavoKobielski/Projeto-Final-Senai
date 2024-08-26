@@ -1,39 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css">
+{% block content %}
+{% include 'navbar.html' %}
 
     <style>
         /* Estilos gerais */
         body {
             margin: 0;
             font-family: Arial, sans-serif;
+            overflow: hidden;
         }
 
         #contacts {
             width: 25%;
+            height: 85%;
             float: left;
             border-right: 1px solid #ddd;
             height: 100vh;
             box-sizing: border-box;
             overflow-y: auto;
+            position: relative;
+            left: 25%;
         }
 
         #messages {
-            width: 75%;
+            width: 50%;
             float: right;
-            height: 100vh;
+            height: 85vh;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
             padding: 10px;
+            position: relative;
         }
 
         #messageArea {
@@ -235,7 +233,7 @@
     </style>
 </head>
 
-<body>
+
     <div id="overlay"></div>
 
     <div id="createGroupPopup">
@@ -271,7 +269,7 @@
                 {% if user.foto %}
                 <img src="{{ url_for('static', filename='uploads/' + user.foto) }}" alt="{{ user.nome }}">
                 {% else %}
-                <img src="{{ url_for('static', filename='uploads/default.png') }}" alt="Foto Padrão">
+                <img src="{{ url_for('static', filename='imgs/defaultPeople.png') }}" alt="Foto Padrão">                
                 {% endif %}
                 <span>{{ user.nome }}</span>
                 <div id="lastActiveInfo_{{ user.id }}" class="last-active-info">
@@ -411,6 +409,17 @@
             });
 
             $('#sendButton').on('click', function () {
+                sendMessage();
+            });
+
+            // Enviar mensagem ao pressionar Enter
+            $('#messageInput').on('keypress', function (e) {
+                if (e.which === 13) {  // 13 é o código da tecla Enter
+                    sendMessage();
+                }
+            });
+
+            function sendMessage() {
                 const messageContent = $('#messageInput').val();
                 if (messageContent && selectedId !== null) {
                     if (chatType === 'user') {
@@ -418,9 +427,9 @@
                     } else if (chatType === 'group') {
                         socket.emit('send_group_message', { content: messageContent, to: selectedId });
                     }
-                    $('#messageInput').val('');
+                    $('#messageInput').val(''); // Limpa o campo de entrada
                 }
-            });
+            }
 
             socket.on('messages_loaded', function (data) {
                 $('#messageArea').empty();
@@ -442,7 +451,7 @@
                     $('#messageArea').append(`
             <div id="message_${msg.message_id}" class="message ${messageClass}" style="display: flex; align-items: flex-start; margin-bottom: 10px; justify-content: ${alignment};">
                 ${!isSent ? '<img src="' + msg.from_foto + '" alt="' + msg.from_name + '" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;">' : ''}
-                <div class="message-content" style="background: ${backgroundColor}; padding: 10px; border-radius: 5px; max-width: 70%; margin-${alignment === 'right' ? 'left' : 'right'}: 10px;">
+                <div class="message-content" style="background: ${backgroundColor}; padding: 10px; border-radius: 15px 15px 0 15px; max-width: 70%; margin-${alignment === 'right' ? 'left' : 'right'}: 10px;">
                     <div style="margin-bottom: 5px;">
                         <strong>${displayName}: </strong>
                     </div>
@@ -478,16 +487,20 @@
 
             // Atualizar as mensagens em tempo real
             socket.on('message_received', function (data) {
-                const displayName = data.from_name === currentUserId ? 'Você' : data.from_name;
-                const messageClass = data.from_id === currentUserId ? 'sent' : 'received';
-                const messageAlignment = data.from_id === currentUserId ? 'flex-end' : 'flex-start';
-                const messageContentStyle = data.from_id === currentUserId ? 'background: #dcf8c6;' : 'background: #ffffff;';
-                const statusIcon = '<i class="bi bi-check2-all status-icon" style="font-size: 1.2em;"></i>'; // Default icon for 'Não visualizado'
+                // Determina se a mensagem é enviada pelo usuário atual comparando com o nome
+                const isSent = data.from_name === currentUserName;
+                const displayName = isSent ? 'Você' : data.from_name;
+                const messageClass = isSent ? 'sent' : 'received'; // Determina a classe da mensagem
+                const messageAlignment = isSent ? 'flex-end' : 'flex-start'; // Define o alinhamento
+                const backgroundColor = isSent ? '#dcf8c6' : '#ffffff'; // Define a cor de fundo
+                const statusIcon = Array.isArray(data.viewed_by) && data.viewed_by.includes(currentUserId) ?
+                    '<i class="bi bi-check2-all status-icon" style="color: blue; font-size: 1.2em;"></i>' :
+                    '<i class="bi bi-check2-all status-icon" style="font-size: 1.2em;"></i>';
 
                 $('#messageArea').append(`
-        <div id="message_${data.message_id}" class="message ${messageClass}" style="justify-content: ${messageAlignment};">
-            ${data.from_id !== currentUserId ? `<img src="${data.from_foto}" alt="${data.from_name}">` : ''}
-            <div class="message-content" style="${messageContentStyle}">
+        <div id="message_${data.message_id}" class="message ${messageClass}" style="display: flex; align-items: flex-start; margin-bottom: 10px; justify-content: ${messageAlignment};">
+            ${!isSent ? `<img src="${data.from_foto}" alt="${data.from_name}" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;">` : ''}
+            <div class="message-content" style="background: ${backgroundColor}; padding: 10px; border-radius: 5px; max-width: 70%; margin-${messageAlignment === 'flex-end' ? 'left' : 'right'}: 10px;">
                 <div style="margin-bottom: 5px;">
                     <strong>${displayName}:</strong>
                 </div>
@@ -499,7 +512,7 @@
                     <span id="status_${data.message_id}">${statusIcon}</span>
                 </div>
             </div>
-            ${data.from_id === currentUserId ? `<img src="${data.from_foto}" alt="${data.from_name}">` : ''}
+            ${isSent ? `<img src="${data.from_foto}" alt="${data.from_name}" style="width: 30px; height: 30px; border-radius: 50%; margin-left: 10px;">` : ''}
         </div>
     `);
                 $('#messageArea').scrollTop($('#messageArea')[0].scrollHeight);
@@ -565,6 +578,4 @@
         });
     </script>
 
-</body>
-
-</html>
+{% endblock %}

@@ -23,7 +23,7 @@ class User(db.Model, UserMixin):
         if self.foto:
             return url_for('static', filename='uploads/' + self.foto)
         else:
-            return url_for('static', filename='default.png')
+            return url_for('static', filename='imgs/defaultPeople.png')
 
 
 class Salas(db.Model):
