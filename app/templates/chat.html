@@ -47,6 +47,7 @@
             width: calc(100% - 90px);
             box-sizing: border-box;
             padding: 10px;
+            border-radius: 15px;
         }
 
         #sendButton {
@@ -63,7 +64,8 @@
             border-bottom: 1px solid #ddd;
             cursor: pointer;
             position: relative;
-            left: -4vh;
+            right: 5%;
+            margin-top: 3%;
         }
 
         .contact img,
@@ -72,6 +74,11 @@
             height: 40px;
             border-radius: 50%;
             margin-right: 10px;
+        }
+
+        .contactName {
+            color: #407DD8;
+            font-weight: 600;
         }
 
         .contact span,
@@ -169,11 +176,15 @@
         }
 
         #createGroupBtn {
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid black;
+            width: 30%;
+            height: 10%;
+            padding: 2%;
+            border-radius: 15px;
+            border: 1px solid #407DD8;
+            background-color: #407DD8;
+            color: #f5f5f5;
             position: relative;
-            left: 2.8vh;
+            left: 4vh;
             top: -0.3vh;
         }
 
@@ -184,7 +195,9 @@
 
         #ctt-title {
             position: relative;
-            left: 35%;
+            left: 16%;
+            margin-top: 3%;
+            color: #407DD8;
         }
 
         .message {
@@ -202,8 +215,7 @@
         }
 
         .message.sent .message-content {
-            background: #dcf8c6;
-            /* Cor de fundo para mensagens enviadas pelo usuário */
+            background: #407DD8;
             margin-left: auto;
         }
 
@@ -230,6 +242,41 @@
         .message.received {
             justify-content: flex-start;
         }
+
+        #searchInput::placeholder {
+            color:#969b92 ;
+        }
+
+        #btnSearch {
+            color: #969b92;
+        }
+
+        @media(min-width: 1300px) and (max-width: 1500px) and (min-height: 598px) and (max-height:900px) {
+
+            #createGroupBtn {
+                font-size: 18px;
+            }
+
+            #btnSearch {
+                position: relative;
+                top: 5%;
+                right: 10%;
+                font-size: 18px;
+            }
+
+            #searchInput {
+                width: 90%; 
+                padding: 3%; 
+                border-radius: 15px;
+                box-sizing: border-box; 
+                font-size: 18px; 
+                position:relative;
+                left: 5%;
+                border: 1px solid #ccc;
+            }
+                
+        }
+
     </style>
 </head>
 
@@ -260,8 +307,10 @@
         <h2 id="ctt-title">Contatos
             <button id="createGroupBtn">Criar grupo</button>
         </h2>
-        <input id="searchInput" type="text" placeholder="Buscar contatos..."
-            style="width: 100%; padding: 10px; box-sizing: border-box;">
+        <div class="search">
+            <input id="searchInput" type="text" placeholder="Buscar contatos...">
+            <span><i id="btnSearch" class="bi bi-search"></i></span>
+        </div>
         <ul id="contactList">
             <!-- Exibindo os usuários -->
             {% for user in users %}
@@ -271,7 +320,7 @@
                 {% else %}
                 <img src="{{ url_for('static', filename='imgs/defaultPeople.png') }}" alt="Foto Padrão">                
                 {% endif %}
-                <span>{{ user.nome }}</span>
+                <span class="contactName">{{ user.nome }}</span>
                 <div id="lastActiveInfo_{{ user.id }}" class="last-active-info">
                     <!-- A informação de última vez online será atualizada via JavaScript -->
                 </div>
@@ -443,7 +492,7 @@
                     const displayName = isSent ? 'Você' : msg.from_name;
                     const messageClass = isSent ? 'sent' : 'received'; // Determina a classe da mensagem
                     const alignment = isSent ? 'right' : 'left'; // Define o alinhamento
-                    const backgroundColor = isSent ? '#dcf8c6' : '#ffffff'; // Define a cor de fundo
+                    const backgroundColor = isSent ? '#407DD8' : '#a9c1e6'; // Define a cor de fundo
                     const statusIcon = Array.isArray(msg.viewed_by) && msg.viewed_by.includes(currentUserId) ?
                         '<i class="bi bi-check2-all status-icon" style="color: blue; font-size: 1.2em;"></i>' :
                         '<i class="bi bi-check2-all status-icon" style="font-size: 1.2em;"></i>';
@@ -453,7 +502,7 @@
                 ${!isSent ? '<img src="' + msg.from_foto + '" alt="' + msg.from_name + '" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;">' : ''}
                 <div class="message-content" style="background: ${backgroundColor}; padding: 10px; border-radius: 15px 15px 0 15px; max-width: 70%; margin-${alignment === 'right' ? 'left' : 'right'}: 10px;">
                     <div style="margin-bottom: 5px;">
-                        <strong>${displayName}: </strong>
+                     
                     </div>
                     <div style="margin-bottom: 5px;">
                         ${msg.content}
