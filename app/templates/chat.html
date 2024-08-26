@@ -3,570 +3,680 @@
 {% block content %}
 {% include 'navbar.html' %}
 
-    <style>
-        /* Estilos gerais */
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            overflow: hidden;
-        }
+<style>
+    /* Estilos gerais */
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        overflow: hidden;
+    }
 
-        #contacts {
-            width: 25%;
-            height: 85%;
-            float: left;
-            border-right: 1px solid #ddd;
-            height: 100vh;
-            box-sizing: border-box;
-            overflow-y: auto;
-            position: relative;
-            left: 25%;
-        }
+    #contacts {
+        width: 25%;
+        height: 85%;
+        float: left;
+        border-right: 1px solid #ddd;
+        height: 100vh;
+        box-sizing: border-box;
+        overflow-y: auto;
+        position: relative;
+        left: 25%;
+    }
 
-        #messages {
-            width: 50%;
-            float: right;
-            height: 85vh;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            padding: 10px;
-            position: relative;
-        }
+    #messages {
+        width: 50%;
+        float: right;
+        height: 85vh;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        padding: 10px;
+        position: relative;
+    }
 
-        #messageArea {
-            flex: 1;
-            overflow-y: auto;
-            border: 1px solid #ddd;
-            padding: 10px;
-            background: #f9f9f9;
-            margin-bottom: 10px;
-        }
+    #messageArea {
+        flex: 1;
+        overflow-y: auto;
+        border: 1px solid #ddd;
+        padding: 10px;
+        background: #f9f9f9;
+        margin-bottom: 10px;
+    }
 
-        #messageInput {
-            width: calc(100% - 90px);
-            box-sizing: border-box;
-            padding: 10px;
-            border-radius: 15px;
-            border: none;
-            position: relative;
-            top: 25%;
-            margin-left: 3%;
-        }
+    #messageInput {
+        width: calc(100% - 90px);
+        box-sizing: border-box;
+        padding: 10px;
+        border-radius: 15px;
+        border: none;
+        position: relative;
+        top: 25%;
+        margin-left: 3%;
+    }
 
-        #sendButton {
-            width: 40px; 
-            height: 40px; 
-            border: none;
-            border-radius: 50%; 
-            background-color: #2870dd; 
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px; 
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        
-        
-        #sendButton i {
-            margin: 0;
-        }
+    #sendButton {
+        width: 40px;
+        height: 40px;
+        border: none;
+        border-radius: 50%;
+        background-color: #2870dd;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
 
-        .contact,
-        .group {
-            display: flex;
-            align-items: center;
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-            cursor: pointer;
-            position: relative;
-            right: 5%;
-            margin-top: 3%;
-        }
 
-        .contact img,
-        .group img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin-right: 10px;
-        }
+    #sendButton i {
+        margin: 0;
+    }
 
-        .contactName {
-            color: #407DD8;
-            font-weight: 600;
-        }
+    .contact,
+    .group {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        cursor: pointer;
+        position: relative;
+        right: 5%;
+        margin-top: 3%;
+    }
 
-        .contact span,
-        .group span {
-            font-size: 1rem;
-        }
+    .contact img,
+    .group img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
 
-        #lastActiveInfo {
-            font-size: 0.9rem;
-            color: gray;
-            margin-bottom: 10px;
-        }
+    .contactName {
+        color: #407DD8;
+        font-weight: 600;
+    }
 
-        #chatTitle {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-        }
+    .contact span,
+    .group span {
+        font-size: 1rem;
+    }
 
-        /* Estilos para o popup */
-        #createGroupPopup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 400px;
-            background: white;
-            border: 1px solid #ddd;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            z-index: 1000;
-        }
+    #lastActiveInfo {
+        font-size: 0.9rem;
+        color: gray;
+        margin-bottom: 10px;
+    }
 
-        #createGroupPopup label {
-            display: block;
-            margin: 10px 0 5px;
-        }
+    #chatTitle {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+    }
 
-        #createGroupPopup input[type="text"] {
-            width: 100%;
-            padding: 8px;
-            box-sizing: border-box;
-        }
+    /* Estilos para o popup */
+    #createGroupPopup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 400px;
+        background: white;
+        border: 1px solid #ddd;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        z-index: 1000;
+    }
 
-        #createGroupPopup input[type="checkbox"] {
-            margin-right: 10px;
-        }
+    #createGroupPopup label {
+        display: block;
+        margin: 10px 0 5px;
+    }
 
-        #createGroupPopup button {
-            margin-top: 10px;
-        }
+    #createGroupPopup input[type="text"] {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+    }
 
-        #overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-        }
+    #createGroupPopup input[type="checkbox"] {
+        margin-right: 10px;
+    }
 
-        #contextMenu {
-            display: none;
-            position: absolute;
-            background: white;
-            border: 1px solid #ddd;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-            padding: 10px;
-        }
+    #createGroupPopup button {
+        margin-top: 10px;
+    }
 
-        #contextMenu button {
-            display: block;
-            width: 100%;
-            padding: 5px;
-            border: none;
-            background: transparent;
-            cursor: pointer;
-        }
+    #overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+    }
 
-        #contextMenu button:hover {
-            background-color: #f0f0f0;
-        }
+    #contextMenu {
+        display: none;
+        position: absolute;
+        background: white;
+        border: 1px solid #ddd;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        padding: 10px;
+    }
 
-        .status-visualizado {
-            color: blue;
-            /* Cor azul para o ícone */
-        }
+    #contextMenu button {
+        display: block;
+        width: 100%;
+        padding: 5px;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+    }
 
-        .selected-contact {
-            background-color: #e0f7fa;
-            /* Cor de fundo azul clara, ajuste conforme necessário */
-        }
+    #contextMenu button:hover {
+        background-color: #f0f0f0;
+    }
+
+    .status-visualizado {
+        color: blue;
+        /* Cor azul para o ícone */
+    }
+
+    .selected-contact {
+        background-color: #e0f7fa;
+        /* Cor de fundo azul clara, ajuste conforme necessário */
+    }
+
+    #createGroupBtn {
+        width: 30%;
+        height: 10%;
+        padding: 2%;
+        border-radius: 15px;
+        border: 1px solid #407DD8;
+        background-color: #407DD8;
+        color: #f5f5f5;
+        position: relative;
+        left: 4vh;
+        top: -0.3vh;
+    }
+
+    #createGroupBtn:hover {
+        cursor: pointer;
+        transform: scale(1.1);
+    }
+
+    #ctt-title {
+        position: relative;
+        left: 16%;
+        margin-top: 3%;
+        color: #407DD8;
+    }
+
+    .message {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 10px;
+    }
+
+    .message-content {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border-radius: 5px;
+        max-width: 70%;
+    }
+
+    .message.sent .message-content {
+        background: #407DD8;
+        margin-left: auto;
+    }
+
+    .message.received .message-content {
+        background: #ffffff;
+        /* Cor de fundo para mensagens recebidas */
+        margin-right: auto;
+    }
+
+    .message img {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+    }
+
+    .message-content img {
+        margin-right: 10px;
+    }
+
+    .message.sent {
+        justify-content: flex-end;
+    }
+
+    .message.received {
+        justify-content: flex-start;
+    }
+
+    #searchInput::placeholder {
+        color: #969b92;
+    }
+
+    #btnSearch {
+        color: #969b92;
+    }
+
+    .backSend {
+        background-color: #a9c1e6;
+        border-radius: 15px;
+    }
+
+    #iconE {
+        color: #407DD8;
+        font-size: 25px;
+        position: relative;
+        right: 11%;
+        top: 30%;
+    }
+
+    #iconE:hover {
+        cursor: pointer;
+    }
+
+    #iconA {
+        color: #407DD8;
+        font-size: 25px;
+        position: relative;
+        right: 12%;
+        top: 30%;
+    }
+
+    #iconA:hover {
+        cursor: pointer;
+    }
+
+    emoji-picker {
+        position: absolute;
+        bottom: 80px;
+        /* Ajuste conforme necessário */
+        right: 20px;
+        /* Ajuste conforme necessário */
+        z-index: 1100;
+        /* Garantir que esteja acima dos outros elementos */
+        max-width: 300px;
+        /* Limitar a largura para responsividade */
+        width: 100%;
+        display: none;
+        /* Inicialmente escondido */
+    }
+
+    @media(min-width: 1300px) and (max-width: 1500px) and (min-height: 598px) and (max-height:900px) {
 
         #createGroupBtn {
-            width: 30%;
-            height: 10%;
-            padding: 2%;
-            border-radius: 15px;
-            border: 1px solid #407DD8;
-            background-color: #407DD8;
-            color: #f5f5f5;
-            position: relative;
-            left: 4vh;
-            top: -0.3vh;
-        }
-
-        #createGroupBtn:hover {
-            cursor: pointer;
-            transform: scale(1.1);
-        }
-
-        #ctt-title {
-            position: relative;
-            left: 16%;
-            margin-top: 3%;
-            color: #407DD8;
-        }
-
-        .message {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 10px;
-        }
-
-        .message-content {
-            display: flex;
-            align-items: center;
-            padding: 10px;
-            border-radius: 5px;
-            max-width: 70%;
-        }
-
-        .message.sent .message-content {
-            background: #407DD8;
-            margin-left: auto;
-        }
-
-        .message.received .message-content {
-            background: #ffffff;
-            /* Cor de fundo para mensagens recebidas */
-            margin-right: auto;
-        }
-
-        .message img {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-        }
-
-        .message-content img {
-            margin-right: 10px;
-        }
-
-        .message.sent {
-            justify-content: flex-end;
-        }
-
-        .message.received {
-            justify-content: flex-start;
-        }
-
-        #searchInput::placeholder {
-            color:#969b92 ;
+            font-size: 18px;
         }
 
         #btnSearch {
-            color: #969b92;
+            position: relative;
+            top: 5%;
+            right: 10%;
+            font-size: 18px;
         }
 
-        .backSend {
-            background-color: #a9c1e6;
+        #searchInput {
+            width: 90%;
+            padding: 3%;
             border-radius: 15px;
-        }
-
-        #iconE {
-            color: #407DD8;
-            font-size: 25px;
+            box-sizing: border-box;
+            font-size: 18px;
             position: relative;
-            right: 11%;
-            top: 30%;
+            left: 5%;
+            border: 1px solid #ccc;
         }
 
-        #iconE:hover {
-            cursor: pointer;
-        }
-
-        #iconA {
-            color: #407DD8;
-            font-size: 25px;
+        #sendButton {
             position: relative;
-            right: 12%;
-            top: 30%;
+            left: 92%;
+            bottom: 25%;
         }
-
-        #iconA:hover {
-            cursor: pointer;
-        }
-
-        @media(min-width: 1300px) and (max-width: 1500px) and (min-height: 598px) and (max-height:900px) {
-
-            #createGroupBtn {
-                font-size: 18px;
-            }
-
-            #btnSearch {
-                position: relative;
-                top: 5%;
-                right: 10%;
-                font-size: 18px;
-            }
-
-            #searchInput {
-                width: 90%; 
-                padding: 3%; 
-                border-radius: 15px;
-                box-sizing: border-box; 
-                font-size: 18px; 
-                position:relative;
-                left: 5%;
-                border: 1px solid #ccc;
-            }
-                
-            #sendButton {
-                position: relative;
-                left: 92%;
-                bottom: 25%;
-            }
-        }
-
-    </style>
+    }
+</style>
 </head>
 
 
-    <div id="overlay"></div>
+<div id="overlay"></div>
 
-    <div id="createGroupPopup">
-        <h3>Criar Grupo</h3>
-        <label for="groupName">Nome do grupo:</label>
-        <input id="groupName" type="text" placeholder="Nome do grupo">
+<div id="createGroupPopup">
+    <h3>Criar Grupo</h3>
+    <label for="groupName">Nome do grupo:</label>
+    <input id="groupName" type="text" placeholder="Nome do grupo">
 
-        <label>Selecione os contatos:</label>
-        <div id="groupContacts">
-            {% for user in users %}
-            <div>
-                <input type="checkbox" id="user{{ user.id }}" data-user-id="{{ user.id }}">
-                <label for="user{{ user.id }}">{{ user.nome }}</label>
+    <label>Selecione os contatos:</label>
+    <div id="groupContacts">
+        {% for user in users %}
+        <div>
+            <input type="checkbox" id="user{{ user.id }}" data-user-id="{{ user.id }}">
+            <label for="user{{ user.id }}">{{ user.nome }}</label>
 
+        </div>
+        {% endfor %}
+    </div>
+
+    <button id="createGroupButton">Criar Grupo</button>
+    <button id="cancelGroupButton">Cancelar</button>
+</div>
+
+<div id="contacts">
+    <h2 id="ctt-title">Contatos
+        <button id="createGroupBtn">Criar grupo</button>
+    </h2>
+    <div class="search">
+        <input id="searchInput" type="text" placeholder="Buscar contatos...">
+        <span><i id="btnSearch" class="bi bi-search"></i></span>
+    </div>
+    <ul id="contactList">
+        <!-- Exibindo os usuários -->
+        {% for user in users %}
+        <li data-user-id="{{ user.id }}" data-user-name="{{ user.nome }}" class="contact">
+            {% if user.foto %}
+            <img src="{{ url_for('static', filename='uploads/' + user.foto) }}" alt="{{ user.nome }}">
+            {% else %}
+            <img src="{{ url_for('static', filename='imgs/defaultPeople.png') }}" alt="Foto Padrão">
+            {% endif %}
+            <span class="contactName">{{ user.nome }}</span>
+            <div id="lastActiveInfo_{{ user.id }}" class="last-active-info">
+                <!-- A informação de última vez online será atualizada via JavaScript -->
             </div>
-            {% endfor %}
+        </li>
+        {% endfor %}
+
+        <div id="contextMenu">
+            <button id="leaveGroupBtn">Sair do Grupo</button>
         </div>
 
-        <button id="createGroupButton">Criar Grupo</button>
-        <button id="cancelGroupButton">Cancelar</button>
+        <!-- Exibindo os grupos -->
+        {% for group in groups %}
+        <li data-group-id="{{ group.id }}" data-group-name="{{ group.name }}" class="group">
+            <img src="{{ url_for('static', filename='uploads/group_icon.png') }}" alt="{{ group.name }}">
+            <span>{{ group.name }}</span>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div id="messages">
+    <h2 id="chatTitle">Selecione um <strong>Contato</strong> para começar a conversar</h2>
+    <div id="lastActiveInfo">
+
+    </div>
+    <div id="messageArea"></div>
+
+    <div id="filePreview"></div>
+
+
+    <div class="backSend">
+        <input id="messageInput" type="text" placeholder="Digite uma mensagem...">
+        <i id="iconA" class="bi bi-paperclip"></i>
+        <i id="iconE" class="bi bi-emoji-smile"></i>
+        <input type="file" id="fileUpload" style="display: none;" accept="image/*, .gif, .rar, .zip">
+        <button id="sendButton" aria-label="Send">
+            <i class="fas fa-paper-plane"></i>
+        </button>
+        <emoji-picker style="display: none;"></emoji-picker>
     </div>
 
-    <div id="contacts">
-        <h2 id="ctt-title">Contatos
-            <button id="createGroupBtn">Criar grupo</button>
-        </h2>
-        <div class="search">
-            <input id="searchInput" type="text" placeholder="Buscar contatos...">
-            <span><i id="btnSearch" class="bi bi-search"></i></span>
-        </div>
-        <ul id="contactList">
-            <!-- Exibindo os usuários -->
-            {% for user in users %}
-            <li data-user-id="{{ user.id }}" data-user-name="{{ user.nome }}" class="contact">
-                {% if user.foto %}
-                <img src="{{ url_for('static', filename='uploads/' + user.foto) }}" alt="{{ user.nome }}">
-                {% else %}
-                <img src="{{ url_for('static', filename='imgs/defaultPeople.png') }}" alt="Foto Padrão">                
-                {% endif %}
-                <span class="contactName">{{ user.nome }}</span>
-                <div id="lastActiveInfo_{{ user.id }}" class="last-active-info">
-                    <!-- A informação de última vez online será atualizada via JavaScript -->
-                </div>
-            </li>
-            {% endfor %}
-
-            <div id="contextMenu">
-                <button id="leaveGroupBtn">Sair do Grupo</button>
-            </div>
-
-            <!-- Exibindo os grupos -->
-            {% for group in groups %}
-            <li data-group-id="{{ group.id }}" data-group-name="{{ group.name }}" class="group">
-                <img src="{{ url_for('static', filename='uploads/group_icon.png') }}" alt="{{ group.name }}">
-                <span>{{ group.name }}</span>
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
-
-    <div id="messages">
-        <h2 id="chatTitle">Chat</h2> <!-- Título que será atualizado -->
-        <div id="lastActiveInfo">
-            <!-- Informação de status será atualizada aqui -->
-        </div>
-        <div id="messageArea"></div>
-        <div class="backSend">
-            <input id="messageInput" type="text" placeholder="Digite uma mensagem...">
-            <i id="iconA" class="bi bi-paperclip"></i>
-            <i id="iconE" class="bi bi-emoji-smile"></i>
-            <button id="sendButton" aria-label="Send">
-                <i class="fas fa-paper-plane"></i>
-            </button>
-        </div>
-       
-    </div>
-
-    <script>
-        $(document).ready(function () {
-            const socket = io.connect('http://' + document.domain + ':' + location.port);
-            let selectedId = null;
-            let selectedName = null;
-            const currentUserName = '{{ current_user.nome }}'; // Substitua pelo nome do usuário atual
-
-            const currentUserId = "{{ current_user.id }}";
-            let chatType = 'user'; // 'user' ou 'group'
 
 
-            function toggleCreateGroupPopup(show) {
-                $('#createGroupPopup').toggle(show);
-                $('#overlay').toggle(show);
-            }
+</div>
 
-            $('#createGroupBtn').on('click', function () {
-                toggleCreateGroupPopup(true);
-            });
+<script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
+<script>
+    $(document).ready(function () {
+        const socket = io.connect('http://' + document.domain + ':' + location.port);
+        let selectedId = null;
+        let selectedName = null;
+        const currentUserName = '{{ current_user.nome }}';
+        const emojiPicker = document.querySelector('emoji-picker');
+        const emojiButton = $('#iconE');
+        const currentUserId = "{{ current_user.id }}";
+        let chatType = 'user'; // 'user' ou 'group'
+        const messageInput = $('#messageInput');
+        const fileUpload = $('#fileUpload');
+        const filePreview = $('#filePreview');
+        const previewImage = $('#previewImage');
+        const removeImageButton = $('#removeImage');
 
-            $('#cancelGroupButton').on('click', function () {
-                toggleCreateGroupPopup(false);
-            });
-
-            $('#createGroupButton').on('click', function () {
-                const groupName = $('#groupName').val();
-                const selectedUsers = [];
-                $('#groupContacts input[type="checkbox"]:checked').each(function () {
-                    selectedUsers.push($(this).data('user-id'));
-                });
-
-                if (groupName && selectedUsers.length) {
-                    socket.emit('create_group', { name: groupName, users: selectedUsers });
-                    toggleCreateGroupPopup(false);
+        function filterContacts() {
+            var searchValue = $('#searchInput').val().toLowerCase();
+            $('#contactList .contact').each(function () {
+                var contactName = $(this).find('.contactName').text().toLowerCase();
+                if (contactName.indexOf(searchValue) > -1) {
+                    $(this).show();
                 } else {
-                    alert('Por favor, insira um nome para o grupo e selecione ao menos um contato.');
+                    $(this).hide();
                 }
             });
+        }
 
+        $('#iconA').on('click', function () {
+            fileUpload.click();
+        });
 
-            $(document).on('click', function (e) {
-                if (!$(e.target).closest('#contextMenu').length) {
-                    $('#contextMenu').hide();
-                }
-            });
+        fileUpload.on('change', function () {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const fileType = file.type;
+                    const fileURL = e.target.result;
 
-            $('#leaveGroupBtn').on('click', function () {
-                if (selectedGroupId !== null) {
-                    socket.emit('leave_group', { group_id: selectedGroupId });
-                    $('#contextMenu').hide();
-                }
-            });
-
-            socket.on('group_left', function (data) {
-                const groupId = data.group_id;
-                $(`#contactList .group[data-group-id="${groupId}"]`).remove();
-            });
-
-            $('#contactList').on('contextmenu', '.group', function (e) {
-                e.preventDefault();
-                selectedGroupId = $(this).data('group-id');
-                $('#contextMenu').css({
-                    display: 'block',
-                    top: e.pageY + 'px',
-                    left: e.pageX + 'px'
-                });
-            });
-
-            function getCurrentTime() {
-                const now = new Date();
-                const hours = String(now.getHours()).padStart(2, '0');
-                const minutes = String(now.getMinutes()).padStart(2, '0');
-                return `${hours}:${minutes}`;
-            }
-
-            function updateLastActive(lastActive) {
-                $('#lastActiveInfo').text(lastActive);
-            }
-
-
-
-            // Clique em um contato
-            $('#contactList').on('click', '.contact', function () {
-                chatType = 'user';
-                selectedId = $(this).data('user-id');
-                selectedName = $(this).data('user-name');
-
-                $('#chatTitle').text(selectedName);
-                $('#lastActiveInfo').show();
-                $('#messageArea').html('');
-                socket.emit('get_last_active', { user_id: selectedId });
-                socket.emit('load_messages', { to: selectedId });
-            });
-
-            // Clique em um grupo
-            $('#contactList').on('click', '.group', function () {
-                chatType = 'group';
-                selectedId = $(this).data('group-id');
-                selectedName = $(this).data('group-name');
-
-                $('#chatTitle').text(selectedName);
-                $('#lastActiveInfo').hide();
-                $('#messageArea').html('');
-                socket.emit('load_group_messages', { group_id: selectedId });
-            });
-
-            $('#sendButton').on('click', function () {
-                sendMessage();
-            });
-
-            // Enviar mensagem ao pressionar Enter
-            $('#messageInput').on('keypress', function (e) {
-                if (e.which === 13) {  // 13 é o código da tecla Enter
-                    sendMessage();
-                }
-            });
-
-            function sendMessage() {
-                const messageContent = $('#messageInput').val();
-                if (messageContent && selectedId !== null) {
-                    if (chatType === 'user') {
-                        socket.emit('send_message', { content: messageContent, to: selectedId });
-                    } else if (chatType === 'group') {
-                        socket.emit('send_group_message', { content: messageContent, to: selectedId });
+                    let previewContent;
+                    if (fileType.startsWith('image/') || fileType === 'image/gif') {
+                        // Cria HTML para imagens e GIFs
+                        previewContent = `
+                    <div class="image-preview" style="position: relative; display: inline-block;">
+                        <img src="${fileURL}" style="max-width: 200px; max-height: 200px; width: auto; height: auto;">
+                        <button class="remove-image" style="position: absolute; top: 0; right: 0; background: red; color: white; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer;">&times;</button>
+                    </div>`;
+                    } else {
+                        // Para outros tipos de arquivos, cria um link de download
+                        previewContent = `<a href="${fileURL}" download="${file.name}">Arquivo enviado: ${file.name}</a>`;
                     }
-                    $('#messageInput').val(''); // Limpa o campo de entrada
-                }
+
+                    // Exibe o preview
+                    $('#filePreview').html(previewContent);
+
+                    // Adiciona a funcionalidade para remover a imagem
+                    $('.remove-image').on('click', function () {
+                        $('#filePreview').empty();
+                        fileUpload.val(''); // Limpa o campo de upload
+                    });
+                };
+                reader.readAsDataURL(file);
             }
+        });
 
-            socket.on('messages_loaded', function (data) {
-                $('#messageArea').empty();
-                data.messages.forEach(msg => {
-                    console.log("Mensagem:", msg);
-                    console.log("Nome Atual:", currentUserName); // Usando o nome do usuário
-                    console.log("Nome do Remetente:", msg.from_name);
+        emojiButton.on('click', function () {
+            if (emojiPicker.style.display === 'none') {
+                emojiPicker.style.display = 'block';
+            } else {
+                emojiPicker.style.display = 'none';
+            }
+        });
 
-                    // Determina se a mensagem é enviada pelo usuário atual comparando com o nome
-                    const isSent = msg.from_name === currentUserName;
-                    const displayName = isSent ? 'Você' : msg.from_name;
-                    const messageClass = isSent ? 'sent' : 'received'; // Determina a classe da mensagem
-                    const alignment = isSent ? 'right' : 'left'; // Define o alinhamento
-                    const backgroundColor = isSent ? '#407DD8' : '#a9c1e6'; // Define a cor de fundo
-                    const statusIcon = Array.isArray(msg.viewed_by) && msg.viewed_by.includes(currentUserId) ?
-                        '<i class="bi bi-check2-all status-icon" style="color: blue; font-size: 1.2em;"></i>' :
-                        '<i class="bi bi-check2-all status-icon" style="font-size: 1.2em;"></i>';
+        document.addEventListener('click', function (e) {
+            if (!emojiPicker.contains(e.target) && !emojiButton[0].contains(e.target)) {
+                emojiPicker.style.display = 'none';
+            }
+        });
 
-                    $('#messageArea').append(`
+        emojiPicker.addEventListener('emoji-click', (event) => {
+            const emoji = event.detail.unicode;
+            messageInput.val(messageInput.val() + emoji);
+            emojiPicker.style.display = 'none';
+        });
+
+        // Evento de digitação na caixa de pesquisa
+        $('#searchInput').on('keyup', function () {
+            filterContacts();
+        });
+
+        // Evento de clique no botão de pesquisa (opcional, mas você pode usá-lo para compatibilidade com botões)
+        $('#btnSearch').on('click', function () {
+            filterContacts();
+        });
+
+        function toggleCreateGroupPopup(show) {
+            $('#createGroupPopup').toggle(show);
+            $('#overlay').toggle(show);
+        }
+
+        $('#createGroupBtn').on('click', function () {
+            toggleCreateGroupPopup(true);
+        });
+
+        $('#cancelGroupButton').on('click', function () {
+            toggleCreateGroupPopup(false);
+        });
+
+        $('#createGroupButton').on('click', function () {
+            const groupName = $('#groupName').val();
+            const selectedUsers = [];
+            $('#groupContacts input[type="checkbox"]:checked').each(function () {
+                selectedUsers.push($(this).data('user-id'));
+            });
+
+            if (groupName && selectedUsers.length) {
+                socket.emit('create_group', { name: groupName, users: selectedUsers });
+                toggleCreateGroupPopup(false);
+            } else {
+                alert('Por favor, insira um nome para o grupo e selecione ao menos um contato.');
+            }
+        });
+
+
+        $(document).on('click', function (e) {
+            if (!$(e.target).closest('#contextMenu').length) {
+                $('#contextMenu').hide();
+            }
+        });
+
+        $('#leaveGroupBtn').on('click', function () {
+            if (selectedGroupId !== null) {
+                socket.emit('leave_group', { group_id: selectedGroupId });
+                $('#contextMenu').hide();
+            }
+        });
+
+        socket.on('group_left', function (data) {
+            const groupId = data.group_id;
+            $(`#contactList .group[data-group-id="${groupId}"]`).remove();
+        });
+
+        $('#contactList').on('contextmenu', '.group', function (e) {
+            e.preventDefault();
+            selectedGroupId = $(this).data('group-id');
+            $('#contextMenu').css({
+                display: 'block',
+                top: e.pageY + 'px',
+                left: e.pageX + 'px'
+            });
+        });
+
+        function getCurrentTime() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            return `${hours}:${minutes}`;
+        }
+
+        function updateLastActive(lastActive) {
+            $('#lastActiveInfo').text(lastActive);
+        }
+
+
+
+        // Clique em um contato
+        $('#contactList').on('click', '.contact', function () {
+            chatType = 'user';
+            selectedId = $(this).data('user-id');
+            selectedName = $(this).data('user-name');
+
+            $('#chatTitle').text(selectedName);
+            $('#lastActiveInfo').show();
+            $('#messageArea').html('');
+            socket.emit('get_last_active', { user_id: selectedId });
+            socket.emit('load_messages', { to: selectedId });
+        });
+
+        // Clique em um grupo
+        $('#contactList').on('click', '.group', function () {
+            chatType = 'group';
+            selectedId = $(this).data('group-id');
+            selectedName = $(this).data('group-name');
+
+            $('#chatTitle').text(selectedName);
+            $('#lastActiveInfo').hide();
+            $('#messageArea').html('');
+            socket.emit('load_group_messages', { group_id: selectedId });
+        });
+
+        $('#sendButton').on('click', function () {
+            sendMessage();
+        });
+
+        // Enviar mensagem ao pressionar Enter
+        $('#messageInput').on('keypress', function (e) {
+            if (e.which === 13) {  // 13 é o código da tecla Enter
+                sendMessage();
+            }
+        });
+
+        function sendMessage(content) {
+            const messageContent = content || $('#messageInput').val(); // Se não há conteúdo de arquivo, usa o texto da mensagem
+            if (messageContent || fileUpload[0].files.length > 0) { // Verifica se há conteúdo ou arquivos
+                const messageData = {
+                    content: messageContent,
+                    to: selectedId,
+                    file: fileUpload[0].files[0] ? fileUpload[0].files[0] : null // Inclui o arquivo se existir
+                };
+
+                if (chatType === 'user') {
+                    socket.emit('send_message', messageData);
+                } else if (chatType === 'group') {
+                    socket.emit('send_group_message', messageData);
+                }
+
+                $('#messageInput').val(''); // Limpa o campo de entrada
+                $('#filePreview').empty(); // Limpa a visualização do arquivo após o envio
+                fileUpload.val(''); // Limpa o campo de upload após o envio
+            }
+        }
+
+        socket.on('messages_loaded', function (data) {
+            $('#messageArea').empty();
+            data.messages.forEach(msg => {
+                const isSent = msg.from_name === currentUserName;
+                const displayName = isSent ? 'Você' : msg.from_name;
+                const messageClass = isSent ? 'sent' : 'received';
+                const alignment = isSent ? 'right' : 'left';
+                const backgroundColor = isSent ? '#407DD8' : '#a9c1e6';
+                const textColor = isSent ? '#fff' : '#000';
+                const statusIcon = Array.isArray(msg.viewed_by) && msg.viewed_by.includes(currentUserId) ?
+                    '<i class="bi bi-check2-all status-icon" style="color: blue; font-size: 1.2em;"></i>' :
+                    '<i class="bi bi-check2-all status-icon" style="font-size: 1.2em;"></i>';
+
+                $('#messageArea').append(`
             <div id="message_${msg.message_id}" class="message ${messageClass}" style="display: flex; align-items: flex-start; margin-bottom: 10px; justify-content: ${alignment};">
                 ${!isSent ? '<img src="' + msg.from_foto + '" alt="' + msg.from_name + '" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;">' : ''}
-                <div class="message-content" style="background: ${backgroundColor}; padding: 10px; border-radius: 15px 15px 0 15px; max-width: 70%; margin-${alignment === 'right' ? 'left' : 'right'}: 10px;">
-                    <div style="margin-bottom: 5px;">
-                     
-                    </div>
+                <div class="message-content" style="background: ${backgroundColor}; color: ${textColor}; padding: 10px; border-radius: 15px 15px 0 15px; max-width: 70%; margin-${alignment === 'right' ? 'left' : 'right'}: 10px;">
                     <div style="margin-bottom: 5px;">
                         ${msg.content}
                     </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div class="time-message" style="display: flex; justify-content: space-between; align-items: center;">
                         <small>(${msg.time})</small>
                         <span id="status_${msg.message_id}">${statusIcon}</span>
                     </div>
@@ -574,48 +684,40 @@
                 ${isSent ? '<img src="' + msg.from_foto + '" alt="' + msg.from_name + '" style="width: 30px; height: 30px; border-radius: 50%; margin-left: 10px;">' : ''}
             </div>
         `);
-                });
-                $('#messageArea').scrollTop($('#messageArea')[0].scrollHeight);
             });
+            $('#messageArea').scrollTop($('#messageArea')[0].scrollHeight);
+        });
 
-
-
-
-
-
-            socket.on('group_messages_loaded', function (data) {
-                $('#messageArea').empty();
-                data.messages.forEach(msg => {
-                    const displayName = msg.from_name === currentUserId ? 'Você' : msg.from_name;
-                    $('#messageArea').append(`<div><strong>${displayName}:</strong> ${msg.content} <small>(${msg.time})</small></div>`);
-                });
-                $('#messageArea').scrollTop($('#messageArea')[0].scrollHeight);
+        socket.on('group_messages_loaded', function (data) {
+            $('#messageArea').empty();
+            data.messages.forEach(msg => {
+                const displayName = msg.from_name === currentUserId ? 'Você' : msg.from_name;
+                $('#messageArea').append(`<div><strong>${displayName}:</strong> ${msg.content} <small>(${msg.time})</small></div>`);
             });
+            $('#messageArea').scrollTop($('#messageArea')[0].scrollHeight);
+        });
 
 
-            // Atualizar as mensagens em tempo real
-            socket.on('message_received', function (data) {
-                // Determina se a mensagem é enviada pelo usuário atual comparando com o nome
-                const isSent = data.from_name === currentUserName;
-                const displayName = isSent ? 'Você' : data.from_name;
-                const messageClass = isSent ? 'sent' : 'received'; // Determina a classe da mensagem
-                const messageAlignment = isSent ? 'flex-end' : 'flex-start'; // Define o alinhamento
-                const backgroundColor = isSent ? '#dcf8c6' : '#ffffff'; // Define a cor de fundo
-                const statusIcon = Array.isArray(data.viewed_by) && data.viewed_by.includes(currentUserId) ?
-                    '<i class="bi bi-check2-all status-icon" style="color: blue; font-size: 1.2em;"></i>' :
-                    '<i class="bi bi-check2-all status-icon" style="font-size: 1.2em;"></i>';
+        // Atualizar as mensagens em tempo real
+        socket.on('message_received', function (data) {
+            const isSent = data.from_name === currentUserName;
+            const displayName = isSent ? 'Você' : data.from_name;
+            const messageClass = isSent ? 'sent' : 'received';
+            const messageAlignment = isSent ? 'flex-end' : 'flex-start';
+            const backgroundColor = isSent ? '#407DD8' : '#ffffff';
+            const textColor = isSent ? '#fff' : '#000';
+            const statusIcon = Array.isArray(data.viewed_by) && data.viewed_by.includes(currentUserId) ?
+                '<i class="bi bi-check2-all status-icon" style="color: blue; font-size: 1.2em;"></i>' :
+                '<i class="bi bi-check2-all status-icon" style="font-size: 1.2em;"></i>';
 
-                $('#messageArea').append(`
+            $('#messageArea').append(`
         <div id="message_${data.message_id}" class="message ${messageClass}" style="display: flex; align-items: flex-start; margin-bottom: 10px; justify-content: ${messageAlignment};">
             ${!isSent ? `<img src="${data.from_foto}" alt="${data.from_name}" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;">` : ''}
-            <div class="message-content" style="background: ${backgroundColor}; padding: 10px; border-radius: 5px; max-width: 70%; margin-${messageAlignment === 'flex-end' ? 'left' : 'right'}: 10px;">
-                <div style="margin-bottom: 5px;">
-                    <strong>${displayName}:</strong>
-                </div>
+            <div class="message-content" style="background: ${backgroundColor}; color: ${textColor}; padding: 10px; border-radius: 15px 15px 0 15px; max-width: 70%; margin-${messageAlignment === 'flex-end' ? 'left' : 'right'}: 10px;">
                 <div style="margin-bottom: 5px;">
                     ${data.content}
                 </div>
-                <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div class="time-message" style="display: flex; justify-content: space-between; align-items: center;">
                     <small>(${data.time})</small>
                     <span id="status_${data.message_id}">${statusIcon}</span>
                 </div>
@@ -623,67 +725,62 @@
             ${isSent ? `<img src="${data.from_foto}" alt="${data.from_name}" style="width: 30px; height: 30px; border-radius: 50%; margin-left: 10px;">` : ''}
         </div>
     `);
-                $('#messageArea').scrollTop($('#messageArea')[0].scrollHeight);
-            });
+            $('#messageArea').scrollTop($('#messageArea')[0].scrollHeight);
+        });
+
+        socket.on('group_message', function (data) {
+            const displayName = data.from_name === currentUserId ? 'Você' : data.from_name;
+            $('#messageArea').append(`<div><strong>${displayName}:</strong> ${data.content} <small>(${data.time})</small></div>`);
+            $('#messageArea').scrollTop($('#messageArea')[0].scrollHeight);
+        });
+
+        socket.on('message_viewed', function (data) {
+            const messageId = data.message_id;
+            const statusElement = $(`#status_${messageId}`);
+
+            // Atualiza o status da mensagem para 'visualizado'
+            statusElement.html('<i class="bi bi-check2-all" style="color: blue; font-size: 1.2em;"></i>'); // Icone para 'Visualizado'
+        });
 
 
+        socket.on('last_active', function (data) {
+            const lastActive = data.last_active;
+            if (chatType === 'user') {
+                updateLastActive(lastActive);
+            } else if (chatType === 'group') {
+                // Atualize informações de última atividade dos membros do grupo aqui, se necessário
+            }
 
+        });
 
-
-
-            socket.on('group_message', function (data) {
-                const displayName = data.from_name === currentUserId ? 'Você' : data.from_name;
-                $('#messageArea').append(`<div><strong>${displayName}:</strong> ${data.content} <small>(${data.time})</small></div>`);
-                $('#messageArea').scrollTop($('#messageArea')[0].scrollHeight);
-            });
-
-            socket.on('message_viewed', function (data) {
-                const messageId = data.message_id;
-                const statusElement = $(`#status_${messageId}`);
-
-                // Atualiza o status da mensagem para 'visualizado'
-                statusElement.html('<i class="bi bi-check2-all" style="color: blue; font-size: 1.2em;"></i>'); // Icone para 'Visualizado'
-            });
-
-
-            socket.on('last_active', function (data) {
-                const lastActive = data.last_active;
-                if (chatType === 'user') {
-                    updateLastActive(lastActive);
-                } else if (chatType === 'group') {
-                    // Atualize informações de última atividade dos membros do grupo aqui, se necessário
-                }
-
-            });
-
-            socket.on('group_created', function (data) {
-                $('#contactList').append(`<li data-group-id="${data.group_id}" data-group-name="${data.group_name}" class="group">
+        socket.on('group_created', function (data) {
+            $('#contactList').append(`<li data-group-id="${data.group_id}" data-group-name="${data.group_name}" class="group">
                     <img src="{{ url_for('static', filename='uploads/group_icon.png') }}" alt="${data.group_name}">
                     <span>${data.group_name}</span>
                 </li>`);
-            });
-
-            // Clique em um contato
-            $('#contactList').on('click', '.contact', function () {
-                // Remove a classe de destaque de todos os contatos
-                $('.contact').removeClass('selected-contact');
-
-                // Adiciona a classe de destaque ao contato selecionado
-                $(this).addClass('selected-contact');
-
-                chatType = 'user';
-                selectedId = $(this).data('user-id');
-                selectedName = $(this).data('user-name');
-
-                $('#chatTitle').text(selectedName);
-                $('#lastActiveInfo').show();
-                $('#messageArea').html('');
-                socket.emit('get_last_active', { user_id: selectedId });
-                socket.emit('load_messages', { to: selectedId });
-            });
-
-
         });
-    </script>
+
+        // Clique em um contato
+        $('#contactList').on('click', '.contact', function () {
+            // Remove a classe de destaque de todos os contatos
+            $('.contact').removeClass('selected-contact');
+
+            // Adiciona a classe de destaque ao contato selecionado
+            $(this).addClass('selected-contact');
+
+            chatType = 'user';
+            selectedId = $(this).data('user-id');
+            selectedName = $(this).data('user-name');
+
+            $('#chatTitle').text(selectedName);
+            $('#lastActiveInfo').show();
+            $('#messageArea').html('');
+            socket.emit('get_last_active', { user_id: selectedId });
+            socket.emit('load_messages', { to: selectedId });
+        });
+
+
+    });
+</script>
 
 {% endblock %}
