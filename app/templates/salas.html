@@ -212,7 +212,7 @@
         border: 1.5px solid black;
         display: none;
     }
-   
+
 
 
 
@@ -241,17 +241,20 @@
         align-items: center;
         width: 50%;
     }
-   
+
     .addFoto {
-        width: 40%;        
-        height: auto; /* Mantém a proporção da imagem */
-        margin-bottom: 10px; /* Espaço entre a imagem e o botão */
+        width: 40%;
+        height: auto;
+        /* Mantém a proporção da imagem */
+        margin-bottom: 10px;
+        /* Espaço entre a imagem e o botão */
     }
-   
+
     .addImg {
         position: relative;
         left: -85%;
-        margin-top: 10px; /* Espaço acima do botão, se necessário */
+        margin-top: 10px;
+        /* Espaço acima do botão, se necessário */
         font-size: 1vw;
     }
 
@@ -321,9 +324,12 @@
         left: 0;
         width: 100vw;
         height: 100vh;
-        background-color: rgba(0, 0, 0, 0.5); /* Cor preta com opacidade */
-        z-index: 1000; /* Abaixo do popup */
-        display: none; /* Inicialmente oculto */
+        background-color: rgba(0, 0, 0, 0.5);
+        /* Cor preta com opacidade */
+        z-index: 1000;
+        /* Abaixo do popup */
+        display: none;
+        /* Inicialmente oculto */
     }
 
     .image {
@@ -334,7 +340,7 @@
 
 
     @media(min-width: 1300px) and (max-width: 1670px) and (min-height: 598px) and (max-height:900px) {
-       
+
         .tituloSalas {
             position: relative;
             left: 1%;
@@ -381,10 +387,6 @@
         }
 
     }
-
-
-
-
 </style>
 
 
@@ -408,20 +410,21 @@
 
 <div class="container">
     {% for sala in salas %}
-        <div class="box">
-            <div class="group">
-                <a href="{{ url_for('armarios', sala_id=sala.id_salas) }}">
-                    <div class="rectangle"></div>
-                    <div class="div"></div>
-                    <img class="image" src="{{ url_for('uploaded_file', filename=sala.foto_sala) if sala.foto_sala else url_for('static', filename='imgs/defaultImage.jpg') }}" />
-                    <div class="text-wrapper">{{ sala.nome_sala }}</div>
-                    <div class="total-de-arm-rios">
-                        Total de armários:<br />
-                        {{ armarios_por_sala[sala.id_salas] }}
-                    </div>
-                </a>
-            </div>
+    <div class="box">
+        <div class="group">
+            <a href="{{ url_for('armarios', sala_id=sala.id_salas) }}">
+                <div class="rectangle"></div>
+                <div class="div"></div>
+                <img class="image"
+                    src="{{ url_for('serve_salas_file', filename=sala.foto_sala) if sala.foto_sala else url_for('static', filename='imgs/defaultImage.jpg') }}" />
+                <div class="text-wrapper">{{ sala.nome_sala }}</div>
+                <div class="total-de-arm-rios">
+                    Total de armários:<br />
+                    {{ armarios_por_sala[sala.id_salas] }}
+                </div>
+            </a>
         </div>
+    </div>
     {% endfor %}
 </div>
 
@@ -436,7 +439,7 @@
     <div class="content">
         <div class="foto">
             <img class="addFoto" src="{{ url_for('static', filename='imgs/addFoto.png')}}" alt="">
-           
+
         </div>
 
         <form action="" method="POST" class="formSalas" enctype="multipart/form-data">
@@ -487,7 +490,7 @@
 
 
         // Abre o popup ao clicar no botão "Adicionar Salas"
-        openPopupBtn.addEventListener('click', function(event) {
+        openPopupBtn.addEventListener('click', function (event) {
             event.preventDefault(); // Evita que o link redirecione
             openPopup(); // Exibe o popup e o overlay
         });
@@ -496,7 +499,7 @@
 
 
         // Fecha o popup ao clicar no botão "×"
-        closePopupBtn.addEventListener('click', function() {
+        closePopupBtn.addEventListener('click', function () {
             closePopup(); // Oculta o popup e o overlay
         });
 
@@ -504,7 +507,7 @@
 
 
         // Fecha o popup ao clicar fora do conteúdo
-        overlay.addEventListener('click', function() {
+        overlay.addEventListener('click', function () {
             closePopup(); // Oculta o popup e o overlay
         });
     });

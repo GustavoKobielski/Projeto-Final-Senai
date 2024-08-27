@@ -21,7 +21,7 @@ class User(db.Model, UserMixin):
 
     def obter_foto(self):
         if self.foto:
-            return url_for('static', filename='uploads/' + self.foto)
+            return url_for('static', filename='uploads/perfil/' + self.foto)
         else:
             return url_for('static', filename='imgs/defaultPeople.png')
 
@@ -82,6 +82,7 @@ class Message(db.Model):
     content = db.Column(db.String(500), nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.now())
     viewed_by = db.Column(db.PickleType, default=[])
+    file_path = db.Column(db.String(200))
 
     sender = db.relationship('User', foreign_keys=[sender_id])
     recipient = db.relationship('User', foreign_keys=[recipient_id])

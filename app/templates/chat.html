@@ -4,7 +4,6 @@
 {% include 'navbar.html' %}
 
 <style>
-    /* Estilos gerais */
     body {
         margin: 0;
         font-family: Arial, sans-serif;
@@ -67,6 +66,9 @@
         font-size: 20px;
         cursor: pointer;
         transition: background-color 0.3s ease;
+        position: relative;
+        left: 94%;
+        bottom: 25%;
     }
 
 
@@ -82,14 +84,13 @@
         border-bottom: 1px solid #ddd;
         cursor: pointer;
         position: relative;
-        right: 5%;
-        margin-top: 3%;
+        margin-top: 5%;
     }
 
     .contact img,
     .group img {
-        width: 40px;
-        height: 40px;
+        width: 50px;
+        height: 50px;
         border-radius: 50%;
         margin-right: 10px;
     }
@@ -97,11 +98,14 @@
     .contactName {
         color: #407DD8;
         font-weight: 600;
+        bottom: 5%;
     }
 
     .contact span,
     .group span {
-        font-size: 1rem;
+        font-size: 1vw;
+        position: relative;
+        bottom: 10%;
     }
 
     #lastActiveInfo {
@@ -168,6 +172,8 @@
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
         z-index: 1000;
         padding: 10px;
+        position: relative;
+        left: 50%;
     }
 
     #contextMenu button {
@@ -189,7 +195,9 @@
     }
 
     .selected-contact {
-        background-color: #e0f7fa;
+        background-color: #ebe9e9;
+        border-radius: 15px;
+        width: 95%;
         /* Cor de fundo azul clara, ajuste conforme necessário */
     }
 
@@ -202,8 +210,9 @@
         background-color: #407DD8;
         color: #f5f5f5;
         position: relative;
-        left: 4vh;
+        left: 20%;
         top: -0.3vh;
+        font-size: 1vw;
     }
 
     #createGroupBtn:hover {
@@ -215,7 +224,6 @@
         position: relative;
         left: 16%;
         margin-top: 3%;
-        color: #407DD8;
     }
 
     .message {
@@ -261,12 +269,38 @@
         justify-content: flex-start;
     }
 
+    .imgPeople {
+        border: 1px solid;
+
+    }
+
+    #searchInput {
+        width: 90%;
+        padding: 2%;
+        border-radius: 15px;
+        box-sizing: border-box;
+        font-size: 18px;
+        position: relative;
+        left: 5%;
+        border: 1px solid #ccc;
+        margin-top: 3%;
+    }
+
+    #searchInput:active {
+        border: none;
+    }
+
     #searchInput::placeholder {
         color: #969b92;
+        border: none;
     }
 
     #btnSearch {
         color: #969b92;
+        position: relative;
+        top: 5%;
+        right: 10%;
+        font-size: 20px;
     }
 
     .backSend {
@@ -278,7 +312,7 @@
         color: #407DD8;
         font-size: 25px;
         position: relative;
-        right: 11%;
+        right: 9%;
         top: 30%;
     }
 
@@ -290,7 +324,7 @@
         color: #407DD8;
         font-size: 25px;
         position: relative;
-        right: 12%;
+        right: 10%;
         top: 30%;
     }
 
@@ -312,6 +346,79 @@
         display: none;
         /* Inicialmente escondido */
     }
+
+    #contactList {
+        position: relative;
+        right: 1%;
+    }
+
+    .titleGroup {
+        color: #407DD8;
+        font-weight: 600;
+        display: flex;
+        justify-content: center;
+    }
+
+    #createGroupButton {
+        background-color: #407DD8;
+        border-radius: 5px;
+        border: none;
+        color: #f5f5f5;
+        padding: 2.5%;
+        position: relative;
+        left: 45%;
+    }
+
+    #cancelGroupButton {
+        background-color: transparent;
+        border-radius: 15px;
+        border: none;
+        color: #ccc;
+        padding: 2.5%;
+        position: relative;
+        left: 40%;
+    }
+
+    .rowCreateGroup {
+        color: #407DD8;
+    }
+
+    .user {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        background-color: #f4f4f4;
+        margin-bottom: 10px;
+        border-radius: 5px;
+    }
+
+
+    .add-btn {
+        background-color: #61d692;
+        padding: 6px 12px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+        display: inline-block;
+        text-align: center;
+    }
+
+    .added-btn {
+        background-color: transparent;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        color: black;
+        font-weight: bold;
+        font-size: 14px;
+        display: inline-block;
+        text-align: center;
+    }
+
 
     @media(min-width: 1300px) and (max-width: 1500px) and (min-height: 598px) and (max-height:900px) {
 
@@ -350,7 +457,7 @@
 <div id="overlay"></div>
 
 <div id="createGroupPopup">
-    <h3>Criar Grupo</h3>
+    <h3 class="titleGroup">Criar Grupo</h3>
     <label for="groupName">Nome do grupo:</label>
     <input id="groupName" type="text" placeholder="Nome do grupo">
 
@@ -358,15 +465,24 @@
     <div id="groupContacts">
         {% for user in users %}
         <div>
-            <input type="checkbox" id="user{{ user.id }}" data-user-id="{{ user.id }}">
-            <label for="user{{ user.id }}">{{ user.nome }}</label>
+            <div class="user">
+                <label for="user{{ user.id }}">{{ user.nome }}</label>
+                <input type="checkbox" id="user{{ user.id }}" data-user-id="{{ user.id }}" style="display: none;">
+                <label for="user{{ user.id }}" class="add-btn"> + Add</label>
+                <label for="user{{ user.id }}" class="added-btn" style="display: none;"> ✓ Added</label>
+            </div>
 
         </div>
         {% endfor %}
     </div>
 
-    <button id="createGroupButton">Criar Grupo</button>
+    <div class="rowCreateGroup">
+        <hr>
+    </div>
+
     <button id="cancelGroupButton">Cancelar</button>
+    <button id="createGroupButton">Criar Grupo</button>
+
 </div>
 
 <div id="contacts">
@@ -382,9 +498,10 @@
         {% for user in users %}
         <li data-user-id="{{ user.id }}" data-user-name="{{ user.nome }}" class="contact">
             {% if user.foto %}
-            <img src="{{ url_for('static', filename='uploads/' + user.foto) }}" alt="{{ user.nome }}">
+            <img src="{{ url_for('static', filename='uploads/perfil/' + user.foto) }}" class="imgPeople"
+                alt="{{ user.nome }}">
             {% else %}
-            <img src="{{ url_for('static', filename='imgs/defaultPeople.png') }}" alt="Foto Padrão">
+            <img src="{{ url_for('static', filename='imgs/defaultPeople.png') }}" class="imgPeople" alt="Foto Padrão">
             {% endif %}
             <span class="contactName">{{ user.nome }}</span>
             <div id="lastActiveInfo_{{ user.id }}" class="last-active-info">
@@ -636,12 +753,30 @@
         });
 
         function sendMessage(content) {
-            const messageContent = content || $('#messageInput').val(); // Se não há conteúdo de arquivo, usa o texto da mensagem
-            if (messageContent || fileUpload[0].files.length > 0) { // Verifica se há conteúdo ou arquivos
+            const messageContent = content || $('#messageInput').val();
+            const file = fileUpload[0].files[0];
+
+            let fileData = null;
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onloadend = function (e) {
+                    fileData = {
+                        filename: file.name,
+                        data: e.target.result.split(',')[1] // Obtém a parte base64 dos dados
+                    };
+                    sendToServer(messageContent, fileData);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                sendToServer(messageContent, null);
+            }
+
+            function sendToServer(messageContent, fileData) {
                 const messageData = {
                     content: messageContent,
                     to: selectedId,
-                    file: fileUpload[0].files[0] ? fileUpload[0].files[0] : null // Inclui o arquivo se existir
+                    file: fileData // Envia os dados codificados em base64
                 };
 
                 if (chatType === 'user') {
@@ -651,8 +786,8 @@
                 }
 
                 $('#messageInput').val(''); // Limpa o campo de entrada
-                $('#filePreview').empty(); // Limpa a visualização do arquivo após o envio
-                fileUpload.val(''); // Limpa o campo de upload após o envio
+                $('#filePreview').empty(); // Limpa a visualização do arquivo
+                fileUpload.val(''); // Limpa o campo de upload
             }
         }
 
@@ -671,22 +806,27 @@
 
                 $('#messageArea').append(`
             <div id="message_${msg.message_id}" class="message ${messageClass}" style="display: flex; align-items: flex-start; margin-bottom: 10px; justify-content: ${alignment};">
-                ${!isSent ? '<img src="' + msg.from_foto + '" alt="' + msg.from_name + '" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;">' : ''}
+                ${!isSent ? `<img src="${msg.from_foto}" alt="${msg.from_name}" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;">` : ''}
                 <div class="message-content" style="background: ${backgroundColor}; color: ${textColor}; padding: 10px; border-radius: 15px 15px 0 15px; max-width: 70%; margin-${alignment === 'right' ? 'left' : 'right'}: 10px;">
                     <div style="margin-bottom: 5px;">
                         ${msg.content}
+                        ${msg.file_url ? (['.jpg', '.jpeg', '.avif', '.jfif', '.png'].some(ext => msg.file_url.endsWith(ext))) ?
+                        `<img src="${msg.file_url}" alt="Image" style="max-width: 100%; height: auto; margin-top: 10px;">` :
+                        `<a href="${msg.file_url}" download>Download ${msg.file_name}</a>` :
+                        ''}
                     </div>
                     <div class="time-message" style="display: flex; justify-content: space-between; align-items: center;">
                         <small>(${msg.time})</small>
                         <span id="status_${msg.message_id}">${statusIcon}</span>
                     </div>
                 </div>
-                ${isSent ? '<img src="' + msg.from_foto + '" alt="' + msg.from_name + '" style="width: 30px; height: 30px; border-radius: 50%; margin-left: 10px;">' : ''}
+                ${isSent ? `<img src="${msg.from_foto}" alt="${msg.from_name}" style="width: 30px; height: 30px; border-radius: 50%; margin-left: 10px;">` : ''}
             </div>
         `);
             });
             $('#messageArea').scrollTop($('#messageArea')[0].scrollHeight);
         });
+
 
         socket.on('group_messages_loaded', function (data) {
             $('#messageArea').empty();
@@ -716,6 +856,10 @@
             <div class="message-content" style="background: ${backgroundColor}; color: ${textColor}; padding: 10px; border-radius: 15px 15px 0 15px; max-width: 70%; margin-${messageAlignment === 'flex-end' ? 'left' : 'right'}: 10px;">
                 <div style="margin-bottom: 5px;">
                     ${data.content}
+                    ${data.file_url ? (['.jpg', '.jpeg', '.avif', '.jfif', '.png'].some(ext => data.file_url.endsWith(ext))) ?
+                    `<img src="${data.file_url}" alt="Image" style="max-width: 100%; height: auto; margin-top: 10px;">` :
+                    `<a href="${data.file_url}" download>Download ${data.file_name}</a>` :
+                    ''}
                 </div>
                 <div class="time-message" style="display: flex; justify-content: space-between; align-items: center;">
                     <small>(${data.time})</small>
@@ -727,6 +871,9 @@
     `);
             $('#messageArea').scrollTop($('#messageArea')[0].scrollHeight);
         });
+
+
+
 
         socket.on('group_message', function (data) {
             const displayName = data.from_name === currentUserId ? 'Você' : data.from_name;
@@ -777,6 +924,22 @@
             $('#messageArea').html('');
             socket.emit('get_last_active', { user_id: selectedId });
             socket.emit('load_messages', { to: selectedId });
+        });
+
+
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            const addBtn = checkbox.nextElementSibling; // Label "Add"
+            const addedBtn = addBtn.nextElementSibling; // Label "Added"
+
+            checkbox.addEventListener('change', function () {
+                if (this.checked) {
+                    addBtn.style.display = 'none';
+                    addedBtn.style.display = 'inline-block';
+                } else {
+                    addBtn.style.display = 'inline-block';
+                    addedBtn.style.display = 'none';
+                }
+            });
         });
 
 
