@@ -222,8 +222,21 @@
                 width: 7%;
             }
 
-            
-        }
+            ul {
+                margin: 0;
+            }
+
+            .listBtn {
+                position: relative;
+                top: 3%;
+            }
+
+            .titulo {
+                margin: 0;
+                font-size: 2vw;
+                position: relative;
+                top: 45%;
+            }
 
         .iconHeader img {
             width: 8vh; /* Define a largura com base na altura da viewport */
@@ -233,7 +246,7 @@
             object-position: center; /* Centraliza a imagem no contêiner */
         }
 
-
+    }
     </style>
 </head>
 
@@ -258,7 +271,7 @@
         <div class="linha"></div>
         <p class="titulo">Geral</p>
 
-        <ul>
+        <ul class="listBtn">
             <li class="botaoNB ativo">
                 <a href="{{url_for('home')}}">
                     <span class="icon"><i class="bi bi-house"></i></span>
@@ -303,7 +316,7 @@
         <div class="linha"></div>
         <p class="titulo">Gerenciamento</p>
 
-        <ul>
+        <ul class="listBtn">
             <li class="botaoNB">
                 <a href="{{url_for('gerenciamento_salas')}}">
                     <span class="icon"><i class="bi bi-box-seam-fill"></i></span>
