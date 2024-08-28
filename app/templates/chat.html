@@ -450,32 +450,32 @@
 
         .contact,
         .group {
-        position: relative;
-        margin-top: 5%;
-        right: 3%;
-    }
+            position: relative;
+            margin-top: 5%;
+            right: 3%;
+        }
 
-    .selected-contact {
-        background-color: #ebe9e9;
-        border-radius: 15px;
-        width: 98%;
-    }
+        .selected-contact {
+            background-color: #ebe9e9;
+            border-radius: 15px;
+            width: 98%;
+        }
 
-    #createGroupBtn {
-        font-size: 1.2vw;
-        position: relative;
-        left: 8%;
-    }
+        #createGroupBtn {
+            font-size: 1.2vw;
+            position: relative;
+            left: 8%;
+        }
 
-    #iconA {
-        position: relative;
-        right: 12%;
-    }
+        #iconA {
+            position: relative;
+            right: 12%;
+        }
 
-    #iconE {
-        position: relative;
-        right: 11%;
-    }
+        #iconE {
+            position: relative;
+            right: 11%;
+        }
 
     }
 </style>
@@ -573,8 +573,15 @@
         <emoji-picker style="display: none;"></emoji-picker>
     </div>
 
+</div>
 
-
+<div id="imageModal"
+    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000;">
+    <div style="position: relative; max-width: 90%; max-height: 90%; margin: auto;">
+        <img id="modalImage" src="" alt="Large Image" style="width: 100%; height: auto; border-radius: 8px;">
+        <button id="closeModal"
+            style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.8); border: none; border-radius: 50%; padding: 5px 10px; cursor: pointer; font-size: 16px;">X</button>
+    </div>
 </div>
 
 <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
@@ -819,8 +826,39 @@
             }
         }
 
+        function showImageModal(src) {
+            $('#modalImage').attr('src', src);
+            $('#imageModal').show();
+        }
+
+        // Função para esconder o modal
+        function hideImageModal() {
+            $('#imageModal').hide();
+        }
+
+        // Event listener para mostrar o modal quando uma imagem é clicada
+        $(document).on('click', '.message-image', function () {
+            const src = $(this).attr('src');
+            showImageModal(src);
+        });
+
+        // Event listener para fechar o modal quando o botão de fechar é clicado
+        $(document).on('click', '#closeModal', function () {
+            hideImageModal();
+        });
+
+        // Event listener para fechar o modal quando clicar fora da imagem
+        $(document).on('click', '#imageModal', function (event) {
+            if ($(event.target).is('#imageModal')) {
+                hideImageModal();
+            }
+        });
+
         socket.on('messages_loaded', function (data) {
             $('#messageArea').empty();
+            let imagesLoaded = 0;
+            const totalImages = data.messages.filter(msg => msg.file_url && ['.jpg', '.jpeg', '.avif', '.jfif', '.png'].some(ext => msg.file_url.endsWith(ext))).length;
+
             data.messages.forEach(msg => {
                 const isSent = msg.from_name === currentUserName;
                 const displayName = isSent ? 'Você' : msg.from_name;
@@ -839,7 +877,7 @@
                     <div style="margin-bottom: 5px;">
                         ${msg.content}
                         ${msg.file_url ? (['.jpg', '.jpeg', '.avif', '.jfif', '.png'].some(ext => msg.file_url.endsWith(ext))) ?
-                        `<img src="${msg.file_url}" alt="Image" style="max-width: 100%; height: auto; margin-top: 10px;">` :
+                        `<img src="${msg.file_url}" alt="Image" class="message-image" style="max-width: 300px; max-height: 300px; width: auto; height: auto; display: block; margin-top: 10px; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.2); cursor: pointer;" onload="imageLoaded()">` :
                         `<a href="${msg.file_url}" download>Download ${msg.file_name}</a>` :
                         ''}
                     </div>
@@ -852,8 +890,26 @@
             </div>
         `);
             });
-            $('#messageArea').scrollTop($('#messageArea')[0].scrollHeight);
+
+            // Função para rolar a conversa para baixo após todas as imagens serem carregadas
+            function scrollToBottom() {
+                $('#messageArea').scrollTop($('#messageArea')[0].scrollHeight);
+            }
+
+            // Se houver imagens, aguarde até que todas sejam carregadas antes de rolar para baixo
+            if (totalImages > 0) {
+                window.imageLoaded = function () {
+                    imagesLoaded++;
+                    if (imagesLoaded === totalImages) {
+                        setTimeout(scrollToBottom, 500);  // Aguarda 0.5 segundos antes de rolar para baixo
+                    }
+                };
+            } else {
+                scrollToBottom();  // Caso não haja imagens, rola imediatamente para baixo
+            }
         });
+
+
 
 
         socket.on('group_messages_loaded', function (data) {
@@ -885,7 +941,7 @@
                 <div style="margin-bottom: 5px;">
                     ${data.content}
                     ${data.file_url ? (['.jpg', '.jpeg', '.avif', '.jfif', '.png'].some(ext => data.file_url.endsWith(ext))) ?
-                    `<img src="${data.file_url}" alt="Image" style="max-width: 100%; height: auto; margin-top: 10px;">` :
+                    `<img src="${data.file_url}" alt="Image" class="message-image" style="max-width: 300px; max-height: 300px; width: auto; height: auto; display: block; margin-top: 10px; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.2); cursor: pointer;">` :
                     `<a href="${data.file_url}" download>Download ${data.file_name}</a>` :
                     ''}
                 </div>
@@ -899,6 +955,7 @@
     `);
             $('#messageArea').scrollTop($('#messageArea')[0].scrollHeight);
         });
+
 
 
 

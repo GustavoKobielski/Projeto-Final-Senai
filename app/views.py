@@ -1,7 +1,7 @@
 from app import app, db, socketio
 from flask import render_template, send_from_directory, url_for, request, redirect, jsonify, flash
 from flask_login import login_user, logout_user, current_user, login_required
-from app.forms import CadastrarSala, CadastroArmario, CadastroFerramenta, EditarInformacoes, LoginForm, UserForm, CadastrarSuporte
+from app.forms import CadastrarSala, CadastroArmario, CadastroFerramenta, EditarInformacoes, LoginForm, ScanearForm, UserForm, CadastrarSuporte
 from app.models import User, Salas, Armario, Ferramentas, FerramentasSuporte, Message, Group, GroupUser, GroupMessage
 from datetime import datetime
 from flask_socketio import join_room, leave_room, emit
@@ -10,6 +10,7 @@ from werkzeug.utils import secure_filename
 import os
 import base64
 import uuid
+import random
 
 # Sistema de uploads
 UPLOAD_FOLDER = os.path.join(app.root_path, 'static', 'uploads')
@@ -33,6 +34,8 @@ def serve_armario_file(filename):
 def serve_ferramentas_file(filename):
     return send_from_directory(os.path.join(app.config['UPLOAD_FOLDER'], 'ferramentas'), filename)
 
+
+
 def get_unique_filename(folder_path, filename):
     """
     Gera um nome de arquivo único para evitar a sobreposição.
@@ -47,6 +50,16 @@ def get_unique_filename(folder_path, filename):
 
     return new_filename
 
+def generate_codigo_armario():
+    random_digits = ''.join([str(random.randint(0, 9)) for _ in range(7)])
+    return "ARM" + random_digits
+
+def generate_unique_codigo_armario():
+    while True:
+        codigo_armario = generate_codigo_armario()
+        existing_armario = Armario.query.filter_by(numero=codigo_armario).first()
+        if not existing_armario:
+            return codigo_armario
 
 
 def allowed_file(filename):
@@ -119,22 +132,20 @@ def home():
 @app.route('/salas/', methods=['GET', 'POST'])
 def salas():
     form = CadastrarSala()
+    form2 = ScanearForm()
     if form.validate_on_submit():
         file = request.files.get('foto_sala')  # Obtém o arquivo do request
         filename = None
 
-        # Verifica se o arquivo é permitido e se tem um nome
         if file and file.filename != '' and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             folder_path = os.path.join(app.config['UPLOAD_FOLDER'], 'salas')
             unique_filename = get_unique_filename(folder_path, filename)
             file_path = os.path.join(folder_path, unique_filename)
 
-            # Certifica-se de que o diretório existe
             os.makedirs(folder_path, exist_ok=True)
             file.save(file_path)
 
-        # Salva os dados da sala, incluindo o nome do arquivo
         sala = Salas(
             nome_sala=form.nome_sala.data,
             capacidade_armario=form.capacidade_armario.data,
@@ -148,9 +159,47 @@ def salas():
     salas = Salas.query.all()
     armarios_por_sala = {}
     for sala in salas:
-        armarios_por_sala[sala.id_salas] = Armario.contar_armarios_na_sala(sala.id_salas)
-    return render_template('salas.html', salas=salas, form=form, armarios_por_sala=armarios_por_sala)
+        armarios_por_sala[sala.id_salas] = Armario.query.filter_by(sala_id=sala.id_salas).count()
 
+    return render_template('salas.html', salas=salas, form=form, form2=form2, armarios_por_sala=armarios_por_sala)
+
+
+@app.route('/verificar_codigo', methods=['POST'])
+def verificar_codigo():
+    barcode = request.form.get('barcode')
+    armario = Armario.query.filter_by(numero=barcode).first()
+    
+    if armario:
+        ferramentas_count = Ferramentas.query.filter_by(armario_id=armario.id_armario).count()
+        result = {
+            'resultado': f'Armário encontrado: {armario.numero}. Total de ferramentas: {ferramentas_count}.',
+            'id_armario': armario.id_armario,
+            'numero': armario.numero,
+            'capacidade_ferramentas': armario.capacidade_ferramentas,
+            'foto_armario': armario.foto_armario,
+            'sala_id': armario.sala_id,
+            'ir_para': url_for('ferramentas', armario_id=armario.id_armario)  # URL para a página de ferramentas
+        }
+    else:
+        result = {'error': 'Armário não encontrado.', 'ir_para': None}
+
+    return jsonify(result)
+    
+
+@app.route('/atualizar_codigo', methods=['POST'])
+def atualizar_codigo():
+    data = request.json
+    old_code = data.get('old_code')
+    new_code = data.get('new_code')
+
+    # Encontrar o armário com o código antigo
+    armario = Armario.query.filter_by(numero=old_code).first()
+    if armario:
+        armario.numero = new_code
+        db.session.commit()
+        return jsonify({'success': 'Código atualizado com sucesso'})
+    else:
+        return jsonify({'error': 'Código não encontrado'}), 404
 
 #############################################
 ######## PAGE ARMARIOS ######################
@@ -176,6 +225,9 @@ def armarios(sala_id):
             # Certifica-se de que o diretório existe
             os.makedirs(folder_path, exist_ok=True)
             file.save(file_path)
+
+        codigo_armario = generate_unique_codigo_armario()
+        form.numero.data = codigo_armario
 
         form.save(sala_id=sala_id, filename=unique_filename if filename else None)
         return redirect(url_for('armarios', sala_id=sala_id))

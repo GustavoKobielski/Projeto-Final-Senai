@@ -145,6 +145,26 @@
         border-top-right-radius: 15px;
     }
 
+    .scanear {
+        margin-left: 65.2%;
+        top: 15%;
+        background-color: #407DD8;
+        border-radius: 15px;
+        width: 14%;
+        padding: 0.3%;
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .iconScan {
+        position: relative;
+        left: -30px;
+        font-size: 20px;
+        margin-right: 8px;
+    }
+
 
     .botaoSalas {
         margin-left: 81.2%;
@@ -196,6 +216,39 @@
     }
 
 
+    .popup-container {
+        display: none;
+        /* Inicialmente oculto */
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .popup-content {
+        background: white;
+        padding: 20px;
+        border-radius: 5px;
+        position: relative;
+    }
+
+    .close-popup {
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        font-size: 30px;
+        cursor: pointer;
+        color: black;
+    }
+
+    #scanResult {
+        margin-top: 20px;
+    }
 
 
     .containerSala {
@@ -338,6 +391,11 @@
         bottom: 9%;
     }
 
+    #goToButton {
+        padding: 2px;
+        background-color: gray;
+        border: 1px solid black;
+    }
 
     @media(min-width: 1300px) and (max-width: 1670px) and (min-height: 598px) and (max-height:900px) {
 
@@ -386,6 +444,7 @@
             font-size: 18px;
         }
 
+
     }
 </style>
 
@@ -396,6 +455,12 @@
 <p class="txtSalas">Aqui você consegue ver as salas existentes, e clicar nelas para verificar os armários.</p>
 
 
+<a href="javascript:void(0)" id="openPopupScan">
+    <div class="scanear">
+        <span class="iconScan"><i class="bi bi-camera-fill"></i></span>
+        <span class="txt-salas">Scanear</span>
+    </div>
+</a>
 
 
 <div class="botaoSalas">
@@ -430,6 +495,21 @@
 
 <div class="overlay" id="overlay"></div>
 
+<div class="popup-container" id="barcodePopup">
+    <div class="popup-content">
+        <h1>Leitura de Código</h1>
+        <span class="close-popup" id="closeBarcodePopup">&times;</span>
+        <form id="barcodeForm" method="post" action="{{ url_for('verificar_codigo') }}">
+            <label for="barcode">Código de Barras:</label>
+            <input type="text" id="barcode" name="barcode" required autofocus>
+            <button type="submit">Verificar</button>
+        </form>
+        <div id="scanResult"></div>
+    </div>
+</div>
+
+
+
 
 <div class="containerSala" id="popupSala">
     <h1 class="tituloSala">Adicionar Sala</h1>
@@ -463,13 +543,81 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        // Elementos do popup de escaneamento
+        const openPopupScanBtn = document.getElementById('openPopupScan');
+        const closePopupScanBtn = document.getElementById('closeBarcodePopup');
+        const barcodePopup = document.getElementById('barcodePopup');
+        const scanResult = document.getElementById('scanResult');
+        const barcodeForm = document.getElementById('barcodeForm');
+
+        // Função para abrir o popup de escaneamento
+        openPopupScanBtn.addEventListener('click', function () {
+            barcodePopup.style.display = 'flex';
+        });
+
+        // Função para fechar o popup de escaneamento
+        closePopupScanBtn.addEventListener('click', function () {
+            barcodePopup.style.display = 'none';
+        });
+
+        // Manipulação do formulário de código de barras
+        document.getElementById('barcodeForm').addEventListener('submit', function (event) {
+            event.preventDefault();  // Evita o comportamento padrão de envio do formulário
+
+            var formData = new FormData(this);
+
+            fetch('{{ url_for("verificar_codigo") }}', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        scanResult.innerHTML = `<p>${data.error}</p>`;
+                    } else {
+                        scanResult.innerHTML = `
+                        <p><strong>ID do Armário:</strong> ${data.id_armario}</p>
+                        <p><strong>Número:</strong> ${data.numero}</p>
+                        <p><strong>Capacidade de Ferramentas:</strong> ${data.capacidade_ferramentas}</p>
+                        <p><strong>Foto:</strong> <img src="/uploads/armarios/${data.foto_armario}" alt="Foto do Armário" style="width: 100px;"></p>
+                        <p><strong>ID da Sala:</strong> ${data.sala_id}</p>
+                        <input type="hidden" id="currentCode" value="${data.numero}">
+                        <button id="updateButton">Atualizar Código</button>
+                        <a href="${data.ir_para}" id="goToButton" style="display: ${data.ir_para ? 'inline-block' : 'none'};">Ir até</a>
+                    `;
+
+                        // Adiciona o listener para o botão de atualização
+                        document.getElementById('updateButton').addEventListener('click', function () {
+                            const newCode = prompt('Digite o novo código:', data.numero);
+                            if (newCode && newCode !== data.numero) {
+                                fetch('{{ url_for("atualizar_codigo") }}', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ old_code: data.numero, new_code: newCode })
+                                })
+                                    .then(response => response.json())
+                                    .then(updateData => {
+                                        if (updateData.success) {
+                                            scanResult.innerHTML = `<p>${updateData.success}</p>`;
+                                        } else {
+                                            scanResult.innerHTML = `<p>${updateData.error}</p>`;
+                                        }
+                                    });
+                            }
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    scanResult.innerHTML = 'Erro ao verificar o código.';
+                });
+        });
+
+        // Elementos do popup geral
         const openPopupBtn = document.getElementById('openPopup');
         const closePopupBtn = document.getElementById('closePopup');
         const popup = document.getElementById('popupSala');
         const overlay = document.getElementById('overlay');
-
-
-
 
         // Função para abrir o popup e o overlay
         function openPopup() {
@@ -477,17 +625,11 @@
             overlay.style.display = 'block';
         }
 
-
-
-
         // Função para fechar o popup e o overlay
         function closePopup() {
             popup.style.display = 'none';
             overlay.style.display = 'none';
         }
-
-
-
 
         // Abre o popup ao clicar no botão "Adicionar Salas"
         openPopupBtn.addEventListener('click', function (event) {
@@ -495,16 +637,10 @@
             openPopup(); // Exibe o popup e o overlay
         });
 
-
-
-
         // Fecha o popup ao clicar no botão "×"
         closePopupBtn.addEventListener('click', function () {
             closePopup(); // Oculta o popup e o overlay
         });
-
-
-
 
         // Fecha o popup ao clicar fora do conteúdo
         overlay.addEventListener('click', function () {
@@ -512,6 +648,7 @@
         });
     });
 </script>
+
 
 
 {% endblock %}

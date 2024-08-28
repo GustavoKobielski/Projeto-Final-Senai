@@ -150,6 +150,7 @@ class CadastroFerramenta(FlaskForm):
 
     def save(self, armario_id, filename=None):
         ferramentas = Ferramentas(
+            
             nome_ferramenta=self.nome_ferramenta.data,
             total_ferramenta=self.total_ferramenta.data,
             foto_ferramenta=filename,
@@ -158,3 +159,8 @@ class CadastroFerramenta(FlaskForm):
         db.session.add(ferramentas)
         db.session.commit()
         return ferramentas
+    
+
+class ScanearForm(FlaskForm):
+    numero_scan = StringField("Clique aqui e scaneie o código de barras", validators=[DataRequired()])
+    btnSubmit = SubmitField('Procurar')

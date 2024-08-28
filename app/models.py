@@ -38,7 +38,7 @@ class Salas(db.Model):
 
 class Armario(db.Model):
     id_armario = db.Column(db.Integer, primary_key=True)
-    numero = db.Column(db.Integer, default=1)
+    numero = db.Column(db.String, default=1)
     capacidade_ferramentas = db.Column(db.Integer, nullable=False, default=0)
     foto_armario = db.Column(db.String, nullable=True)
     sala_id = db.Column(db.Integer, db.ForeignKey('salas.id_salas'), nullable=False)
