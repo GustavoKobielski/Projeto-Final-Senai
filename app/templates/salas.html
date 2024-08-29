@@ -218,7 +218,6 @@
 
     .popup-container {
         display: none;
-        /* Inicialmente oculto */
         position: fixed;
         top: 0;
         left: 0;
@@ -232,9 +231,10 @@
 
     .popup-content {
         background: white;
-        padding: 20px;
+        padding: 2%;
         border-radius: 5px;
         position: relative;
+        width: 35%;
     }
 
     .close-popup {
@@ -392,9 +392,30 @@
     }
 
     #goToButton {
-        padding: 2px;
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        color: white;
+        text-align: center;
+        margin-top: 15px;
+        cursor: pointer;
+        border: none;       
         background-color: gray;
-        border: 1px solid black;
+        position: relative;
+        right: 5%;
+    }
+
+    .barcode{
+        color: #407DD8;
+        font-size: 20px;
+        margin-bottom: 2%;
+    }
+
+    .tituloBarcode{
+        text-align: center;
+        color: #407DD8;
+        margin-bottom: 3%;
+        margin-left: 1%;
     }
 
     @media(min-width: 1300px) and (max-width: 1670px) and (min-height: 598px) and (max-height:900px) {
@@ -497,12 +518,12 @@
 
 <div class="popup-container" id="barcodePopup">
     <div class="popup-content">
-        <h1>Leitura de Código</h1>
-        <span class="close-popup" id="closeBarcodePopup">&times;</span>
+        <h1 class="tituloBarcode">Leitura de Código</h1>
+        <span class="closePopup" id="closeBarcodePopup">&times;</span>
         <form id="barcodeForm" method="post" action="{{ url_for('verificar_codigo') }}">
-            <label for="barcode">Código de Barras:</label>
-            <input type="text" id="barcode" name="barcode" required autofocus>
-            <button type="submit">Verificar</button>
+            <label for="barcode" class="barcode">Código de Barras</label>
+            <input type="text" id="barcode" name="barcode" class="form-control" placeholder="Digite o código de barras" autofocus>
+            <button type="submit" class="buttonSala">Buscar</button>
         </form>
         <div id="scanResult"></div>
     </div>
@@ -576,13 +597,11 @@
                         scanResult.innerHTML = `<p>${data.error}</p>`;
                     } else {
                         scanResult.innerHTML = `
-                        <p><strong>ID do Armário:</strong> ${data.id_armario}</p>
-                        <p><strong>Número:</strong> ${data.numero}</p>
-                        <p><strong>Capacidade de Ferramentas:</strong> ${data.capacidade_ferramentas}</p>
-                        <p><strong>Foto:</strong> <img src="/uploads/armarios/${data.foto_armario}" alt="Foto do Armário" style="width: 100px;"></p>
-                        <p><strong>ID da Sala:</strong> ${data.sala_id}</p>
+                        <p><h class="corSala">Número:</h> ${data.numero}</p>
+                        <p><h class="corSala">Capacidade de Ferramentas:</h> ${data.capacidade_ferramentas}</p>
+                        <p><h class="corSala">Foto:</h> <img src="/uploads/armarios/${data.foto_armario}" alt="Foto do Armário" style="width: 30%;"></p>
                         <input type="hidden" id="currentCode" value="${data.numero}">
-                        <button id="updateButton">Atualizar Código</button>
+                        <button id="updateButton" class="buttonSala">Atualizar Código</button>
                         <a href="${data.ir_para}" id="goToButton" style="display: ${data.ir_para ? 'inline-block' : 'none'};">Ir até</a>
                     `;
 
