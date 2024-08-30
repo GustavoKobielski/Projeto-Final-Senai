@@ -1,5 +1,5 @@
 from app import app, db, socketio
-from flask import render_template, send_from_directory, url_for, request, redirect, jsonify, flash
+from flask import render_template, send_from_directory, url_for, request, redirect, jsonify, flash, current_app
 from flask_login import login_user, logout_user, current_user, login_required
 from app.forms import CadastrarSala, CadastroArmario, CadastroFerramenta, EditarInformacoes, LoginForm, ScanearForm, UserForm, CadastrarSuporte
 from app.models import User, Salas, Armario, Ferramentas, FerramentasSuporte, Message, Group, GroupUser, GroupMessage
@@ -397,7 +397,6 @@ def login_google():
 @app.route('/login/google/callback')
 def authorize_google():
     token = google.authorize_access_token()
-    print("Token de Acesso do Google:", token)
 
 
     # Verifique se o token foi obtido corretamente
@@ -461,7 +460,7 @@ def handle_message(data):
 
         if file_data:
             original_file_name = secure_filename(file_data['filename'])
-            folder_path = os.path.join(app.config['UPLOAD_FOLDER'], 'chat')
+            folder_path = os.path.join(app.config['UPLOAD_FOLDER'], 'chat', 'people')
 
             # Garante que o nome do arquivo é único
             file_name = get_unique_filename(folder_path, original_file_name)
@@ -502,7 +501,7 @@ def handle_message(data):
             'message_id': message.id,
             'from_id': sender_id,
             'from_foto': sender_photo_url,
-            'file_url': url_for('static', filename='uploads/chat/' + message.file_path) if message.file_path else None
+            'file_url': url_for('static', filename='uploads/chat/people/' + message.file_path) if message.file_path else None
         }, room=recipient_id)
 
         # Emite a mensagem para o remetente
@@ -512,7 +511,7 @@ def handle_message(data):
             'time': message.timestamp.strftime('%H:%M'),
             'message_id': message.id,
             'from_foto': sender_photo_url,
-            'file_url': url_for('static', filename='uploads/chat/' + message.file_path) if message.file_path else None
+            'file_url': url_for('static', filename='uploads/chat/people/' + message.file_path) if message.file_path else None
         }, room=sender_id)
 
         # Marca a mensagem como visualizada se o chat estiver aberto
@@ -559,9 +558,8 @@ def load_messages(data):
             'message_id': message.id,
             'from_foto': sender_photo_url,
             'viewed_by': message.viewed_by,
-            'file_url': url_for('static', filename='uploads/chat/' + message.file_path) if message.file_path else None
+            'file_url': url_for('static', filename='uploads/chat/people/' + message.file_path) if message.file_path else None
         })  
-        print("kk: ",message.file_path)
 
 
     emit('messages_loaded', {'messages': messages_data}, room=current_user.id)
@@ -618,40 +616,103 @@ def handle_disconnect():
 def handle_create_group(data):
     group_name = data['name']
     user_ids = data['users']
+    creator_id = data['creator_id']  # Receba o ID do criador do grupo
+    group_image_path = data.get('image')  # O caminho da imagem deve ser enviado junto aos dados
 
     if not group_name or not user_ids:
         return
 
     # Criar o grupo
-    group = Group(name=group_name)
+    group = Group(name=group_name, image=group_image_path)
     db.session.add(group)
     db.session.commit()
 
-    # Adicionar os usuários ao grupo
+    # Adicionar o criador ao grupo
+    group_user = GroupUser(group_id=group.id, user_id=creator_id)
+    db.session.add(group_user)
+
+    # Adicionar usuários ao grupo
     for user_id in user_ids:
         group_user = GroupUser(group_id=group.id, user_id=user_id)
         db.session.add(group_user)
 
     db.session.commit()
 
-
+    # Emitir evento de criação de grupo
     socketio.emit('group_created', {'group_id': group.id, 'group_name': group_name}, room=None)
+
+
+
+@app.route('/upload-group-image', methods=['POST'])
+def upload_group_image():
+    if 'image' not in request.files:
+        flash('Nenhuma imagem selecionada.', 'danger')
+        return redirect(request.url)
+
+    image = request.files['image']
+
+    if image.filename == '':
+        flash('Nenhuma imagem selecionada.', 'danger')
+        return redirect(request.url)
+
+    if image and allowed_file(image.filename):
+        filename = secure_filename(image.filename)
+        folder_path = os.path.join(app.config['UPLOAD_FOLDER'], 'chat', 'group')
+
+        # Crie o diretório se não existir
+        os.makedirs(folder_path, exist_ok=True)
+
+        # Gera um nome de arquivo único
+        unique_filename = get_unique_filename(folder_path, filename)
+        filepath = os.path.join(folder_path, unique_filename)
+
+        # Salva a imagem
+        image.save(filepath)
+
+        # Corrige o caminho para uso na web
+        relative_path = os.path.join('chat', 'group', unique_filename).replace('\\', '/')
+
+        return jsonify({'success': True, 'image_path': relative_path})
+
+    flash('Formato de arquivo não permitido.', 'danger')
+    return jsonify({'success': False, 'message': 'Formato de arquivo não permitido.'})
+
+
+
 
 @socketio.on('load_group_messages')
 def load_group_messages(data):
-    group_id = data['group_id']
-    messages = GroupMessage.query.filter_by(group_id=group_id).all()
+    try:
+        group_id = data['group_id']
+        messages = GroupMessage.query.filter_by(group_id=group_id).all()
 
-    messages_data = []
-    for message in messages:
-        sender = User.query.get(message.sender_id)
-        messages_data.append({
-            'content': message.content,
-            'from_name': sender.nome,
-            'time': message.timestamp.strftime('%H:%M')
-        })
+        messages_data = []
+        for message in messages:
+            sender = User.query.get(message.sender_id)
+            if sender.foto:
+                sender_photo_url = url_for('static', filename='uploads/perfil/' + sender.foto)
+            else:
+                sender_photo_url = url_for('static', filename='imgs/defaultPeople.png')
 
-    emit('group_messages_loaded', {'messages': messages_data}, room=current_user.id)
+            messages_data.append({
+                'content': message.content,
+                'from_name': sender.nome,
+                'from_foto': sender_photo_url,
+                'time': message.timestamp.strftime('%H:%M'),
+                'message_id': message.id,
+                'viewed_by': message.viewed_by if message.viewed_by else [],
+                'file_url': url_for('static', filename='uploads/chat/group/' + message.file_path) if message.file_path else None,
+                'sender_id': message.sender_id  # Adiciona sender_id aqui
+            })
+
+
+        
+        emit('group_messages_loaded', {'messages': messages_data}, room=current_user.id)
+    except Exception as e:
+        print(f"Error loading group messages: {e}")
+
+
+
 
 @socketio.on('send_group_message')
 def handle_group_message(data):
@@ -665,28 +726,59 @@ def handle_group_message(data):
         if message_content is None:
             raise ValueError("Message content is missing")
 
+        file_data = data.get('file')
+        file_name = None
+        file_url = None
+
+        if file_data:
+            original_file_name = secure_filename(file_data['filename'])
+            folder_path = os.path.join(app.config['UPLOAD_FOLDER'], 'chat/group')
+
+            file_name = get_unique_filename(folder_path, original_file_name)
+            file_path = os.path.join(folder_path, file_name)
+
+            os.makedirs(folder_path, exist_ok=True)
+            
+            file_data_decoded = base64.b64decode(file_data['data'])
+            with open(file_path, 'wb') as f:
+                f.write(file_data_decoded)
+
+            file_url = url_for('static', filename='uploads/chat/group/' + file_name)
+
         current_time = datetime.now()
         group_message = GroupMessage(
             group_id=group_id,
             sender_id=sender_id,
             content=message_content,
-            timestamp=current_time
+            timestamp=current_time,
+            file_path=file_name  # Usa file_path para armazenar o nome do arquivo
         )
+
         db.session.add(group_message)
         db.session.commit()
 
-        # Emitir mensagem para todos os membros do grupo
+
         group_users = GroupUser.query.filter_by(group_id=group_id).all()
         for group_user in group_users:
             emit('group_message', {
                 'content': group_message.content,
                 'from_name': current_user.nome,
-                'time': group_message.timestamp.strftime('%H:%M')
+                'from_foto': url_for('static', filename='uploads/perfil/' + current_user.foto) if current_user.foto else url_for('static', filename='imgs/defaultPeople.png'),
+                'timestamp': group_message.timestamp.strftime('%H:%M'),
+                'message_id': group_message.id,
+                'sender_id': current_user.id,  # Certifique-se de usar current_user.id aqui
+                'viewed_by': [],
+                'file_url': file_url
             }, room=group_user.user_id, broadcast=False)
+
+
+
 
     except Exception as e:
         print(f"Error saving group message: {e}")
         db.session.rollback()
+
+
 
 @socketio.on('leave_group')
 def handle_leave_group(data):
@@ -700,7 +792,27 @@ def handle_leave_group(data):
             db.session.delete(group_user)
             db.session.commit()
 
-        # Emitir evento para atualizar a lista de grupos
+            # Verificar se o grupo está vazio
+            remaining_users = GroupUser.query.filter_by(group_id=group_id).count()
+            if remaining_users == 0:
+                # Excluir o grupo
+                group = Group.query.get(group_id)
+                if group:
+                    # Excluir a imagem do diretório
+                    if group.image:
+                        image_path = os.path.join(app.config['UPLOAD_FOLDER'], group.image)
+                        if os.path.exists(image_path):
+                            os.remove(image_path)
+                        else:
+                            print(f"Arquivo não encontrado: {image_path}")
+
+                    db.session.delete(group)
+                    db.session.commit()
+
+                # Emitir evento para todos os usuários (opcional)
+                socketio.emit('group_deleted', {'group_id': group_id}, room=None)
+
+        # Emitir evento para o usuário que saiu do grupo
         emit('group_left', {'group_id': group_id}, room=user_id)
     except Exception as e:
         print(f"Error leaving group: {e}")

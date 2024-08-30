@@ -166,14 +166,13 @@
 
     #contextMenu {
         display: none;
-        position: absolute;
+        position: fixed;
+        /* Usar fixed para posição em relação à viewport */
         background: white;
         border: 1px solid #ddd;
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
         z-index: 1000;
         padding: 10px;
-        position: relative;
-        left: 50%;
     }
 
     #contextMenu button {
@@ -200,6 +199,14 @@
         width: 95%;
         /* Cor de fundo azul clara, ajuste conforme necessário */
     }
+
+    .selected-group {
+        background-color: #ebe9e9;
+        border-radius: 15px;
+        width: 95%;
+        /* Cor de fundo azul clara, ajuste conforme necessário */
+    }
+
 
     #createGroupBtn {
         width: 30%;
@@ -417,6 +424,38 @@
         text-align: center;
     }
 
+    #groupName {
+        border: none;
+        border-bottom: 2px dashed #a9c1e6;
+        outline: none;
+        width: 70% !important;
+        position: relative;
+        left: 12%;
+        top: -1vh;
+
+    }
+
+
+
+
+    #groupName::placeholder {
+        position: relative;
+        right: 2%;
+    }
+
+
+    #uploadIcon {
+        font-size: 3vw;
+        margin: 0;
+        padding: 0;
+        position: relative;
+        left: 5%;
+    }
+
+    #uploadIcon:hover {
+        cursor: pointer;
+    }
+
 
     @media(min-width: 1300px) and (max-width: 1500px) and (min-height: 598px) and (max-height:900px) {
 
@@ -486,8 +525,13 @@
 
 <div id="createGroupPopup">
     <h3 class="titleGroup">Criar Grupo</h3>
-    <label for="groupName">Nome do grupo:</label>
-    <input id="groupName" type="text" placeholder="Nome do grupo">
+    <span id="uploadIconContainer">
+        <img id="uploadIcon" src="{{ url_for('static', filename='imgs/images.svg') }}" alt="Upload Icon"
+            style="width: 50px; height: 50px;">
+    </span>
+    <input type="file" id="groupImage" style="display: none;">
+
+    <input id="groupName" class="move-up" type="text" placeholder="Nome do grupo">
 
     <label>Selecione os contatos:</label>
     <div id="groupContacts">
@@ -499,7 +543,6 @@
                 <label for="user{{ user.id }}" class="add-btn"> + Add</label>
                 <label for="user{{ user.id }}" class="added-btn" style="display: none;"> ✓ Added</label>
             </div>
-
         </div>
         {% endfor %}
     </div>
@@ -510,8 +553,8 @@
 
     <button id="cancelGroupButton">Cancelar</button>
     <button id="createGroupButton">Criar Grupo</button>
-
 </div>
+
 
 <div id="contacts">
     <h2 id="ctt-title">Contatos
@@ -545,7 +588,11 @@
         <!-- Exibindo os grupos -->
         {% for group in groups %}
         <li data-group-id="{{ group.id }}" data-group-name="{{ group.name }}" class="group">
+            {% if group.image %}
+            <img src="{{ url_for('static', filename='uploads/' + group.image) }}" alt="sla">
+            {% else %}
             <img src="{{ url_for('static', filename='uploads/group_icon.png') }}" alt="{{ group.name }}">
+            {% endif %}
             <span>{{ group.name }}</span>
         </li>
         {% endfor %}
@@ -613,9 +660,12 @@
             });
         }
 
+
         $('#iconA').on('click', function () {
             fileUpload.click();
         });
+
+
 
         fileUpload.on('change', function () {
             const file = this.files[0];
@@ -697,22 +747,99 @@
         $('#createGroupButton').on('click', function () {
             const groupName = $('#groupName').val();
             const selectedUsers = [];
+            let groupImage = $('#groupImage')[0].files[0];
+
+            const creatorId = currentUserId; // Substitua isso pelo método real para obter o ID do usuário logado
+
             $('#groupContacts input[type="checkbox"]:checked').each(function () {
                 selectedUsers.push($(this).data('user-id'));
             });
 
             if (groupName && selectedUsers.length) {
-                socket.emit('create_group', { name: groupName, users: selectedUsers });
-                toggleCreateGroupPopup(false);
+                if (groupImage) {
+                    const formData = new FormData();
+                    formData.append('image', groupImage);
+
+                    $.ajax({
+                        url: '/upload-group-image',
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (response) {
+                            const imagePath = response.image_path;
+
+                            socket.emit('create_group', {
+                                name: groupName,
+                                users: selectedUsers,
+                                creator_id: creatorId,
+                                image: imagePath
+                            });
+                            toggleCreateGroupPopup(false);
+                        },
+                        error: function (error) {
+                            console.error('Erro ao enviar a imagem:', error);
+                            alert('Erro ao enviar a imagem.');
+                        }
+                    });
+                } else {
+                    socket.emit('create_group', {
+                        name: groupName,
+                        users: selectedUsers,
+                        creator_id: creatorId,
+                        image: null
+                    });
+                    toggleCreateGroupPopup(false);
+                }
             } else {
                 alert('Por favor, insira um nome para o grupo e selecione ao menos um contato.');
             }
         });
 
+        $('#uploadIconContainer').on('click', function () {
+            $('#groupImage').click();
+        });
+
+        // Evento de mudança no input de arquivo
+        $('#groupImage').on('change', function () {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#uploadIconContainer').html(`<img id="uploadIcon" src="${e.target.result}" alt="Selected Image" style="width: 50px; height: 50px;; object-fit: cover;">`);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function resetCreateGroupPopup() {
+            $('#groupName').val('');
+            $('#groupContacts input[type="checkbox"]').prop('checked', false);
+            $('#groupContacts .added-btn').hide();
+            $('#groupContacts .add-btn').show();
+            $('#groupImage').val('');
+            $('#uploadIconContainer').html('<img id="uploadIcon" src="{{ url_for("static", filename="imgs/images.svg") }}" alt="Ícone de upload" style="width: 50px; height: 50px;">');
+        }
+
+        $('#cancelGroupButton').on('click', function () {
+            resetCreateGroupPopup();
+        });
+
+
+
+        $(document).on('contextmenu', '.group', function (e) {
+            e.preventDefault();
+            selectedGroupId = $(this).data('group-id');
+            $('#contextMenu').css({
+                display: 'block',
+                top: e.pageY + 'px',   // Posição em relação à viewport
+                left: e.pageX + 'px'   // Posição em relação à viewport
+            });
+        });
 
         $(document).on('click', function (e) {
-            if (!$(e.target).closest('#contextMenu').length) {
-                $('#contextMenu').hide();
+            if (!$(e.target).closest('#contextMenu').length && !$(e.target).closest('.group').length) {
+                $('#contextMenu').hide(); // Oculta o menu se o clique não for no menu ou em um grupo
             }
         });
 
@@ -728,15 +855,6 @@
             $(`#contactList .group[data-group-id="${groupId}"]`).remove();
         });
 
-        $('#contactList').on('contextmenu', '.group', function (e) {
-            e.preventDefault();
-            selectedGroupId = $(this).data('group-id');
-            $('#contextMenu').css({
-                display: 'block',
-                top: e.pageY + 'px',
-                left: e.pageX + 'px'
-            });
-        });
 
         function getCurrentTime() {
             const now = new Date();
@@ -810,9 +928,10 @@
             function sendToServer(messageContent, fileData) {
                 const messageData = {
                     content: messageContent,
-                    to: selectedId,
-                    file: fileData // Envia os dados codificados em base64
+                    to: selectedId,  // ID do grupo para o qual a mensagem está sendo enviada
+                    file: fileData   // Dados do arquivo, se houver
                 };
+
 
                 if (chatType === 'user') {
                     socket.emit('send_message', messageData);
@@ -909,19 +1028,6 @@
             }
         });
 
-
-
-
-        socket.on('group_messages_loaded', function (data) {
-            $('#messageArea').empty();
-            data.messages.forEach(msg => {
-                const displayName = msg.from_name === currentUserId ? 'Você' : msg.from_name;
-                $('#messageArea').append(`<div><strong>${displayName}:</strong> ${msg.content} <small>(${msg.time})</small></div>`);
-            });
-            $('#messageArea').scrollTop($('#messageArea')[0].scrollHeight);
-        });
-
-
         // Atualizar as mensagens em tempo real
         socket.on('message_received', function (data) {
             const isSent = data.from_name === currentUserName;
@@ -941,7 +1047,7 @@
                 <div style="margin-bottom: 5px;">
                     ${data.content}
                     ${data.file_url ? (['.jpg', '.jpeg', '.avif', '.jfif', '.png'].some(ext => data.file_url.endsWith(ext))) ?
-                    `<img src="${data.file_url}" alt="Image" class="message-image" style="max-width: 300px; max-height: 300px; width: auto; height: auto; display: block; margin-top: 10px; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.2); cursor: pointer;">` :
+                    `<img src="${data.file_url}" alt="Image" class="message-image" style="max-width: 300px; max-height: 300px; width: auto; height: auto; display: block; margin-top: 10px; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.2); cursor: pointer;" onload="scrollToBottom()">` :
                     `<a href="${data.file_url}" download>Download ${data.file_name}</a>` :
                     ''}
                 </div>
@@ -953,18 +1059,123 @@
             ${isSent ? `<img src="${data.from_foto}" alt="${data.from_name}" style="width: 30px; height: 30px; border-radius: 50%; margin-left: 10px;">` : ''}
         </div>
     `);
-            $('#messageArea').scrollTop($('#messageArea')[0].scrollHeight);
+
+            // Função para rolar a conversa para baixo
+            function scrollToBottom() {
+                $('#messageArea').scrollTop($('#messageArea')[0].scrollHeight);
+            }
+
+            // Se houver imagens, aguarde até que todas sejam carregadas antes de rolar para baixo
+            setTimeout(scrollToBottom, 100);  // Aguarda um breve momento antes de rolar para baixo
         });
 
 
 
 
+
+        socket.on('group_messages_loaded', function (data) {
+            $('#messageArea').empty();
+            let imagesLoaded = 0;
+            const totalImages = data.messages.filter(msg => msg.file_url && ['.jpg', '.jpeg', '.avif', '.jfif', '.png'].some(ext => msg.file_url.endsWith(ext))).length;
+
+            data.messages.forEach(msg => {
+                const isSent = String(msg.sender_id) === String(currentUserId);
+                const displayName = isSent ? 'Você' : msg.from_name;
+                const messageClass = isSent ? 'sent' : 'received';
+                const alignment = isSent ? 'right' : 'left';
+                const backgroundColor = isSent ? '#407DD8' : '#a9c1e6';
+                const textColor = isSent ? '#fff' : '#000';
+                const statusIcon = Array.isArray(msg.viewed_by) && msg.viewed_by.includes(currentUserId) ?
+                    '<i class="bi bi-check2-all status-icon" style="color: blue; font-size: 1.2em;"></i>' :
+                    '<i class="bi bi-check2-all status-icon" style="font-size: 1.2em;"></i>';
+
+                $('#messageArea').append(`
+            <div id="message_${msg.message_id}" class="message ${messageClass}" style="display: flex; align-items: flex-start; margin-bottom: 10px; justify-content: ${alignment};">
+                ${!isSent ? `
+                    <div style="display: flex; flex-direction: column; align-items: center; margin-right: 10px;">
+                        <img src="${msg.from_foto}" alt="${msg.from_name}" style="width: 30px; height: 30px; border-radius: 50%; margin-bottom: 5px;">
+                        
+                    </div>` : ''}
+                <div class="message-content" style="background: ${backgroundColor}; color: ${textColor}; padding: 10px; border-radius: 15px; max-width: 70%; margin-${alignment === 'right' ? 'left' : 'right'}: 10px; display: flex; flex-direction: column;">
+                    <small style="margin-bottom: 5px; font-weight: bold;">${!isSent ? msg.from_name : ''}</small>
+                    <div style="margin-bottom: 5px;">
+                        ${msg.content}
+                        ${msg.file_url ? (['.jpg', '.jpeg', '.avif', '.jfif', '.png'].some(ext => msg.file_url.endsWith(ext))) ?
+                        `<img src="${msg.file_url}" alt="Image" class="message-image" style="max-width: 300px; max-height: 300px; width: auto; height: auto; display: block; margin-top: 10px; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.2); cursor: pointer;" onload="imageLoaded()">` :
+                        `<a href="${msg.file_url}" download>Download ${msg.file_name}</a>` :
+                        ''}
+                    </div>
+                    <div class="time-message" style="display: flex; justify-content: space-between; align-items: center;">
+                        <small>(${msg.time})</small>
+                        <span id="status_${msg.message_id}">${statusIcon}</span>
+                    </div>
+                </div>
+            </div>
+        `);
+            });
+
+            function scrollToBottom() {
+                $('#messageArea').scrollTop($('#messageArea')[0].scrollHeight);
+            }
+
+            if (totalImages > 0) {
+                window.imageLoaded = function () {
+                    imagesLoaded++;
+                    if (imagesLoaded === totalImages) {
+                        setTimeout(scrollToBottom, 500);
+                    }
+                };
+            } else {
+                scrollToBottom();
+            }
+        });
 
         socket.on('group_message', function (data) {
-            const displayName = data.from_name === currentUserId ? 'Você' : data.from_name;
-            $('#messageArea').append(`<div><strong>${displayName}:</strong> ${data.content} <small>(${data.time})</small></div>`);
-            $('#messageArea').scrollTop($('#messageArea')[0].scrollHeight);
+            const isSent = String(data.sender_id) === String(currentUserId);
+            const displayName = isSent ? 'Você' : data.from_name;
+            const messageClass = isSent ? 'sent' : 'received';
+            const alignment = isSent ? 'right' : 'left';
+            const backgroundColor = isSent ? '#407DD8' : '#a9c1e6';
+            const textColor = isSent ? '#fff' : '#000';
+            const statusIcon = Array.isArray(data.viewed_by) && data.viewed_by.includes(currentUserId) ?
+                '<i class="bi bi-check2-all status-icon" style="color: blue; font-size: 1.2em;"></i>' :
+                '<i class="bi bi-check2-all status-icon" style="font-size: 1.2em;"></i>';
+
+            $('#messageArea').append(`
+        <div id="message_${data.message_id}" class="message ${messageClass}" style="display: flex; align-items: flex-start; margin-bottom: 10px; justify-content: ${alignment};">
+            ${!isSent ? `
+                <div style="display: flex; flex-direction: column; align-items: center; margin-right: 10px;">
+                    <img src="${data.from_foto}" alt="${data.from_name}" style="width: 30px; height: 30px; border-radius: 50%; margin-bottom: 5px;">
+                    <small>${data.from_name}</small>
+                </div>` : ''}
+            <div class="message-content" style="background: ${backgroundColor}; color: ${textColor}; padding: 10px; border-radius: 15px; max-width: 70%; margin-${alignment === 'right' ? 'left' : 'right'}: 10px; display: flex; flex-direction: column;">
+                <small style="margin-bottom: 5px; font-weight: bold;">${!isSent ? data.from_name : ''}</small>
+                <div style="margin-bottom: 5px;">
+                    ${data.content}
+                    ${data.file_url ? (['.jpg', '.jpeg', '.avif', '.jfif', '.png'].some(ext => data.file_url.endsWith(ext))) ?
+                    `<img src="${data.file_url}" alt="Image" class="message-image" style="max-width: 300px; max-height: 300px; width: auto; height: auto; display: block; margin-top: 10px; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.2); cursor: pointer;">` :
+                    `<a href="${data.file_url}" download>Download ${data.file_name}</a>` :
+                    ''}
+                </div>
+                <div class="time-message" style="display: flex; justify-content: space-between; align-items: center;">
+                    <small>(${data.timestamp})</small>
+                    <span id="status_${data.message_id}">${statusIcon}</span>
+                </div>
+            </div>
+        </div>
+    `);
+
+            // Forçar rolagem para o fundo
+            function scrollToBottom() {
+                $('#messageArea').scrollTop($('#messageArea')[0].scrollHeight);
+            }
+
+            // Aguarda um breve momento para garantir que o DOM esteja atualizado
+            setTimeout(scrollToBottom, 100);  // Ajuste o tempo se necessário
         });
+
+
+
 
         socket.on('message_viewed', function (data) {
             const messageId = data.message_id;
@@ -987,15 +1198,20 @@
 
         socket.on('group_created', function (data) {
             $('#contactList').append(`<li data-group-id="${data.group_id}" data-group-name="${data.group_name}" class="group">
-                    <img src="{{ url_for('static', filename='uploads/group_icon.png') }}" alt="${data.group_name}">
-                    <span>${data.group_name}</span>
-                </li>`);
+            <img src="{{ url_for('static', filename='uploads/group_icon.png') }}" alt="${data.group_name}">
+            <span>${data.group_name}</span>
+        </li>`);
+
+            // Redirecionar para a chat
+            window.location.href = '/chat';
         });
+
 
         // Clique em um contato
         $('#contactList').on('click', '.contact', function () {
-            // Remove a classe de destaque de todos os contatos
+            // Remove a classe de destaque de todos os contatos e grupos
             $('.contact').removeClass('selected-contact');
+            $('.group').removeClass('selected-group');
 
             // Adiciona a classe de destaque ao contato selecionado
             $(this).addClass('selected-contact');
@@ -1009,6 +1225,25 @@
             $('#messageArea').html('');
             socket.emit('get_last_active', { user_id: selectedId });
             socket.emit('load_messages', { to: selectedId });
+        });
+
+        // Clique em um grupo
+        $('#contactList').on('click', '.group', function () {
+            // Remove a classe de destaque de todos os contatos e grupos
+            $('.contact').removeClass('selected-contact');
+            $('.group').removeClass('selected-group');
+
+            // Adiciona a classe de destaque ao grupo selecionado
+            $(this).addClass('selected-group');
+
+            chatType = 'group';
+            selectedId = $(this).data('group-id');
+            selectedName = $(this).data('group-name');
+
+            $('#chatTitle').text(selectedName);
+            $('#lastActiveInfo').hide();
+            $('#messageArea').html('');
+            socket.emit('load_group_messages', { group_id: selectedId });
         });
 
 

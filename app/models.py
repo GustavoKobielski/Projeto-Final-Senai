@@ -92,6 +92,8 @@ class Group(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now)
+    image = db.Column(db.String, nullable=True)
+
     
     # Relacionamento com os usuários (muitos para muitos)
     users = db.relationship('User', secondary='group_user', backref='groups')
@@ -108,6 +110,8 @@ class GroupMessage(db.Model):
     sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     content = db.Column(db.String(500), nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.now)
+    viewed_by = db.Column(db.PickleType, default=[])
+    file_path = db.Column(db.String(200))
 
     group = db.relationship('Group', backref=db.backref('group_messages', lazy=True))
     sender = db.relationship('User', foreign_keys=[sender_id])
