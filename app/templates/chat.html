@@ -502,6 +502,13 @@
         overflow-y: scroll;
     }
 
+    .timeSmg {
+        color: #ccc;
+        font-size: 0.6vw;
+        position: relative;
+        right: 30%;
+        top: -50%;
+    }
 
     @media(min-width: 1300px) and (max-width: 1500px) and (min-height: 598px) and (max-height:900px) {
 
@@ -681,10 +688,10 @@
 
 <div id="imageModal"
     style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000;">
-    <div style="position: relative; max-width: 90%; max-height: 90%; margin: auto;">
-        <img id="modalImage" src="" alt="Large Image" style="width: 100%; height: auto; border-radius: 8px;">
+    <div style="position: relative; max-width: 60%; max-height: 60%; margin: auto; left: 15%; top: 20%;">
+        <img id="modalImage" src="" alt="Large Image" style="width: 50%; height: auto; border-radius: 8px;">
         <button id="closeModal"
-            style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.8); border: none; border-radius: 50%; padding: 5px 10px; cursor: pointer; font-size: 16px;">X</button>
+            style="position: absolute;  right: 46.5%; background: rgba(255,255,255,0.8); border: none; border-radius: 50%; padding: 5px 10px; cursor: pointer; font-size: 16px;">X</button>
     </div>
 </div>
 
@@ -1049,18 +1056,23 @@
                 $('#messageArea').append(`
            <div id="message_${msg.message_id}" class="message ${messageClass}" style="display: flex; align-items: flex-start; margin-bottom: 10px; justify-content: ${alignment};">
     ${!isSent ? `<img src="${msg.from_foto}" alt="${msg.from_name}" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;">` : ''}
-    <div class="message-content" style="background: ${backgroundColor}; color: ${textColor}; padding: 10px; border-radius: 15px 15px 0 15px; max-width: 70%; margin-${alignment === 'right' ? 'left' : 'right'}: 10px; display: flex; flex-direction: column; align-items: ${msg.content ? 'flex-start' : 'flex-end'};">
-        <div style="flex: 1; text-align: ${msg.content ? 'left' : 'right'};">
+    <div class="message-content" style="background: ${backgroundColor}; color: ${textColor}; padding: 0.3%; border-radius: 15px 15px 0 15px; min-width: 80px; max-width: 70%; margin-${alignment === 'right' ? 'left' : 'right'}: 10px; display: flex; align-items: ${msg.content ? 'flex-start' : 'flex-end'};">
+        <div style="flex: 1; text-align: ${msg.content ? 'left' : 'right'}; padding-left: 5%;">
             ${msg.content}
             ${msg.file_url ? (['.jpg', '.jpeg', '.avif', '.jfif', '.png'].some(ext => msg.file_url.endsWith(ext))) ?
             `<img src="${msg.file_url}" alt="Image" class="message-image" style="max-width: 300px; max-height: 300px; width: auto; height: auto; display: block; margin-top: 10px; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.2); cursor: pointer;" onload="imageLoaded()">` :
             `<a href="${msg.file_url}" download style="color: ${textColor}; text-decoration: underline;">Download ${msg.file_name}</a>` :
             ''}
         </div>
-        <div class="time-message" style="display: flex; justify-content: ${msg.content ? 'flex-start' : 'flex-end'}; align-items: center; margin-top: 10px; width: 100%;">
-            <small>${msg.time}</small>
-            <span id="status_${msg.message_id}" style="margin-left: 10px;">${statusIcon}</span>
+
+       <div class="time-message" style="display: flex; margin-left: auto; align-items: center;">
+            <small class="timeSmg" >${msg.time}</small>
+            <span class="timeSmg" id="status_${msg.message_id}">${statusIcon}</span>
         </div>
+
+
+
+
     </div>
     ${isSent ? `<img src="${msg.from_foto}" alt="${msg.from_name}" style="width: 30px; height: 30px; border-radius: 50%; margin-left: 10px;">` : ''}
 </div>
@@ -1103,7 +1115,7 @@
             $('#messageArea').append(`
       <div id="message_${data.message_id}" class="message ${messageClass}" style="display: flex; align-items: flex-start; margin-bottom: 10px; justify-content: ${messageAlignment};">
     ${!isSent ? `<img src="${data.from_foto}" alt="${data.from_name}" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;">` : ''}
-    <div class="message-content" style="background: ${backgroundColor}; color: ${textColor}; padding: 10px; border-radius: 15px 15px 0 15px; max-width: 70%; margin-${messageAlignment === 'flex-end' ? 'left' : 'right'}: 10px; display: flex; flex-direction: column; align-items: ${data.content ? 'flex-start' : 'flex-end'};">
+    <div class="message-content" style="background: ${backgroundColor}; color: ${textColor}; padding: 0.3%; border-radius: 15px 15px 0 15px; min-width: 80px; max-width: 70%; margin-${messageAlignment === 'flex-end' ? 'left' : 'right'}: 10px; display: flex; align-items: ${data.content ? 'flex-start' : 'flex-end'};">
         <div style="flex: 1; text-align: ${data.content ? 'left' : 'right'};">
             ${data.content}
             ${data.file_url ? (['.jpg', '.jpeg', '.avif', '.jfif', '.png'].some(ext => data.file_url.endsWith(ext))) ?
@@ -1111,7 +1123,7 @@
             `<a href="${data.file_url}" download style="color: ${textColor}; text-decoration: underline;">Download ${data.file_name}</a>` :
             ''}
         </div>
-        <div class="time-message" style="display: flex; justify-content: ${data.content ? 'flex-start' : 'flex-end'}; align-items: center; margin-top: 10px; width: 100%;">
+        <div class="time-message" style="display: flex; margin-left: auto; align-items: center;">
             <small>${data.time}</small>
             <span id="status_${data.message_id}" style="margin-left: 10px;">${statusIcon}</span>
         </div>
