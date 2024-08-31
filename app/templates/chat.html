@@ -141,7 +141,6 @@
 
     #createGroupPopup input[type="text"] {
         width: 100%;
-        padding: 8px;
         box-sizing: border-box;
     }
 
@@ -278,7 +277,11 @@
 
     .imgPeople {
         border: 1px solid;
+    }
 
+     .tamanhoImg {
+        width: 50px;
+        border-radius: 50px;
     }
 
     #searchInput {
@@ -292,6 +295,45 @@
         border: 1px solid #ccc;
         margin-top: 3%;
     }
+
+    .searchGroup {
+        position: relative;
+        width: 90%;
+        margin-top: 3%;
+        left: 5%;
+        margin-bottom: 3%;
+    }
+
+    .searchGroup input {
+        padding-left: 15%;
+    }
+    
+    #searchInputGroup:focus {
+        outline: none; /* Remove o contorno de foco */
+    }
+    
+    #searchInputGroup {
+        width: 100%;
+        padding-left: 40px; /* Ajuste o valor conforme necessário */
+        box-sizing: border-box;
+        font-size: 18px;
+        border: none;
+        border-bottom: 1px solid #8ba6ce;
+    }
+    
+    #btnSearchGroup {
+        position: absolute;
+        left: 10px; /* Ajuste conforme necessário para a posição desejada */
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 18px;
+        color: #888;
+        pointer-events: none; /* Evita que o ícone interfira no clique do input */
+    }
+    
+    
+    
+    
 
     #searchInput:active {
         border: none;
@@ -432,9 +474,8 @@
         position: relative;
         left: 12%;
         top: -1vh;
-
+        padding-left: 2%;
     }
-
 
 
 
@@ -454,6 +495,11 @@
 
     #uploadIcon:hover {
         cursor: pointer;
+    }
+
+    #groupContacts {
+        height: 230px;
+        overflow-y: scroll;
     }
 
 
@@ -533,11 +579,22 @@
 
     <input id="groupName" class="move-up" type="text" placeholder="Nome do grupo">
 
-    <label>Selecione os contatos:</label>
+    <div class="searchGroup">
+        <i id="btnSearchGroup" class="fas fa-search"></i>
+        <input id="searchInputGroup" type="text" placeholder="Buscar contatos...">
+    </div>
+    
+
     <div id="groupContacts">
         {% for user in users %}
         <div>
             <div class="user">
+                {% if user.foto %}
+            <img src="{{ url_for('static', filename='uploads/perfil/' + user.foto) }}" class="imgPeople tamanhoImg"
+                alt="{{ user.nome }}">
+            {% else %}
+                <img src="{{ url_for('static', filename='imgs/defaultPeople.png') }}" class="imgPeople tamanhoImg" alt="Foto Padrão">
+            {% endif %} 
                 <label for="user{{ user.id }}">{{ user.nome }}</label>
                 <input type="checkbox" id="user{{ user.id }}" data-user-id="{{ user.id }}" style="display: none;">
                 <label for="user{{ user.id }}" class="add-btn"> + Add</label>
@@ -990,23 +1047,26 @@
                     '<i class="bi bi-check2-all status-icon" style="font-size: 1.2em;"></i>';
 
                 $('#messageArea').append(`
-            <div id="message_${msg.message_id}" class="message ${messageClass}" style="display: flex; align-items: flex-start; margin-bottom: 10px; justify-content: ${alignment};">
-                ${!isSent ? `<img src="${msg.from_foto}" alt="${msg.from_name}" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;">` : ''}
-                <div class="message-content" style="background: ${backgroundColor}; color: ${textColor}; padding: 10px; border-radius: 15px 15px 0 15px; max-width: 70%; margin-${alignment === 'right' ? 'left' : 'right'}: 10px;">
-                    <div style="margin-bottom: 5px;">
-                        ${msg.content}
-                        ${msg.file_url ? (['.jpg', '.jpeg', '.avif', '.jfif', '.png'].some(ext => msg.file_url.endsWith(ext))) ?
-                        `<img src="${msg.file_url}" alt="Image" class="message-image" style="max-width: 300px; max-height: 300px; width: auto; height: auto; display: block; margin-top: 10px; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.2); cursor: pointer;" onload="imageLoaded()">` :
-                        `<a href="${msg.file_url}" download>Download ${msg.file_name}</a>` :
-                        ''}
-                    </div>
-                    <div class="time-message" style="display: flex; justify-content: space-between; align-items: center;">
-                        <small>(${msg.time})</small>
-                        <span id="status_${msg.message_id}">${statusIcon}</span>
-                    </div>
-                </div>
-                ${isSent ? `<img src="${msg.from_foto}" alt="${msg.from_name}" style="width: 30px; height: 30px; border-radius: 50%; margin-left: 10px;">` : ''}
-            </div>
+           <div id="message_${msg.message_id}" class="message ${messageClass}" style="display: flex; align-items: flex-start; margin-bottom: 10px; justify-content: ${alignment};">
+    ${!isSent ? `<img src="${msg.from_foto}" alt="${msg.from_name}" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;">` : ''}
+    <div class="message-content" style="background: ${backgroundColor}; color: ${textColor}; padding: 10px; border-radius: 15px 15px 0 15px; max-width: 70%; margin-${alignment === 'right' ? 'left' : 'right'}: 10px; display: flex; flex-direction: column; align-items: ${msg.content ? 'flex-start' : 'flex-end'};">
+        <div style="flex: 1; text-align: ${msg.content ? 'left' : 'right'};">
+            ${msg.content}
+            ${msg.file_url ? (['.jpg', '.jpeg', '.avif', '.jfif', '.png'].some(ext => msg.file_url.endsWith(ext))) ?
+            `<img src="${msg.file_url}" alt="Image" class="message-image" style="max-width: 300px; max-height: 300px; width: auto; height: auto; display: block; margin-top: 10px; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.2); cursor: pointer;" onload="imageLoaded()">` :
+            `<a href="${msg.file_url}" download style="color: ${textColor}; text-decoration: underline;">Download ${msg.file_name}</a>` :
+            ''}
+        </div>
+        <div class="time-message" style="display: flex; justify-content: ${msg.content ? 'flex-start' : 'flex-end'}; align-items: center; margin-top: 10px; width: 100%;">
+            <small>${msg.time}</small>
+            <span id="status_${msg.message_id}" style="margin-left: 10px;">${statusIcon}</span>
+        </div>
+    </div>
+    ${isSent ? `<img src="${msg.from_foto}" alt="${msg.from_name}" style="width: 30px; height: 30px; border-radius: 50%; margin-left: 10px;">` : ''}
+</div>
+
+
+
         `);
             });
 
@@ -1041,23 +1101,24 @@
                 '<i class="bi bi-check2-all status-icon" style="font-size: 1.2em;"></i>';
 
             $('#messageArea').append(`
-        <div id="message_${data.message_id}" class="message ${messageClass}" style="display: flex; align-items: flex-start; margin-bottom: 10px; justify-content: ${messageAlignment};">
-            ${!isSent ? `<img src="${data.from_foto}" alt="${data.from_name}" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;">` : ''}
-            <div class="message-content" style="background: ${backgroundColor}; color: ${textColor}; padding: 10px; border-radius: 15px 15px 0 15px; max-width: 70%; margin-${messageAlignment === 'flex-end' ? 'left' : 'right'}: 10px;">
-                <div style="margin-bottom: 5px;">
-                    ${data.content}
-                    ${data.file_url ? (['.jpg', '.jpeg', '.avif', '.jfif', '.png'].some(ext => data.file_url.endsWith(ext))) ?
-                    `<img src="${data.file_url}" alt="Image" class="message-image" style="max-width: 300px; max-height: 300px; width: auto; height: auto; display: block; margin-top: 10px; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.2); cursor: pointer;" onload="scrollToBottom()">` :
-                    `<a href="${data.file_url}" download>Download ${data.file_name}</a>` :
-                    ''}
-                </div>
-                <div class="time-message" style="display: flex; justify-content: space-between; align-items: center;">
-                    <small>(${data.time})</small>
-                    <span id="status_${data.message_id}">${statusIcon}</span>
-                </div>
-            </div>
-            ${isSent ? `<img src="${data.from_foto}" alt="${data.from_name}" style="width: 30px; height: 30px; border-radius: 50%; margin-left: 10px;">` : ''}
+      <div id="message_${data.message_id}" class="message ${messageClass}" style="display: flex; align-items: flex-start; margin-bottom: 10px; justify-content: ${messageAlignment};">
+    ${!isSent ? `<img src="${data.from_foto}" alt="${data.from_name}" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;">` : ''}
+    <div class="message-content" style="background: ${backgroundColor}; color: ${textColor}; padding: 10px; border-radius: 15px 15px 0 15px; max-width: 70%; margin-${messageAlignment === 'flex-end' ? 'left' : 'right'}: 10px; display: flex; flex-direction: column; align-items: ${data.content ? 'flex-start' : 'flex-end'};">
+        <div style="flex: 1; text-align: ${data.content ? 'left' : 'right'};">
+            ${data.content}
+            ${data.file_url ? (['.jpg', '.jpeg', '.avif', '.jfif', '.png'].some(ext => data.file_url.endsWith(ext))) ?
+            `<img src="${data.file_url}" alt="Image" class="message-image" style="max-width: 300px; max-height: 300px; width: auto; height: auto; display: block; margin-top: 10px; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.2); cursor: pointer;" onload="scrollToBottom()">` :
+            `<a href="${data.file_url}" download style="color: ${textColor}; text-decoration: underline;">Download ${data.file_name}</a>` :
+            ''}
         </div>
+        <div class="time-message" style="display: flex; justify-content: ${data.content ? 'flex-start' : 'flex-end'}; align-items: center; margin-top: 10px; width: 100%;">
+            <small>${data.time}</small>
+            <span id="status_${data.message_id}" style="margin-left: 10px;">${statusIcon}</span>
+        </div>
+    </div>
+    ${isSent ? `<img src="${data.from_foto}" alt="${data.from_name}" style="width: 30px; height: 30px; border-radius: 50%; margin-left: 10px;">` : ''}
+</div>
+
     `);
 
             // Função para rolar a conversa para baixo
@@ -1262,6 +1323,20 @@
             });
         });
 
+        document.getElementById('searchInputGroup').addEventListener('input', function () {
+            let searchQuery = this.value.toLowerCase();
+            let users = document.querySelectorAll('#groupContacts .user');
+        
+            users.forEach(function (user) {
+                let userName = user.querySelector('label[for^="user"]').textContent.toLowerCase();
+        
+                if (userName.includes(searchQuery)) {
+                    user.parentElement.style.display = '';
+                } else {
+                    user.parentElement.style.display = 'none';
+                }
+            });
+        });
 
     });
 </script>

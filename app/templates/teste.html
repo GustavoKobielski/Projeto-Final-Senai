@@ -1,0 +1,33 @@
+<head>
+    <!-- Adiciona o Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<div class="search-container">
+    <!-- Adiciona a classe fa-search para exibir o ícone de pesquisa -->
+    <i class="fas fa-search search-icon"></i>
+    <input type="text" placeholder="Buscar contatos..." />
+</div>
+
+<style>
+    .search-container {
+        position: relative;
+        width: 100%;
+    }
+    
+    .search-icon {
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 16px; /* Ajuste o tamanho do ícone conforme necessário */
+        color: #888; /* Cor do ícone */
+        pointer-events: none; /* Para garantir que o ícone não interfira no clique do input */
+    }
+    
+    .search-container input {
+        width: 100%;
+        padding-left: 30px; /* Espaço para o ícone */
+        box-sizing: border-box;
+    }
+</style>
