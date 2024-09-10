@@ -418,7 +418,7 @@
         margin-left: 1%;
     }
 
-    @media(min-width: 1300px) and (max-width: 1670px) and (min-height: 598px) and (max-height:900px) {
+    @media screen and (min-width: 1300px) and (max-width: 1500px) and (min-height: 598px) and (max-height:900px) {
 
         .tituloSalas {
             position: relative;
@@ -426,11 +426,11 @@
         }
 
         .txt-salas {
-            font-size: 20px;
+            font-size: 18px;
         }
 
         .iconSalas {
-            font-size: 20px;
+            font-size: 18px;
         }
 
         .container {
@@ -464,9 +464,38 @@
         .total-de-arm-rios {
             font-size: 18px;
         }
-
-
     }
+        @media (max-width: 1300px) {
+            .txt-salas {
+                font-size: 16px !important;
+            }
+
+            .tituloSalas {
+                position: relative;
+                left: 1.5%;
+            }
+
+            .txtSalas {
+                position: relative;
+                left: 0.5%;
+            }
+        }
+
+        @media (max-width: 1440px)   {
+            .txt-salas {
+                font-size: 16px;
+            }
+        }
+
+        @media (min-width: 1988px) {
+            
+
+            .container {
+                display: flex;
+                gap: 3.9%;
+            }
+        }
+            
 </style>
 
 

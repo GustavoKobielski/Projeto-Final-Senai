@@ -883,7 +883,7 @@ def handle_get_group_info(data):
         # Dados do grupo
         group_info = {
             'name': group.name,
-            'image': url_for('static', filename='uploads/chat/group/' + group.image) if group.image else None,
+            'image': url_for('static', filename='uploads/' + group.image) if group.image else None,
             'members': members
         }
 
