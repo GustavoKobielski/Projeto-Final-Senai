@@ -537,17 +537,20 @@
         border: 1px solid #888;
         width: 80%;
         max-width: 500px;
+        overflow-y: scroll;
     }
 
-    .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
+    .closePopupGroup {
+        position: fixed;
+        top: 20%;
+        right: 32%;
+        font-size: 50px;
+        cursor: pointer;
+        color: #407DD8;
     }
 
-    .close:hover,
-    .close:focus {
+    .closePopupGroup:hover,
+    .closePopupGroup:focus {
         color: black;
         text-decoration: none;
         cursor: pointer;
@@ -562,6 +565,33 @@
     }
 
 
+    /* ##########################################################################################
+    ######################################CHAT################################################
+    ########################################################################################## */
+
+    #leaveGroupInModalBtn {
+        background-color: red;
+        border-radius: 10px;
+        border: none;
+        color: #f5f5f5;
+    }
+
+    #groupNameModal {
+        color: #407DD8;
+        display: flex;
+        justify-content: center;
+    }
+
+    #groupPhotoModal {
+        width: 90px;
+        border-radius: 50px;
+        position: relative;
+        left: 40%;
+    }
+
+    #groupMembersModal {
+        font-size: 20px;
+    }
 
     @media(min-width: 1300px) and (max-width: 1500px) and (min-height: 598px) and (max-height:900px) {
 
@@ -622,6 +652,11 @@
             right: 11%;
         }
 
+        .modal-content {
+            position: relative;
+            left: 3%;
+            bottom: 15%;
+        }
     }
 </style>
 </head>
@@ -767,10 +802,9 @@
 
 <div id="groupInfoModal" class="modalInfoGroup">
     <div class="modal-content">
-        <span class="close">&times;</span>
+        <span class="closePopupGroup">&times;</span>
         <h2 id="groupNameModal"></h2>
         <img id="groupPhotoModal" src="" alt="Foto do grupo" width="100">
-        <h3>Membros</h3>
         <ul id="groupMembersModal"></ul>
         <button id="leaveGroupInModalBtn">Sair do Grupo</button>
     </div>
