@@ -6,6 +6,7 @@ from app.models import User, Salas, Armario, Ferramentas, FerramentasSuporte, Me
 from datetime import datetime
 from flask_socketio import join_room, leave_room, emit
 
+from sqlalchemy import desc
 from werkzeug.utils import secure_filename
 import os
 import base64
@@ -432,9 +433,6 @@ def authorize_google():
     return redirect(url_for('login_google'))
 
 
-#############################################
-######## CHATTTTTTTTTTTTTTT #################
-#############################################
 
 #############################################
 ######## CHATTTTTTTTTTTTTTT #################
@@ -443,9 +441,36 @@ def authorize_google():
 @app.route('/chat')
 @login_required
 def chat():
+    # Obter os usuários, excluindo o usuário atual
     users = User.query.filter(User.id != current_user.id).all()
     groups = Group.query.join(GroupUser).filter(GroupUser.user_id == current_user.id).all()
-    return render_template('chat.html', users=users, groups=groups, current_user=current_user)
+
+    # Obter a última mensagem recebida de cada usuário
+    last_messages = {}
+    for user in users:
+        last_msg = Message.query.filter_by(sender_id=user.id, recipient_id=current_user.id)\
+            .order_by(Message.timestamp.desc()).first()
+        if last_msg:
+            last_messages[user.id] = last_msg.content  # Alterado para armazenar o conteúdo da mensagem
+
+    # Obter a última mensagem de cada grupo
+    last_group_messages = {}
+    for group in groups:
+        last_group_msg = GroupMessage.query.filter_by(group_id=group.id)\
+            .order_by(GroupMessage.timestamp.desc()).first()
+        if last_group_msg and last_group_msg.sender_id != current_user.id:
+            last_group_messages[group.id] = last_group_msg.content  # Alterado para armazenar o conteúdo da mensagem
+
+    # Ordenar os usuários e grupos por última mensagem
+    users_sorted = sorted(users, key=lambda u: last_messages.get(u.id, ''), reverse=True)
+    groups_sorted = sorted(groups, key=lambda g: last_group_messages.get(g.id, ''), reverse=True)
+
+    return render_template('chat.html', users=users_sorted, groups=groups_sorted,
+                           last_messages=last_messages,
+                           last_group_messages=last_group_messages,
+                           current_user=current_user)
+
+
 
 @socketio.on('send_message')
 def handle_message(data):
@@ -833,3 +858,37 @@ def get_last_active_display(user):
         hours_ago = minutes_ago // 60
         return f"{hours_ago} hora(s) atrás"
     
+@socketio.on('get_group_info')
+def handle_get_group_info(data):
+    try:
+        group_id = data.get('group_id')
+        if not group_id:
+            raise ValueError("Group ID is missing")
+
+        group = Group.query.get(group_id)
+        if not group:
+            raise ValueError("Group not found")
+
+        # Obter membros do grupo
+        group_users = GroupUser.query.filter_by(group_id=group_id).all()
+        members = []
+        for gu in group_users:
+            user = User.query.get(gu.user_id)
+            members.append({
+                'name': user.nome,
+                'last_seen': get_last_active_display(user),
+                'foto': url_for('static', filename='uploads/perfil/' + user.foto) if user.foto else url_for('static', filename='imgs/defaultPeople.png')
+            })
+
+        # Dados do grupo
+        group_info = {
+            'name': group.name,
+            'image': url_for('static', filename='uploads/chat/group/' + group.image) if group.image else None,
+            'members': members
+        }
+
+        emit('group_info', group_info)
+    except Exception as e:
+        print(f"Error retrieving group info: {e}")
+        emit('error', {'message': 'Unable to retrieve group info'})
+

@@ -211,57 +211,58 @@
             border: 2px solid black;
         }
 
-        @media(min-width: 1300px) and (max-width: 1500px) {
+        @media screen and (max-width: 1500px) {
             .barraLateral {
                 width: 25%;
             }
-
+        
             .botaoNB {
                 width: 90%;
             }
-
+        
             .txt-link {
-                font-size: 18px;
+                font-size: 1.3vw !important;
             }
-
+        
             .botaoNB .icon {
                 font-size: 28px;
             }
-
+        
             .sair {
                 position: fixed;
                 top: 10%;
                 width: 7%;
             }
-
+        
             ul {
                 margin: 0;
             }
-
+        
             .listBtn {
                 position: relative;
                 top: 3%;
             }
-
+        
             .titulo {
                 margin: 0;
                 font-size: 2vw;
                 position: relative;
                 top: 45%;
             }
-
+        
             .iconHeader img {
                 width: 8vh;
-                /* Define a largura com base na altura da viewport */
                 height: 8vh;
-                /* Define a altura com base na altura da viewport */
                 border-radius: 50%;
                 object-fit: cover;
-                /* Mantém a imagem cortada, mas sem distorcer */
                 object-position: center;
-                /* Centraliza a imagem no contêiner */
             }
-
+        }
+        
+        @media screen and (max-width: 1660px) {
+            .txt-link {
+                font-size: 1.7vw;
+            }
         }
     </style>
 </head>

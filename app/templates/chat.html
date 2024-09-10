@@ -77,36 +77,45 @@
     }
 
     .contact,
-    .group {
-        display: flex;
-        align-items: center;
-        padding: 10px;
-        border-bottom: 1px solid #ddd;
-        cursor: pointer;
-        position: relative;
-        margin-top: 5%;
-    }
+.group {
+    display: flex;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+    position: relative;
+    margin-top: 5%;
+}
 
-    .contact img,
-    .group img {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        margin-right: 10px;
-    }
+.contact img,
+.group img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
 
-    .contactName {
-        color: #407DD8;
-        font-weight: 600;
-        bottom: 5%;
-    }
+.contact-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
 
-    .contact span,
-    .group span {
-        font-size: 1vw;
-        position: relative;
-        bottom: 10%;
-    }
+.contactName {
+    color: #407DD8;
+    font-weight: 600;
+}
+
+.last-message {
+    font-size: 0.9vw; /* Ajuste para garantir que a mensagem não ocupe muito espaço */
+    color: #666;
+    opacity: 0.7; /* Torna o texto um pouco transparente */
+    overflow: hidden; /* Oculta o texto que ultrapassa o container */
+    text-overflow: ellipsis; /* Adiciona reticências se o texto for muito longo */
+    white-space: nowrap; /* Impede que o texto quebre em várias linhas */
+    margin-top: 2px; /* Espaço entre o nome e a última mensagem */
+}
+
 
     #lastActiveInfo {
         font-size: 0.9rem;
@@ -510,6 +519,50 @@
         top: -50%;
     }
 
+    .modalInfoGroup {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+        background-color: #fff;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 500px;
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .member-img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 10px;
+        vertical-align: middle;
+    }
+
+
+
     @media(min-width: 1300px) and (max-width: 1500px) and (min-height: 598px) and (max-height:900px) {
 
         #createGroupBtn {
@@ -633,19 +686,27 @@
         {% for user in users %}
         <li data-user-id="{{ user.id }}" data-user-name="{{ user.nome }}" class="contact">
             {% if user.foto %}
-            <img src="{{ url_for('static', filename='uploads/perfil/' + user.foto) }}" class="imgPeople"
-                alt="{{ user.nome }}">
+            <img src="{{ url_for('static', filename='uploads/perfil/' + user.foto) }}" class="imgPeople" alt="{{ user.nome }}">
             {% else %}
             <img src="{{ url_for('static', filename='imgs/defaultPeople.png') }}" class="imgPeople" alt="Foto Padrão">
             {% endif %}
-            <span class="contactName">{{ user.nome }}</span>
-            <div id="lastActiveInfo_{{ user.id }}" class="last-active-info">
-                <!-- A informação de última vez online será atualizada via JavaScript -->
+            
+            <div class="contact-info">
+                <!-- Nome do contato -->
+                <span class="contactName">{{ user.nome }}</span>
+                
+                <!-- Última mensagem recebida desse usuário -->
+                {% if last_messages.get(user.id) %}
+                <div class="last-message">{{ last_messages[user.id] }}</div>
+                {% endif %}
             </div>
+            
+            <div id="lastActiveInfo_{{ user.id }}" class="last-active-info"></div>
         </li>
         {% endfor %}
 
         <div id="contextMenu">
+            <button id="infoBtn">Informações</button>
             <button id="leaveGroupBtn">Sair do Grupo</button>
         </div>
 
@@ -653,11 +714,20 @@
         {% for group in groups %}
         <li data-group-id="{{ group.id }}" data-group-name="{{ group.name }}" class="group">
             {% if group.image %}
-            <img src="{{ url_for('static', filename='uploads/' + group.image) }}" alt="sla">
+            <img src="{{ url_for('static', filename='uploads/' + group.image) }}" alt="{{ group.name }}">
             {% else %}
-            <img src="{{ url_for('static', filename='uploads/group_icon.png') }}" alt="{{ group.name }}">
+            <img src="{{ url_for('static', filename='imgs/defaultImage.jpg') }}" alt="{{ group.name }}">
             {% endif %}
-            <span>{{ group.name }}</span>
+            
+            <div class="contact-info">
+                <!-- Nome do grupo -->
+                <span class="contactName">{{ group.name }}</span>
+                
+                <!-- Última mensagem do grupo, se não foi enviada pelo usuário atual -->
+                {% if last_group_messages.get(group.id) %}
+                <div class="last-message">{{ last_group_messages[group.id] }}</div>
+                {% endif %}
+            </div>
         </li>
         {% endfor %}
     </ul>
@@ -694,6 +764,18 @@
             style="position: absolute;  right: 46.5%; background: rgba(255,255,255,0.8); border: none; border-radius: 50%; padding: 5px 10px; cursor: pointer; font-size: 16px;">X</button>
     </div>
 </div>
+
+<div id="groupInfoModal" class="modalInfoGroup">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2 id="groupNameModal"></h2>
+        <img id="groupPhotoModal" src="" alt="Foto do grupo" width="100">
+        <h3>Membros</h3>
+        <ul id="groupMembersModal"></ul>
+        <button id="leaveGroupInModalBtn">Sair do Grupo</button>
+    </div>
+</div>
+
 
 <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
 <script>
@@ -913,6 +995,61 @@
                 $('#contextMenu').hide();
             }
         });
+
+        $('#infoBtn').on('click', function () {
+            if (selectedGroupId !== null) {
+                // Solicita as informações do grupo ao servidor
+                socket.emit('get_group_info', { group_id: selectedGroupId });
+                $('#contextMenu').hide(); // Esconde o menu de contexto
+            }
+        });
+
+        // Recebe as informações do grupo do servidor
+        socket.on('group_info', function (groupData) {
+            // Preencher o nome e foto do grupo no modal
+            $('#groupNameModal').text(groupData.name);
+            $('#groupPhotoModal').attr('src', groupData.image ? groupData.image : 'static/imgs/defaultImage.jpg');
+
+            // Limpar e preencher a lista de membros do grupo
+            $('#groupMembersModal').empty();
+            groupData.members.forEach(function (member) {
+                let memberItem = `
+                    <li>
+                        <img src="${member.foto}" alt="Foto de ${member.name}" class="member-img">
+                        ${member.name} (${member.last_seen})
+                    </li>`;
+                $('#groupMembersModal').append(memberItem);
+            });
+
+            // Exibir o modal de informações do grupo
+            $('#groupInfoModal').show();
+        });
+
+
+        // Fechar o modal ao clicar no botão de fechar
+        $('.close').on('click', function () {
+            $('#groupInfoModal').hide();
+        });
+
+        // Sair do grupo diretamente pelo modal
+        $('#leaveGroupInModalBtn').on('click', function () {
+            if (selectedGroupId !== null) {
+                socket.emit('leave_group', { group_id: selectedGroupId });
+                $('#groupInfoModal').hide();
+            }
+        });
+
+
+    // Sair do grupo diretamente pelo modal
+    $('#leaveGroupInModalBtn').on('click', function () {
+        if (selectedGroupId !== null) {
+            socket.emit('leave_group', { group_id: selectedGroupId });
+            $('#groupInfoModal').hide();
+        }
+    });
+
+
+        
 
         socket.on('group_left', function (data) {
             const groupId = data.group_id;
