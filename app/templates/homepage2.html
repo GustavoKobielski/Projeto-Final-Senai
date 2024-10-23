@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% include 'navbar.html' %}
+
+<style>
+    html {
+        font-size: 62.5%;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+
+
+    main {
+        margin-left: 27.3%;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .listBtn {
+        padding-left: 32px;
+    }
+
+    .main-title {
+        margin-bottom: 2rem;
+        font-weight: bold;
+    }
+
+    .banner .img5 {
+        width: 95%;
+        height: 32rem;
+    }
+
+    .infos {
+        padding: 0;
+    }
+
+    .salas {
+        margin-top: 2rem;
+        width: 95%;
+
+    }
+
+    .salas ul {
+        display: flex;
+        gap: 1rem;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+
+    .salas ul li {
+        border-radius: 10px;
+        width: calc(25% - 1rem);
+        height: auto;
+        min-height: 12rem;
+        background-color: #407DD8;
+        color: #F1F1F1;
+        font-size: 2.4rem;
+        line-height: 2.5rem;
+        overflow: hidden;
+    }
+
+    .salas ul li p {
+        margin-top: .5rem;
+        word-break: break-word;
+        overflow-wrap: break-word;
+    }
+
+    .salas ul li .conteudoQ {
+        display: flex;
+        justify-content: center;
+    }
+
+    .escritArea2 {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+</style>
+
+<main>
+
+    <h1 class="main-title">Home</h1>
+
+    <div class="banner">
+        <img src="{{ url_for('static', filename='imgs/bannerHome.png') }}" class="img5" alt="teste">
+    </div>
+
+    <section class="salas">
+        <ul class="infos">
+            <li>
+                <div class="escritArea2">
+                    <p class="conteudoH">Total de Salas</p>
+                    <p class="conteudoQ">{{qtd_sala}}
+                    </p>
+                </div>
+            </li>
+
+            <li>
+                <div class="escritArea2">
+                    <p class="conteudoH">Total de Armários</p>
+                    <p class="conteudoQ">{{qtd_armario}}
+                </div>
+            </li>
+
+            <li>
+                <div class="escritArea2">
+                    <p class="conteudoH">Total de Ferramentas</p>
+                    <p class="conteudoQ">{{qtd_ferramenta}}
+                </div>
+            </li>
+
+            <li>
+                <div class="escritArea2">
+                    <p class="conteudoH">Ferramentas Defeituosas</p>
+                    <p class="conteudoQ">{{qtd_ferramenta_sup}}
+                </div>
+            </li>
+        </ul>
+    </section>
+
+</main>
+
+
+{% endblock %}
