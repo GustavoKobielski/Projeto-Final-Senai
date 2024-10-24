@@ -18,7 +18,7 @@
 
 
     main {
-        margin-left: 27.3%;
+        margin-left: 27.8%;
         padding: 20px;
         box-sizing: border-box;
     }
@@ -28,13 +28,15 @@
     }
 
     .main-title {
-        margin-bottom: 2rem;
-        font-weight: bold;
+        margin-top: 1rem;
+        margin-bottom: 5rem;
+        font-size: 4rem;
     }
 
     .banner .img5 {
         width: 95%;
         height: 32rem;
+        margin-left: 0.3rem;
     }
 
     .infos {
@@ -43,8 +45,8 @@
 
     .salas {
         margin-top: 2rem;
+        margin-left: 0.3rem;
         width: 95%;
-
     }
 
     .salas ul {
@@ -64,6 +66,12 @@
         font-size: 2.4rem;
         line-height: 2.5rem;
         overflow: hidden;
+        box-shadow: -1px 3px 9px 1px rgba(0, 0, 0, 0.5);
+        transition: box-shadow 0.3s ease;
+    }
+
+    .salas ul li:hover {
+        box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3);
     }
 
     .salas ul li p {
@@ -86,6 +94,27 @@
         align-items: center;
         text-align: center;
     }
+
+    @media (min-width: 1849px) {
+        .salas ul li {
+            min-height: 15rem;
+            font-size: 2.8rem;
+        }
+
+        .banner .img5 {
+            margin-bottom: 2.5rem;
+            width: 94.5%;
+            height: 45rem;
+        }
+
+        .salas {
+            margin-top: 2rem;
+            width: 94.5%;
+        }
+    }
+
+
+
 </style>
 
 <main>

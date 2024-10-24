@@ -123,7 +123,7 @@ def home():
     qtd_ferramenta_sup = FerramentasSuporte.contar_ferramentas_sup()
 
 
-    return render_template('homepage.html', qtd_sala=qtd_sala,  qtd_armario=qtd_armario, qtd_ferramenta=qtd_ferramenta, qtd_ferramenta_sup=qtd_ferramenta_sup)
+    return render_template('homepage2.html', qtd_sala=qtd_sala,  qtd_armario=qtd_armario, qtd_ferramenta=qtd_ferramenta, qtd_ferramenta_sup=qtd_ferramenta_sup)
 
 #############################################
 ######## PAGE SALAS #########################
@@ -162,7 +162,7 @@ def salas():
     for sala in salas:
         armarios_por_sala[sala.id_salas] = Armario.query.filter_by(sala_id=sala.id_salas).count()
 
-    return render_template('salas.html', salas=salas, form=form, form2=form2, armarios_por_sala=armarios_por_sala)
+    return render_template('salas2.html', salas=salas, form=form, form2=form2, armarios_por_sala=armarios_por_sala)
 
 
 @app.route('/verificar_codigo', methods=['POST'])

@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% include 'navbar.html' %}
+
+<style>
+
+    html {
+        font-size: 62.5%;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+
+
+    main {
+        margin-left: 27.8%;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .main-title {
+        margin-top: 1rem;
+        margin-bottom: 3rem;
+        font-size: 4rem;
+    }
+
+    .main-txt {
+        margin-top: 1rem;
+        margin-bottom: 3rem;
+        font-size: 2rem;
+        color: #555;
+        display: inline-block;
+    }
+
+    .btns {
+        display: flex;
+        gap: 15px;
+        justify-content: end;
+    }
+
+    .btn-scanner .btn-add-room {
+        color: red;
+    }
+
+</style>
+
+<main>
+
+    <h1 class="main-title">Salas</h1>
+
+    <p class="main-txt">Aqui voce consegue ver as salas existentes, e clicar nelas para verificar os armários.</p>
+
+    <div class="btns">
+
+        <a href="javascript:void(0)" id="openPopupScan">
+
+            <div class="btn-scanner">
+
+                <span class="iconScan"><i class="bi bi-camera-fill"></i></span>
+                <p class="txt-salas">Scanear</p>
+
+            </div>
+
+        </a>
+
+        <a href="javascript:void(0)" id="openPopup">
+
+            <div class="btn-add-room">
+
+                <span class="iconSalas"><i class="bi bi-plus-circle"></i></span>
+                <p class="txt-salas">Adicionar Salas</p>
+
+            </div>
+
+        </a>
+
+
+
+    </div>
+
+</main>
+
+
+{% endblock %}
