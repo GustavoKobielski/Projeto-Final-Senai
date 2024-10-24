@@ -1,17 +1,20 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projeto Final</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
+
     <style>
         body {
             height: 100%;
             margin: 0;
         }
+
 
         .barraLateral {
             width: 25%;
@@ -28,11 +31,13 @@
             transition: transform 0.3s ease;
         }
 
+
         .senai {
             width: 21vw;
             object-fit: contain;
             max-height: 100px;
         }
+
 
         .logo2 {
             display: flex;
@@ -40,17 +45,12 @@
             margin-top: 5%;
         }
 
+
         .linha {
             border-bottom: 0.5px solid aliceblue;
             margin-bottom: -4%;
         }
 
-        a {
-            color: #f5f5f5;
-            text-decoration: none;
-            font-size: 18px;
-            margin-left: 5%;
-        }
 
         .titulo {
             text-align: center;
@@ -59,9 +59,11 @@
             margin-top: 10%;
         }
 
+
         .a:hover {
             cursor: pointer;
         }
+
 
         .botaoNB {
             color: #f5f5f5;
@@ -73,6 +75,7 @@
             margin: 15px 0;
         }
 
+
         .botaoNB a {
             display: flex;
             align-items: center;
@@ -83,10 +86,12 @@
             text-decoration: none;
         }
 
+
         .botaoNB.ativo {
             background-color: #02247b77;
             border-radius: 12px;
         }
+
 
         .botaoNB:hover {
             cursor: pointer;
@@ -94,15 +99,18 @@
             border-radius: 12px;
         }
 
+
         .botaoNB img {
             width: 10%;
             position: relative;
             top: -11%;
         }
 
+
         ul li {
             list-style-type: none;
         }
+
 
         .botaoNB .txt-link {
             margin-left: 15px;
@@ -111,9 +119,15 @@
             flex-direction: row;
         }
 
+
         .txt-link {
             font-size: 30px;
+            color: #f5f5f5;
+            text-decoration: none;
+            font-size: 18px;
+            margin-left: 5%;
         }
+
 
         .pessoa {
             display: flex;
@@ -122,10 +136,11 @@
             margin: 1% 95%;
         }
 
+
         .iconHeader {
             margin-right: 20px;
-            font-size: 32px;
         }
+
 
         .iconHeader img {
             width: 8vh;
@@ -139,12 +154,15 @@
             /* Centraliza a imagem no contêiner */
         }
 
+
         .txt-header {
             margin: 0;
             font-size: 22px;
             white-space: nowrap;
             color: #1D1D1D;
+            text-decoration: none;
         }
+
 
         .Seta {
             position: relative;
@@ -154,6 +172,7 @@
             cursor: pointer;
         }
 
+
         .linhaHeader {
             border-bottom: 1.0px solid #1D1D1D;
             margin: 0 auto;
@@ -161,7 +180,9 @@
             position: relative;
             left: 12%;
 
+
         }
+
 
         .sair {
             width: 6.5%;
@@ -178,10 +199,12 @@
             cursor: pointer;
         }
 
+
         .juncao {
             display: flex;
             gap: 10px;
         }
+
 
         .popup-link {
             color: black;
@@ -193,23 +216,28 @@
             height: 100%;
         }
 
+
         .txt-sair {
             font-size: 25px;
             font-weight: 500;
         }
+
 
         .iconSair {
             font-size: 25px;
             font-weight: 500;
         }
 
+
         #popup {
             user-select: none;
         }
 
+
         .profile-img {
             border: 2px solid black;
         }
+
 
         .toggle-btn {
             display: none;
@@ -224,49 +252,51 @@
             z-index: 1000;
         }
 
+
         .barraLateral.hidden {
             transform: translateX(-100%);
         }
+
 
         @media screen and (max-width: 1500px) {
             .barraLateral {
                 width: 25%;
             }
-        
+       
             .botaoNB {
                 width: 90%;
             }
-        
+       
             .txt-link {
                 font-size: 1.3vw !important;
             }
-        
+       
             .botaoNB .icon {
                 font-size: 28px;
             }
-        
+       
             .sair {
                 position: fixed;
                 top: 10%;
                 width: 7%;
             }
-        
+       
             ul {
                 margin: 0;
             }
-        
+       
             .listBtn {
                 position: relative;
                 top: 3%;
             }
-        
+       
             .titulo {
                 margin: 0;
                 font-size: 2vw;
                 position: relative;
                 top: 45%;
             }
-        
+       
             .iconHeader img {
                 width: 8vh;
                 height: 8vh;
@@ -275,36 +305,61 @@
                 object-position: center;
             }
         }
-        
+       
         @media screen and (max-width: 1660px) {
             .txt-link {
                 font-size: 1.7vw;
             }
         }
 
+
         @media screen and (max-width: 768px) {
             .linhaHeader {
                 margin: auto;
-                width: 100%;
+                width: 64.5%;
             }
             .botaoNB .icon {
                 font-size: 18px;
             }
 
+
             .toggle-btn {
                 display: block;
             }
+
 
             /* Esconde a barra lateral por padrão em telas pequenas */
             .barraLateral {
                 transform: translateX(-100%);
             }
 
+
             /* Quando o botão for clicado, a barra lateral aparece */
             .barraLateral.active {
                 transform: translateX(0);
             }
 
+
+            .txt-header {
+                font-size: 18px;
+            }
+
+
+            @media screen and (max-width: 465px) {
+            .txt-header {
+                font-size: 12px;
+            }
+            .iconHeader {
+                margin-right: 10px;
+            }
+            .Seta{
+                margin-left: 5px;
+                margin-right: 11px;
+            }
+            .linhaHeader {
+                width: 59%;
+            }
+            }
         }
     </style>
 </head>
@@ -323,12 +378,14 @@
         <div class="linhaHeader"></div>
     </div>
 
+
     <div class="barraLateral">
         <div class="logo2">
             <img src="https://logodownload.org/wp-content/uploads/2019/08/senai-logo-1.png" class="senai">
         </div>
         <div class="linha"></div>
         <p class="titulo">Geral</p>
+
 
         <ul class="listBtn">
             <li class="botaoNB">
@@ -338,12 +395,14 @@
                 </a>
             </li>
 
+
             <li class="botaoNB">
                 <a href="{{url_for('salas')}}">
                     <span class="icon"><i class="bi bi-box-seam-fill"></i></span>
                     <span class="txt-link">Salas</span>
                 </a>
             </li>
+
 
             <li class="botaoNB">
                 <a href="{{url_for('ferramentasSuporte')}}">
@@ -352,6 +411,7 @@
                 </a>
             </li>
 
+
             <li class="botaoNB">
                 <a href="{{url_for('chat')}}">
                     <span class="icon"><i class="bi bi-chat-dots"></i></span>
@@ -359,14 +419,14 @@
                 </a>
             </li>
 
-
         </ul>
-
 
         <div id="messageContainer"></div>
 
+
         <div class="linha"></div>
         <p class="titulo">Gerenciamento</p>
+
 
         <ul class="listBtn">
             <li class="botaoNB">
@@ -377,10 +437,8 @@
             </li>
         </ul>
 
+
     </div>
-
-
-
 
     <div id="popup" class="sair">
         <a href="{{url_for('logout')}}" class="popup-link" onclick="togglePopup()">
@@ -392,11 +450,10 @@
     </div>
 
 
-
-
-
     <script>
         var menuItem = document.querySelectorAll('.botaoNB');
+
+
 
 
         function highlightActiveLink() {
@@ -410,6 +467,8 @@
         }
 
 
+
+
         menuItem.forEach((item) =>
             item.addEventListener('click', function (event) {
                 event.preventDefault();
@@ -418,6 +477,7 @@
                 });
                 this.classList.add('ativo');
 
+
                 const link = this.querySelector('a');
                 if (link) {
                     window.location.href = link.href;
@@ -425,7 +485,10 @@
             })
         );
 
+
         window.onload = highlightActiveLink;
+
+
 
 
         function togglePopup() {
@@ -436,6 +499,7 @@
                 popup.style.display = 'block';
             }
         }
+
 
         // Fechar o popup ao clicar fora dele
         document.addEventListener('click', function (event) {
@@ -449,19 +513,24 @@
             }
         });
 
+
         // Adicionar evento de clique ao ícone para parar a propagação do evento
         document.querySelector('.iconSair').addEventListener('click', function (event) {
             event.stopPropagation();
             togglePopup();
         });
 
+
             function toggleNavbar() {
                 const navbar = document.querySelector('.barraLateral');
                 navbar.classList.toggle('active');
             }
 
+
     </script>
 
+
 </body>
+
 
 </html>

@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
-
 {% block content %}
-
 {% include 'navbar.html' %}
 
 <style>
 
+
     html {
         font-size: 62.5%;
     }
+
 
     body {
         font-family: Arial, sans-serif;
@@ -24,16 +24,21 @@
         box-sizing: border-box;
     }
 
-    /* não mexer (arrumando navbar) */
-    .listBtn { 
-        padding-left: 32px;
+   
+    .title-btn-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
     }
+
 
     .main-title {
         margin-top: 1rem;
-        margin-bottom: 3rem;
+        margin-bottom: 2rem;
         font-size: 4rem;
+        margin: 0;
     }
+
 
     .main-txt {
         margin-top: 1rem;
@@ -43,51 +48,67 @@
         display: inline-block;
     }
 
+
     .btns {
         display: flex;
         gap: 15px;
-        justify-content: end;
     }
 
-    .btn-scanner .btn-add-room {
-        color: red;
+
+    .btn-scanner , .btn-add-room {
+        background-color: #407DD8;
+        justify-content: center;
+        padding: 10px;
+        color: white;
+        border-radius: 10px;
+        cursor: pointer;
+        width: 15rem;
+        display: flex;
+        gap: 10px;
+        font-size: 1.2rem;
+        margin-right: 5rem;
     }
+
+
+    .btn-scanner p, .btn-add-room p {
+        margin: 0;
+    }
+
 
 </style>
 
 <main>
+   
+    <div class="title-btn-container">
+       
+        <h1 class="main-title">Salas</h1>
 
-    <h1 class="main-title">Salas</h1>
-
-    <p class="main-txt">Aqui voce consegue ver as salas existentes, e clicar nelas para verificar os armários.</p>
-
-    <div class="btns">
-
-        <a href="javascript:void(0)" id="openPopupScan">
-
-            <div class="btn-scanner">
-
-                <span class="iconScan"><i class="bi bi-camera-fill"></i></span>
-                <p class="txt-salas">Scanear</p>
-
-            </div>
-
-        </a>
-
-        <a href="javascript:void(0)" id="openPopup">
-
-            <div class="btn-add-room">
-
-                <span class="iconSalas"><i class="bi bi-plus-circle"></i></span>
-                <p class="txt-salas">Adicionar Salas</p>
-
-            </div>
-
-        </a>
+        <div class="btns">
+            <a href="javascript:void(0)" id="openPopupScan">
+                <div class="btn-scanner">
+                    <span class="iconScan"><i class="bi bi-camera-fill"></i></span>
+                    <p class="txt-salas">Scanear</p>
+                </div>
+            </a>
 
 
-
+            <a href="javascript:void(0)" id="openPopup">
+                <div class="btn-add-room">
+                    <span class="iconSalas"><i class="bi bi-plus-circle"></i></span>
+                    <p class="txt-salas">Adicionar Salas</p>
+                </div>
+            </a>
+        </div>
     </div>
+
+
+   
+    <p class="main-txt">Aqui você consegue ver as salas existentes, e clicar nelas para verificar os armários.</p>
+
+
+    <section class="cards">
+
+    </section>
 
 </main>
 

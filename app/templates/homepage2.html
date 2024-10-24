@@ -33,11 +33,17 @@
         font-size: 4rem;
     }
 
-    .banner .img5 {
-        width: 95%;
-        height: 32rem;
-        margin-left: 0.3rem;
+    .banner {
+        max-width: 95%; 
+        overflow: hidden; 
     }
+
+.banner .img5 {
+    width: 100%; 
+    height: auto; 
+    max-height: 32rem; 
+    margin-left: 0.3rem;
+}
 
     .infos {
         padding: 0;
@@ -96,20 +102,39 @@
     }
 
     @media (min-width: 1849px) {
+    .salas ul li {
+        min-height: 15rem;
+        font-size: 2.8rem;
+    }
+
+    .banner .img5 {
+        margin-bottom: 2.5rem;
+        width: 100%; 
+        max-height: 45rem; 
+        height: auto; 
+    }
+
+    .salas {
+        margin-top: 2rem;
+        width: 94.5%;
+    }
+}
+
+    @media (min-width: 769px) and (max-width: 1100px) {
         .salas ul li {
-            min-height: 15rem;
-            font-size: 2.8rem;
+            font-size: 1.8rem;
         }
+    }
 
-        .banner .img5 {
-            margin-bottom: 2.5rem;
-            width: 94.5%;
-            height: 45rem;
+    @media (max-width: 768px) {
+        .salas ul li {
+            font-size: 1.6rem; 
         }
+    }
 
-        .salas {
-            margin-top: 2rem;
-            width: 94.5%;
+    @media (max-width: 480px) {
+        .salas ul li {
+            font-size: 1.2rem; 
         }
     }
 
