@@ -69,7 +69,7 @@ def allowed_file(filename):
 #############################################
 ######## LOGIN PAGE #########################
 #############################################
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def homepage():
     form = LoginForm()
 
