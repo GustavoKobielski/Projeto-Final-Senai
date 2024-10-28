@@ -162,7 +162,7 @@ def salas():
     for sala in salas:
         armarios_por_sala[sala.id_salas] = Armario.query.filter_by(sala_id=sala.id_salas).count()
 
-    return render_template('salas2.html', salas=salas, form=form, form2=form2, armarios_por_sala=armarios_por_sala)
+    return render_template('salas3.html', salas=salas, form=form, form2=form2, armarios_por_sala=armarios_por_sala)
 
 
 @app.route('/verificar_codigo', methods=['POST'])

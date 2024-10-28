@@ -1,0 +1,248 @@
+{% extends 'base.html' %}
+{% block content %}
+{% include 'navbar.html' %}
+
+<style>
+    html {
+    font-size: 62.5%;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+main {
+    margin-left: 27.8%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; 
+    margin-bottom: 1em; 
+    width: 90%;
+    margin-left: 0;
+}
+
+.main-title {
+    font-size: 4rem;
+}
+
+.btns {
+    display: flex;
+    gap: 2em; /* Espaçamento entre os botões */
+}
+
+.btns .btn-geral {
+    display: flex;
+    align-items: center;
+    gap: .8em;
+    padding: 1vh 2vw;
+    background-color: #35a4d6; /* Azul claro do exemplo */
+    color: #ffffff;
+    border-radius: 20px; /* Arredondamento maior */
+    font-size: 1.4em;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.btns .btn-geral span {
+    
+}
+
+.btns .btn-geral p {
+    margin: 0; /* Remove a margem do parágrafo para centralização */
+    line-height: 1; /* Ajusta o espaçamento entre linhas */
+}
+
+.btns a {
+    text-decoration: none;
+}
+
+
+.btns .btn-geral i {
+    font-size: 1.8em;
+    background-color: #ffffff; /* Fundo branco para o ícone */
+    color: #35a4d6; /* Azul claro para o ícone */
+    border-radius: 100%; /* Torna o fundo do ícone circular */
+    padding: .2em;
+
+}
+
+.btns .btn-geral:hover {
+    background-color: #5AB5D9;
+    transform: translateY(-2px);
+}
+
+.btns .btn-geral:active {
+    transform: translateY(1px); /* Efeito de pressão */
+}
+
+.desc_txt {
+    padding-left: 0.75em;
+    font-size: 1.8em;
+}
+
+
+    /* ############### boxs */
+
+    .wrapper_boxs {
+    margin-top: 3em;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding-left: 0.75em;
+    width: 95%;
+    height: 40em; /* Ajuste conforme necessário */
+    overflow: auto; /* Rolagem automática */
+}
+
+.box {
+    width: calc(30% - 1em);
+    height: 42vh; /* Ajuste para 40% da altura da tela */
+    margin: 1em 0.5em;
+    box-sizing: border-box;
+    background-color: #407DD8;
+    border-radius: 12px;
+    box-shadow: 
+        0px 8px 20px rgba(0, 0, 0, 0.25), /* Sombra principal */
+        0px 4px 8px rgba(0, 0, 0, 0.15),  /* Sombra secundária */
+        0px 2px 4px rgba(0, 0, 0, 0.1); 
+}
+
+
+
+.group {
+    display: flex;
+    justify-content: center;
+}
+
+.box img {
+    max-height: 20em;
+    width: 100%;
+    height: auto; 
+    object-fit: cover;
+    border-top-left-radius: 10px; 
+    border-top-right-radius: 10px;
+}
+
+.box a {
+    text-decoration: none;
+    justify-content: center;
+}
+
+.txts_wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.box .txts_wrapper p {
+    color: #f2f2f2;
+    font-size: 2em;
+}
+
+.box .txts_wrapper .total-de-arm-rios span {
+    display: flex;
+    justify-content: center;
+}
+
+/* Media Queries para responsividade */
+@media (max-width: 1024px) {
+    .box {
+        width: calc(45% - 1em); 
+    }
+}
+
+@media (max-width: 768px) {
+    .box {
+        width: calc(100% - 1em); 
+        height: 48vh;
+    }
+
+    .group {
+        display: block;
+    }
+}
+
+@media (max-width: 480px) {
+    .box {
+        width: calc(100% - 1em); 
+    }
+
+    .box {
+        height: 42vh;
+    }
+
+    .group {
+        display: block;
+    }
+}
+
+
+
+
+</style>
+
+<main>
+    <div class="container">
+        <h1 class="main-title">Salas</h1>
+
+        <article class="btns">
+            <a href="javascript:void(0)" id="openPopupScan">
+                <div class="btn-geral">
+                    <span class="iconScan"><i class="bi bi-camera-fill"></i></span>
+                    <p class="txt-salas">Scanear</p>
+                </div>
+            </a>
+            <a href="javascript:void(0)" id="openPopup">
+                <div class="btn-geral">
+                    <span class="iconSalas"><i class="bi bi-plus-circle"></i></span>
+                    <p class="txt-salas">Adicionar Salas</p>
+                </div>
+            </a>
+        </article>
+
+        
+    </div>
+
+    <p class="desc_txt">Aqui você consegue ver as salas existentes, e clicar nelas para verificar os armarios.</p>
+
+    
+    <div class="wrapper_boxs">
+        {% for sala in salas %}
+            <div class="box">
+                <div class="group">
+                    <a href="{{ url_for('armarios', sala_id=sala.id_salas) }}">
+                        <div class="rectangle"></div>
+                        <div class="div"></div>
+                        <img class="image"
+                                src="{{ url_for('serve_salas_file', filename=sala.foto_sala) if sala.foto_sala else url_for('static', filename='imgs/defaultImage.jpg') }}" />
+                        
+                        <div class="txts_wrapper">
+                            <p class="text-wrapper">{{ sala.nome_sala }}</p>
+                            <p class="total-de-arm-rios">
+                                    Total de armários:<br />
+                                    <span>{{ armarios_por_sala[sala.id_salas] }}</span>
+                            </p>
+                        </div>
+                    </a>
+                </div>
+    </div>
+    {% endfor %}
+            
+    </div>
+
+
+
+</main>
+
+
+
+{% endblock %}
