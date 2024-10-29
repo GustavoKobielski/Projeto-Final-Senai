@@ -252,7 +252,7 @@
         align-items: center;
         padding: 10px;
         border-radius: 5px;
-        max-width: 70%;
+        max-width: 50%;
     }
 
     .message.sent .message-content {
@@ -1228,7 +1228,7 @@
            <div id="message_${msg.message_id}" class="message ${messageClass}" style="display: flex; align-items: flex-start; margin-bottom: 10px; justify-content: ${alignment};">
     ${!isSent ? `<img src="${msg.from_foto}" alt="${msg.from_name}" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;">` : ''}
     <div class="message-content" style="background: ${backgroundColor}; color: ${textColor}; padding: 0.3%; border-radius: 15px 15px 0 15px; min-width: 80px; max-width: 70%; margin-${alignment === 'right' ? 'left' : 'right'}: 10px; display: flex; align-items: ${msg.content ? 'flex-start' : 'flex-end'};">
-        <div style="flex: 1; text-align: ${msg.content ? 'left' : 'right'}; padding-left: 5%;">
+        <div style="flex: 1; max-width: 87%; word-wrap: break-word;text-align: ${msg.content ? 'left' : 'right'}; padding-left: 5%;">
             ${msg.content}
             ${msg.file_url ? (['.jpg', '.jpeg', '.avif', '.jfif', '.png'].some(ext => msg.file_url.endsWith(ext))) ?
             `<img src="${msg.file_url}" alt="Image" class="message-image" style="max-width: 300px; max-height: 300px; width: auto; height: auto; display: block; margin-top: 10px; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.2); cursor: pointer;" onload="imageLoaded()">` :

@@ -43,17 +43,14 @@ main {
     align-items: center;
     gap: .8em;
     padding: 1vh 2vw;
-    background-color: #35a4d6; /* Azul claro do exemplo */
+    background-color: #407DD8; 
     color: #ffffff;
-    border-radius: 20px; /* Arredondamento maior */
+    border-radius: 20px; 
     font-size: 1.4em;
     transition: background-color 0.3s, transform 0.2s;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-.btns .btn-geral span {
-    
-}
 
 .btns .btn-geral p {
     margin: 0; /* Remove a margem do parágrafo para centralização */
@@ -66,16 +63,18 @@ main {
 
 
 .btns .btn-geral i {
-    font-size: 1.8em;
-    background-color: #ffffff; /* Fundo branco para o ícone */
-    color: #35a4d6; /* Azul claro para o ícone */
+    font-size: 1.5em;
+    color: #f2f2f2; /* Azul claro para o ícone */
     border-radius: 100%; /* Torna o fundo do ícone circular */
-    padding: .2em;
+    
+}
 
+.btns .txt-salas {
+    font-size: 1.5em;
 }
 
 .btns .btn-geral:hover {
-    background-color: #5AB5D9;
+    background-color: #548ee4;
     transform: translateY(-2px);
 }
 
@@ -96,39 +95,64 @@ main {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-    padding-left: 0.75em;
+    padding: 1em 0.75em 0 2em;
     width: 95%;
-    height: 40em; /* Ajuste conforme necessário */
-    overflow: auto; /* Rolagem automática */
+    height: 65vh; 
+    overflow: auto; 
+}
+
+/* Estilo para a barra de rolagem */
+.wrapper_boxs::-webkit-scrollbar {
+    width: 8px; /* Largura da barra de rolagem */
+}
+
+.wrapper_boxs::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Cor de fundo da trilha */
+    border-radius: 10px; /* Bordas arredondadas */
+}
+
+.wrapper_boxs::-webkit-scrollbar-thumb {
+    background: #888; /* Cor da barra de rolagem */
+    border-radius: 10px; /* Bordas arredondadas */
+}
+
+.wrapper_boxs::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Cor da barra de rolagem quando está em hover */
 }
 
 .box {
     width: calc(30% - 1em);
-    height: 42vh; /* Ajuste para 40% da altura da tela */
+    min-height: 42vh; 
     margin: 1em 0.5em;
     box-sizing: border-box;
     background-color: #407DD8;
     border-radius: 12px;
     box-shadow: 
-        0px 8px 20px rgba(0, 0, 0, 0.25), /* Sombra principal */
-        0px 4px 8px rgba(0, 0, 0, 0.15),  /* Sombra secundária */
+        0px 8px 20px rgba(0, 0, 0, 0.25), 
+        0px 4px 8px rgba(0, 0, 0, 0.15), 
         0px 2px 4px rgba(0, 0, 0, 0.1); 
 }
 
+.box:hover {
+    transform: scale(1.02); 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
 
 
 .group {
     display: flex;
     justify-content: center;
+    
 }
 
-.box img {
+.box .image {
     max-height: 20em;
     width: 100%;
-    height: auto; 
+    height: 20em;
     object-fit: cover;
     border-top-left-radius: 10px; 
     border-top-right-radius: 10px;
+    display: block;
 }
 
 .box a {
@@ -153,17 +177,219 @@ main {
     justify-content: center;
 }
 
+
+/* POPUP */
+
+.popup-container {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .popup-content {
+        background: white;
+        padding: 2%;
+        border-radius: 5px;
+        position: relative;
+        width: 35%;
+    }
+
+    .close-popup {
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        font-size: 30px;
+        cursor: pointer;
+        color: black;
+    }
+
+    #scanResult {
+        margin-top: 20px;
+    }
+
+
+    .containerSala {
+        position: fixed;
+        top: 50%;
+        left: 62.5%;
+        transform: translate(-50%, -50%);
+        width: 55%;
+        padding: 1.5%;
+        background-color: #f5f5f5;
+        z-index: 1002;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 15px;
+        border: 1.5px solid black;
+        display: none;
+    }
+
+
+
+
+
+    .tituloSala {
+        text-align: center;
+        color: #407DD8;
+        margin-bottom: 20px;
+    }
+
+
+
+
+    .content {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+    }
+
+
+
+
+    .foto {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 50%;
+    }
+
+    .addFoto {
+        width: 40%;
+        height: auto;
+        /* Mantém a proporção da imagem */
+        margin-bottom: 10px;
+        /* Espaço entre a imagem e o botão */
+    }
+
+    .addImg {
+        position: relative;
+        left: -85%;
+        margin-top: 10px;
+        /* Espaço acima do botão, se necessário */
+        font-size: 1vw;
+    }
+
+
+    .addFoto:hover {
+        cursor: pointer;
+    }
+
+    .formSalas {
+        width: 55%;
+    }
+
+    input.form-control {
+        font-size: 18px !important;
+        color: #999 !important;
+        border: 1px solid #8E8080 !important;
+        width: 100%;
+    }
+
+
+
+
+    input::placeholder {
+        font-size: 16px !important;
+        color: #999 !important;
+        text-align: left;
+    }
+
+
+
+
+    .buttonSala {
+        width: 100%;
+        padding: 10px;
+        background-color: #407DD8;
+        border-radius: 5px;
+        color: white;
+        text-align: center;
+        margin-top: 15px;
+        cursor: pointer;
+        border: none;
+    }
+
+
+
+
+    .corSala {
+        color: #407DD8;
+        font-size: 20px;
+        margin-top: 2%;
+    }
+
+
+    .closePopup {
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        font-size: 50px;
+        cursor: pointer;
+        color: #407DD8;
+    }
+
+
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.5);
+        /* Cor preta com opacidade */
+        z-index: 1000;
+        /* Abaixo do popup */
+        display: none;
+        /* Inicialmente oculto */
+    }
+
+    
+
+    #goToButton {
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        color: white;
+        text-align: center;
+        margin-top: 15px;
+        cursor: pointer;
+        border: none;       
+        background-color: gray;
+        position: relative;
+        right: 5%;
+    }
+
+    .barcode{
+        color: #407DD8;
+        font-size: 20px;
+        margin-bottom: 2%;
+    }
+
+    .tituloBarcode{
+        text-align: center;
+        color: #407DD8;
+        margin-bottom: 3%;
+        margin-left: 1%;
+    }
 /* Media Queries para responsividade */
 @media (max-width: 1024px) {
     .box {
         width: calc(45% - 1em); 
+        min-height: 40vh;
     }
+    
 }
 
 @media (max-width: 768px) {
     .box {
         width: calc(100% - 1em); 
-        height: 48vh;
+        min-height: 48vh;
     }
 
     .group {
@@ -240,9 +466,160 @@ main {
     </div>
 
 
-
 </main>
 
+<div class="overlay" id="overlay"></div>
+
+<div class="popup-container" id="barcodePopup">
+    <div class="popup-content">
+        <h1 class="tituloBarcode">Leitura de Código</h1>
+        <span class="closePopup" id="closeBarcodePopup">&times;</span>
+        <form id="barcodeForm" method="post" action="{{ url_for('verificar_codigo') }}">
+            <label for="barcode" class="barcode">Código de Barras</label>
+            <input type="text" id="barcode" name="barcode" class="form-control" placeholder="Digite o código de barras" autofocus>
+            <button type="submit" class="buttonSala">Buscar</button>
+        </form>
+        <div id="scanResult"></div>
+    </div>
+</div>
+
+
+
+
+<div class="containerSala" id="popupSala">
+    <h1 class="tituloSala">Adicionar Sala</h1>
+    <span class="closePopup" id="closePopup">&times;</span>
+
+
+    <div class="content">
+        <div class="foto">
+            <img class="addFoto" src="{{ url_for('static', filename='imgs/addFoto.png')}}" alt="">
+
+        </div>
+
+        <form action="" method="POST" class="formSalas" enctype="multipart/form-data">
+            {{form.csrf_token}}
+
+            {{form.nome_sala.label(class="corSala", style="margin-bottom: 10px; display:block;")}}
+            {{form.nome_sala(class="form-control", placeholder='Digite o nome da sala')}}
+
+            {{form.capacidade_armario.label(class="corSala", style="margin-bottom: 10px; display:block;")}}
+            {{form.capacidade_armario(class="form-control", placeholder='Quantos armários tem a sala')}}
+
+            {{ form.foto_sala(class="addImg", style="display: block;") }}
+
+            {{form.btnSubmit(class="buttonSala")}}
+        </form>
+    </div>
+</div>
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Elementos do popup de escaneamento
+        const openPopupScanBtn = document.getElementById('openPopupScan');
+        const closePopupScanBtn = document.getElementById('closeBarcodePopup');
+        const barcodePopup = document.getElementById('barcodePopup');
+        const scanResult = document.getElementById('scanResult');
+        const barcodeForm = document.getElementById('barcodeForm');
+
+        // Função para abrir o popup de escaneamento
+        openPopupScanBtn.addEventListener('click', function () {
+            barcodePopup.style.display = 'flex';
+        });
+
+        // Função para fechar o popup de escaneamento
+        closePopupScanBtn.addEventListener('click', function () {
+            barcodePopup.style.display = 'none';
+        });
+
+        // Manipulação do formulário de código de barras
+        document.getElementById('barcodeForm').addEventListener('submit', function (event) {
+            event.preventDefault();  // Evita o comportamento padrão de envio do formulário
+
+            var formData = new FormData(this);
+
+            fetch('{{ url_for("verificar_codigo") }}', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        scanResult.innerHTML = `<p>${data.error}</p>`;
+                    } else {
+                        scanResult.innerHTML = `
+                        <p><h class="corSala">Número:</h> ${data.numero}</p>
+                        <p><h class="corSala">Capacidade de Ferramentas:</h> ${data.capacidade_ferramentas}</p>
+                        <p><h class="corSala">Foto:</h> <img src="/uploads/armarios/${data.foto_armario}" alt="Foto do Armário" style="width: 30%;"></p>
+                        <input type="hidden" id="currentCode" value="${data.numero}">
+                        <button id="updateButton" class="buttonSala">Atualizar Código</button>
+                        <a href="${data.ir_para}" id="goToButton" style="display: ${data.ir_para ? 'inline-block' : 'none'};">Ir até</a>
+                    `;
+
+                        // Adiciona o listener para o botão de atualização
+                        document.getElementById('updateButton').addEventListener('click', function () {
+                            const newCode = prompt('Digite o novo código:', data.numero);
+                            if (newCode && newCode !== data.numero) {
+                                fetch('{{ url_for("atualizar_codigo") }}', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ old_code: data.numero, new_code: newCode })
+                                })
+                                    .then(response => response.json())
+                                    .then(updateData => {
+                                        if (updateData.success) {
+                                            scanResult.innerHTML = `<p>${updateData.success}</p>`;
+                                        } else {
+                                            scanResult.innerHTML = `<p>${updateData.error}</p>`;
+                                        }
+                                    });
+                            }
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    scanResult.innerHTML = 'Erro ao verificar o código.';
+                });
+        });
+
+        // Elementos do popup geral
+        const openPopupBtn = document.getElementById('openPopup');
+        const closePopupBtn = document.getElementById('closePopup');
+        const popup = document.getElementById('popupSala');
+        const overlay = document.getElementById('overlay');
+
+        // Função para abrir o popup e o overlay
+        function openPopup() {
+            popup.style.display = 'block';
+            overlay.style.display = 'block';
+        }
+
+        // Função para fechar o popup e o overlay
+        function closePopup() {
+            popup.style.display = 'none';
+            overlay.style.display = 'none';
+        }
+
+        // Abre o popup ao clicar no botão "Adicionar Salas"
+        openPopupBtn.addEventListener('click', function (event) {
+            event.preventDefault(); // Evita que o link redirecione
+            openPopup(); // Exibe o popup e o overlay
+        });
+
+        // Fecha o popup ao clicar no botão "×"
+        closePopupBtn.addEventListener('click', function () {
+            closePopup(); // Oculta o popup e o overlay
+        });
+
+        // Fecha o popup ao clicar fora do conteúdo
+        overlay.addEventListener('click', function () {
+            closePopup(); // Oculta o popup e o overlay
+        });
+    });
+</script>
 
 
 {% endblock %}
