@@ -4,183 +4,206 @@
 
 <style>
     html {
-    font-size: 62.5%;
-}
+        font-size: 62.5%;
+    }
 
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-}
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
 
-main {
-    margin-left: 27.8%;
-    padding: 20px;
-    box-sizing: border-box;
-}
+    main {
+        margin-left: 27.8%;
+        padding: 20px;
+        box-sizing: border-box;
+    }
 
-.container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center; 
-    margin-bottom: 1em; 
-    width: 90%;
-    margin-left: 0;
-}
+    .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1em;
+        width: 90%;
+        margin-left: 0;
+    }
 
-.main-title {
-    font-size: 4rem;
-}
+    .main-title {
+        font-size: 4rem;
+    }
 
-.btns {
-    display: flex;
-    gap: 2em; /* Espaçamento entre os botões */
-}
+    .btns {
+        display: flex;
+        gap: 2em;
+        /* Espaçamento entre os botões */
+    }
 
-.btns .btn-geral {
-    display: flex;
-    align-items: center;
-    gap: .8em;
-    padding: 1vh 2vw;
-    background-color: #407DD8; 
-    color: #ffffff;
-    border-radius: 20px; 
-    font-size: 1.4em;
-    transition: background-color 0.3s, transform 0.2s;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-
-.btns .btn-geral p {
-    margin: 0; /* Remove a margem do parágrafo para centralização */
-    line-height: 1; /* Ajusta o espaçamento entre linhas */
-}
-
-.btns a {
-    text-decoration: none;
-}
+    .btns .btn-geral {
+        display: flex;
+        align-items: center;
+        gap: .8em;
+        padding: 1vh 2vw;
+        background-color: #407DD8;
+        color: #ffffff;
+        border-radius: 20px;
+        font-size: 1.4em;
+        transition: background-color 0.3s, transform 0.2s;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+    }
 
 
-.btns .btn-geral i {
-    font-size: 1.5em;
-    color: #f2f2f2; /* Azul claro para o ícone */
-    border-radius: 100%; /* Torna o fundo do ícone circular */
-    
-}
+    .btns .btn-geral p {
+        margin: 0;
+        /* Remove a margem do parágrafo para centralização */
+        line-height: 1;
+        /* Ajusta o espaçamento entre linhas */
+    }
 
-.btns .txt-salas {
-    font-size: 1.5em;
-}
+    .btns a {
+        text-decoration: none;
+    }
 
-.btns .btn-geral:hover {
-    background-color: #548ee4;
-    transform: translateY(-2px);
-}
 
-.btns .btn-geral:active {
-    transform: translateY(1px); /* Efeito de pressão */
-}
+    .btns .btn-geral i {
+        font-size: 1.5em;
+        color: #f2f2f2;
+        /* Azul claro para o ícone */
+        border-radius: 100%;
+        /* Torna o fundo do ícone circular */
 
-.desc_txt {
-    padding-left: 0.75em;
-    font-size: 1.8em;
-}
+    }
+
+    .btns .txt-salas {
+        font-size: 1.5em;
+    }
+
+    .btns .btn-geral:hover {
+        background-color: #548ee4;
+        transform: translateY(-2px);
+    }
+
+    .btns .btn-geral:active {
+        transform: translateY(1px);
+
+    }
+
+    .desc_txt {
+        padding-left: 0.75em;
+        font-size: 1.8em;
+        opacity: 60%;
+    }
 
 
     /* ############### boxs */
 
     .wrapper_boxs {
-    margin-top: 3em;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    padding: 1em 0.75em 0 2em;
-    width: 95%;
-    height: 65vh; 
-    overflow: auto; 
-}
+        margin-top: 3em;
+        display: flex;
+        flex-wrap: wrap;
+        padding: 1em 0.75em 0 2em;
+        width: 95%;
+        height: 65vh;
+        overflow: auto;
+        gap: 1em;
+        /* Espaçamento uniforme entre as boxes */
+        justify-content: flex-start;
+        /* Garante que os itens começam alinhados à esquerda */
+    }
 
-/* Estilo para a barra de rolagem */
-.wrapper_boxs::-webkit-scrollbar {
-    width: 8px; /* Largura da barra de rolagem */
-}
+    /* Estilo para a barra de rolagem */
+    .wrapper_boxs::-webkit-scrollbar {
+        width: 8px;
+        /* Largura da barra de rolagem */
+    }
 
-.wrapper_boxs::-webkit-scrollbar-track {
-    background: #f1f1f1; /* Cor de fundo da trilha */
-    border-radius: 10px; /* Bordas arredondadas */
-}
+    .wrapper_boxs::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        /* Cor de fundo da trilha */
+        border-radius: 10px;
+        /* Bordas arredondadas */
+    }
 
-.wrapper_boxs::-webkit-scrollbar-thumb {
-    background: #888; /* Cor da barra de rolagem */
-    border-radius: 10px; /* Bordas arredondadas */
-}
+    .wrapper_boxs::-webkit-scrollbar-thumb {
+        background: #888;
+        /* Cor da barra de rolagem */
+        border-radius: 10px;
+        /* Bordas arredondadas */
+    }
 
-.wrapper_boxs::-webkit-scrollbar-thumb:hover {
-    background: #555; /* Cor da barra de rolagem quando está em hover */
-}
+    .wrapper_boxs::-webkit-scrollbar-thumb:hover {
+        background: #555;
+        /* Cor da barra de rolagem quando está em hover */
+    }
 
-.box {
-    width: calc(30% - 1em);
-    min-height: 42vh; 
-    margin: 1em 0.5em;
-    box-sizing: border-box;
-    background-color: #407DD8;
-    border-radius: 12px;
-    box-shadow: 
-        0px 8px 20px rgba(0, 0, 0, 0.25), 
-        0px 4px 8px rgba(0, 0, 0, 0.15), 
-        0px 2px 4px rgba(0, 0, 0, 0.1); 
-}
+    .box {
+        width: calc(30% - 1em);
+        min-height: 42vh;
+        margin: 1em 0.5em;
+        box-sizing: border-box;
+        background-color: #407DD8;
+        border-radius: 12px;
+        box-shadow:
+            0px 8px 20px rgba(0, 0, 0, 0.25),
+            0px 4px 8px rgba(0, 0, 0, 0.15),
+            0px 2px 4px rgba(0, 0, 0, 0.1);
+    }
 
-.box:hover {
-    transform: scale(1.02); 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-}
-
-
-.group {
-    display: flex;
-    justify-content: center;
-    
-}
-
-.box .image {
-    max-height: 20em;
-    width: 100%;
-    height: 20em;
-    object-fit: cover;
-    border-top-left-radius: 10px; 
-    border-top-right-radius: 10px;
-    display: block;
-}
-
-.box a {
-    text-decoration: none;
-    justify-content: center;
-}
-
-.txts_wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.box .txts_wrapper p {
-    color: #f2f2f2;
-    font-size: 2em;
-}
-
-.box .txts_wrapper .total-de-arm-rios span {
-    display: flex;
-    justify-content: center;
-}
+    .box:hover {
+        transform: scale(1.02);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
 
 
-/* POPUP */
+    .group {
+        display: flex;
+        justify-content: center;
 
-.popup-container {
+    }
+
+    .box .image {
+        max-height: 17em;
+        width: 100%;
+        height: 17em;
+        object-fit: cover;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        display: block;
+        margin-bottom: .5em;
+    }
+
+    .box a {
+        text-decoration: none;
+        justify-content: center;
+    }
+
+    .box .text-wrapper {
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: bold;
+    }
+
+    .txts_wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .box .txts_wrapper p {
+        color: #f2f2f2;
+        font-size: 2em;
+    }
+
+    .box .txts_wrapper .total-de-arm-rios span {
+        display: flex;
+        justify-content: center;
+    }
+
+
+    /* POPUP */
+
+    .popup-container {
         display: none;
         position: fixed;
         top: 0;
@@ -349,7 +372,7 @@ main {
         /* Inicialmente oculto */
     }
 
-    
+
 
     #goToButton {
         width: 100%;
@@ -359,61 +382,58 @@ main {
         text-align: center;
         margin-top: 15px;
         cursor: pointer;
-        border: none;       
+        border: none;
         background-color: gray;
         position: relative;
         right: 5%;
     }
 
-    .barcode{
+    .barcode {
         color: #407DD8;
         font-size: 20px;
         margin-bottom: 2%;
     }
 
-    .tituloBarcode{
+    .tituloBarcode {
         text-align: center;
         color: #407DD8;
         margin-bottom: 3%;
         margin-left: 1%;
     }
-/* Media Queries para responsividade */
-@media (max-width: 1024px) {
-    .box {
-        width: calc(45% - 1em); 
-        min-height: 40vh;
-    }
-    
-}
 
-@media (max-width: 768px) {
-    .box {
-        width: calc(100% - 1em); 
-        min-height: 48vh;
+    /* Media Queries para responsividade */
+    @media (max-width: 1024px) {
+        .box {
+            width: calc(45% - 1em);
+            min-height: 40vh;
+        }
+
     }
 
-    .group {
-        display: block;
-    }
-}
+    @media (max-width: 768px) {
+        .box {
+            width: calc(100% - 1em);
+            min-height: 48vh;
+        }
 
-@media (max-width: 480px) {
-    .box {
-        width: calc(100% - 1em); 
-    }
-
-    .box {
-        height: 42vh;
+        .group {
+            display: block;
+        }
     }
 
-    .group {
-        display: block;
+    @media (max-width: 480px) {
+        .box {
+            width: calc(100% - 1em);
+        }
+
+        .box {
+            height: 42vh;
+        }
+
+        .group {
+            display: block;
+        }
     }
-}
-
-
-
-
 </style>
 
 <main>
@@ -435,34 +455,33 @@ main {
             </a>
         </article>
 
-        
+
     </div>
 
     <p class="desc_txt">Aqui você consegue ver as salas existentes, e clicar nelas para verificar os armarios.</p>
 
-    
+
     <div class="wrapper_boxs">
         {% for sala in salas %}
-            <div class="box">
-                <div class="group">
-                    <a href="{{ url_for('armarios', sala_id=sala.id_salas) }}">
-                        <div class="rectangle"></div>
-                        <div class="div"></div>
-                        <img class="image"
-                                src="{{ url_for('serve_salas_file', filename=sala.foto_sala) if sala.foto_sala else url_for('static', filename='imgs/defaultImage.jpg') }}" />
-                        
-                        <div class="txts_wrapper">
-                            <p class="text-wrapper">{{ sala.nome_sala }}</p>
-                            <p class="total-de-arm-rios">
-                                    Total de armários:<br />
-                                    <span>{{ armarios_por_sala[sala.id_salas] }}</span>
-                            </p>
-                        </div>
-                    </a>
-                </div>
-    </div>
-    {% endfor %}
-            
+        <div class="box">
+            <div class="group">
+                <a href="{{ url_for('armarios', sala_id=sala.id_salas) }}">
+
+                    <img class="image"
+                        src="{{ url_for('serve_salas_file', filename=sala.foto_sala) if sala.foto_sala else url_for('static', filename='imgs/defaultImage.jpg') }}" />
+
+                    <div class="txts_wrapper">
+                        <p class="text-wrapper">{{ sala.nome_sala }}</p>
+                        <p class="total-de-arm-rios">
+                            Total de armários:<br />
+                            <span>{{ armarios_por_sala[sala.id_salas] }}</span>
+                        </p>
+                    </div>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+
     </div>
 
 
@@ -476,7 +495,8 @@ main {
         <span class="closePopup" id="closeBarcodePopup">&times;</span>
         <form id="barcodeForm" method="post" action="{{ url_for('verificar_codigo') }}">
             <label for="barcode" class="barcode">Código de Barras</label>
-            <input type="text" id="barcode" name="barcode" class="form-control" placeholder="Digite o código de barras" autofocus>
+            <input type="text" id="barcode" name="barcode" class="form-control" placeholder="Digite o código de barras"
+                autofocus>
             <button type="submit" class="buttonSala">Buscar</button>
         </form>
         <div id="scanResult"></div>
@@ -619,6 +639,8 @@ main {
             closePopup(); // Oculta o popup e o overlay
         });
     });
+
+
 </script>
 
 
