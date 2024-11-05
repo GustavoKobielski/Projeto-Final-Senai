@@ -1,0 +1,728 @@
+{% extends 'base.html' %}
+
+
+
+
+{% block content %}
+{% include 'navbar.html' %}
+
+
+
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        padding: 0;
+        overflow: auto;
+    }
+
+    .tituloSalas {
+        display: flex;
+        justify-content: center;
+        margin-top: 2%;
+        margin-right: 36.8%;
+        font-size: 40px;
+    }
+
+
+
+
+    .txtSalas {
+        margin-top: 1%;
+        margin-left: 29.1%;
+        width: 70%;
+        font-size: 20px;
+        color: #0000008f;
+    }
+
+
+
+
+    .container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4%;
+        justify-content: flex-start;
+        width: 70vw;
+        margin-left: 28.4vw;
+        box-sizing: border-box;
+    }
+
+    .box {
+        width: 20vw;
+        height: 40vh;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 15px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        margin-top: 2%;
+        margin-bottom: 3%;
+    }
+
+
+
+
+    .group {
+        width: 100%;
+        height: 100%;
+        color: white;
+        position: relative;
+    }
+
+
+
+
+    .rectangle,
+    .div {
+        position: absolute;
+        width: 100%;
+        left: 0;
+        border-radius: 15px;
+    }
+
+
+
+
+    .rectangle {
+        background-color: #3f7cd7;
+        height: 100%;
+        box-shadow: 0px 7px 4px #00000040;
+    }
+
+
+
+
+    .div {
+        height: 124px;
+        background-color: #d9d9d9;
+        border-radius: 15px 15px 0 0;
+        top: 0;
+    }
+
+
+
+
+    .text-wrapper,
+    .total-de-arm-rios {
+        position: absolute;
+        width: 100%;
+        color: #fff;
+        font-family: "Poppins-Regular", Helvetica;
+        text-align: center;
+    }
+
+
+
+
+    .text-wrapper {
+        bottom: 40%;
+        font-size: 30px;
+        text-transform: capitalize;
+    }
+
+
+
+
+    .total-de-arm-rios {
+        bottom: 15%;
+        font-size: 20px;
+        height: 51px;
+    }
+
+
+
+
+    .image {
+        width: 100%;
+        height: 45%;
+        object-fit: cover;
+        position: absolute;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+    }
+
+    .scanear {
+        margin-left: 65.2%;
+        top: 15%;
+        background-color: #407DD8;
+        border-radius: 15px;
+        width: 14%;
+        padding: 0.3%;
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .iconScan {
+        position: relative;
+        left: -30px;
+        font-size: 20px;
+        margin-right: 8px;
+    }
+
+
+    .botaoSalas {
+        margin-left: 81.2%;
+        top: 15%;
+        background-color: #407DD8;
+        border-radius: 15px;
+        width: 14%;
+        padding: 0.3%;
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+
+
+
+
+    .botaoSalas a {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: white;
+    }
+
+
+
+
+    .botaoSalas:hover {
+        cursor: pointer;
+    }
+
+
+
+
+    .iconSalas {
+        position: relative;
+        left: -10px;
+        font-size: 24px;
+        margin-right: 8px;
+    }
+
+
+
+
+    .txt-salas {
+        position: relative;
+        font-size: 22px;
+        right: 10px;
+    }
+
+
+    .popup-container {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .popup-content {
+        background: white;
+        padding: 2%;
+        border-radius: 5px;
+        position: relative;
+        width: 35%;
+    }
+
+    .close-popup {
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        font-size: 30px;
+        cursor: pointer;
+        color: black;
+    }
+
+    #scanResult {
+        margin-top: 20px;
+    }
+
+
+    .containerSala {
+        position: fixed;
+        top: 50%;
+        left: 62.5%;
+        transform: translate(-50%, -50%);
+        width: 55%;
+        padding: 1.5%;
+        background-color: #f5f5f5;
+        z-index: 1002;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 15px;
+        border: 1.5px solid black;
+        display: none;
+    }
+
+
+
+
+
+    .tituloSala {
+        text-align: center;
+        color: #407DD8;
+        margin-bottom: 20px;
+    }
+
+
+
+
+    .content {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+    }
+
+
+
+
+    .foto {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 50%;
+    }
+
+    .addFoto {
+        width: 40%;
+        height: auto;
+        /* Mantém a proporção da imagem */
+        margin-bottom: 10px;
+        /* Espaço entre a imagem e o botão */
+    }
+
+    .addImg {
+        position: relative;
+        left: -85%;
+        margin-top: 10px;
+        /* Espaço acima do botão, se necessário */
+        font-size: 1vw;
+    }
+
+
+    .addFoto:hover {
+        cursor: pointer;
+    }
+
+    .formSalas {
+        width: 55%;
+    }
+
+    input.form-control {
+        font-size: 18px !important;
+        color: #999 !important;
+        border: 1px solid #8E8080 !important;
+        width: 100%;
+    }
+
+
+
+
+    input::placeholder {
+        font-size: 16px !important;
+        color: #999 !important;
+        text-align: left;
+    }
+
+
+
+
+    .buttonSala {
+        width: 100%;
+        padding: 10px;
+        background-color: #407DD8;
+        border-radius: 5px;
+        color: white;
+        text-align: center;
+        margin-top: 15px;
+        cursor: pointer;
+        border: none;
+    }
+
+
+
+
+    .corSala {
+        color: #407DD8;
+        font-size: 20px;
+        margin-top: 2%;
+    }
+
+
+    .closePopup {
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        font-size: 50px;
+        cursor: pointer;
+        color: #407DD8;
+    }
+
+
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.5);
+        /* Cor preta com opacidade */
+        z-index: 1000;
+        /* Abaixo do popup */
+        display: none;
+        /* Inicialmente oculto */
+    }
+
+    .image {
+        position: relative;
+        left: 0.0.1%;
+        bottom: 9%;
+    }
+
+    #goToButton {
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        color: white;
+        text-align: center;
+        margin-top: 15px;
+        cursor: pointer;
+        border: none;       
+        background-color: gray;
+        position: relative;
+        right: 5%;
+    }
+
+    .barcode{
+        color: #407DD8;
+        font-size: 20px;
+        margin-bottom: 2%;
+    }
+
+    .tituloBarcode{
+        text-align: center;
+        color: #407DD8;
+        margin-bottom: 3%;
+        margin-left: 1%;
+    }
+
+    @media screen and (min-width: 1300px) and (max-width: 1500px) and (min-height: 598px) and (max-height:900px) {
+
+        .tituloSalas {
+            position: relative;
+            left: 1%;
+        }
+
+        .txt-salas {
+            font-size: 18px;
+        }
+
+        .iconSalas {
+            font-size: 18px;
+        }
+
+        .container {
+            margin-left: 28.2vw;
+        }
+
+        .box {
+            width: 20.2vw;
+            height: 43vh;
+        }
+
+        body {
+            margin-bottom: 2%;
+        }
+
+        .botaoSalas {
+            position: absolute;
+            top: 15%;
+        }
+
+        .image {
+            position: relative;
+            left: -0.0.8%;
+            bottom: 9.8%;
+        }
+
+        .text-wrapper {
+            font-size: 24px;
+        }
+
+        .total-de-arm-rios {
+            font-size: 18px;
+        }
+    }
+        @media (max-width: 1300px) {
+            .txt-salas {
+                font-size: 16px !important;
+            }
+
+            .tituloSalas {
+                position: relative;
+                left: 1.5%;
+            }
+
+            .txtSalas {
+                position: relative;
+                left: 0.5%;
+            }
+        }
+
+        @media (max-width: 1440px)   {
+            .txt-salas {
+                font-size: 16px;
+            }
+        }
+
+        @media (min-width: 1988px) {
+            
+
+            .container {
+                display: flex;
+                gap: 3.9%;
+            }
+        }
+            
+</style>
+
+
+
+
+<h1 class="tituloSalas">Salas</h1>
+<p class="txtSalas">Aqui você consegue ver as salas existentes, e clicar nelas para verificar os armários.</p>
+
+
+<a href="javascript:void(0)" id="openPopupScan">
+    <div class="scanear">
+        <span class="iconScan"><i class="bi bi-camera-fill"></i></span>
+        <span class="txt-salas">Scanear</span>
+    </div>
+</a>
+
+
+<div class="botaoSalas">
+    <a href="javascript:void(0)" id="openPopup">
+        <span class="iconSalas"><i class="bi bi-plus-circle"></i></span>
+        <span class="txt-salas">Adicionar Salas</span>
+    </a>
+</div>
+
+
+
+
+<div class="container">
+    {% for ferramenta in ferramentas %}
+    <div class="box">
+        <div class="group">                
+            <div class="rectangle"></div>
+                <div class="div"></div>
+                <img class="image"
+                src="{{ url_for('uploaded_file', filename=ferramenta.foto_ferramenta_sup) if ferramenta.foto_ferramenta_sup else url_for('static', filename='imgs/defaultImage.jpg') }}" />
+                <div class="text-wrapper">{{ ferramenta.nome_ferramenta_sup }}</div>
+                <div id="teste">
+                    <a class="kobi" href="javascript:void(0)" data-id="{{ ferramenta.id_ferramentas_sup }}"
+                        data-nome="{{ ferramenta.nome_ferramenta_sup }}"
+                        data-defeito="{{ ferramenta.defeito_ferramenta_sup }}"
+                        data-sala="{{ ferramenta.sala_ferramenta_sup }}" data-data="{{ ferramenta.data_ocorrido_sup }}"
+                        data-descricao="{{ ferramenta.ocorrido_ferramenta_sup }}"
+                        data-foto="{{ ferramenta.foto_ferramenta_sup }}"
+                        onclick="showPopup('{{ ferramenta.id_ferramentas_sup }}')">
+    
+                        <div class="total-de-arm-rios">
+                            <span class="iconInfo"><i class="bi bi-info-circle"></i></span>
+                            <span class="txtInfo">Informações</span>
+                        </div>
+    
+                    </a>
+                </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="overlay" id="overlay"></div>
+
+<div class="popup-container" id="barcodePopup">
+    <div class="popup-content">
+        <h1 class="tituloBarcode">Leitura de Código</h1>
+        <span class="closePopup" id="closeBarcodePopup">&times;</span>
+        <form id="barcodeForm" method="post" action="{{ url_for('verificar_codigo') }}">
+            <label for="barcode" class="barcode">Código de Barras</label>
+            <input type="text" id="barcode" name="barcode" class="form-control" placeholder="Digite o código de barras" autofocus>
+            <button type="submit" class="buttonSala">Buscar</button>
+        </form>
+        <div id="scanResult"></div>
+    </div>
+</div>
+
+
+
+
+<div class="containerCF" id="popupCF">
+    <h1 class="tituloCF">Cadastrar Suporte</h1>
+    <span class="closePopup" id="closePopup">&times;</span>
+
+    <div class="content">
+        <div class="afContainer">
+            <img class="addFotoCF" src="{{ url_for('static', filename='imgs/addFoto.png')}}" alt="">
+        </div>
+
+        <form action="" method="POST" class="formCF" enctype="multipart/form-data">
+            {{form.csrf_token}}
+
+            <div>
+                {{form.nome_ferramenta_sup.label(class="corCF", style="margin-bottom: 10px; display:block;")}}
+                {{form.nome_ferramenta_sup(class="form-control", placeholder='Digite o nome da ferramenta')}}
+
+                {{form.defeito_ferramenta_sup.label(class="corCF", style="margin-bottom: 10px; display:block;")}}
+                {{form.defeito_ferramenta_sup(class="form-control", placeholder='Digite o defeito')}}
+            </div>
+
+            <div>
+                {{form.sala_ferramenta_sup.label(class="corCF", style="margin-bottom: 10px; display:block;")}}
+                {{form.sala_ferramenta_sup(class="form-control", placeholder='Digite a sala')}}
+
+                {{form.data_ocorrido_sup.label(class="corCF", style="margin-bottom: 10px; display:block;")}}
+                {{ form.data_ocorrido_sup(class="form-control", id="data_ocorrido", placeholder='Data do ocorrido')}}
+            </div>
+
+            <div style="width: 100%;">
+                {{form.ocorrido_ferramenta_sup.label(class="corCF2", style="margin-bottom: 10px; display:block; width:
+                100%;")}}
+                {{form.ocorrido_ferramenta_sup(class="form-control", style="width: 100%; position: relative; top: 4%;",
+                placeholder='Descreva o ocorrido')}}
+            </div>
+
+            {{ form.foto_ferramenta_sup(class="addImg", style="display: block; position: relative;") }}
+
+            <div class="buttonDIV">
+                {{form.btnSubmit(class="buttonCF")}}
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Elementos do popup de escaneamento
+        const openPopupScanBtn = document.getElementById('openPopupScan');
+        const closePopupScanBtn = document.getElementById('closeBarcodePopup');
+        const barcodePopup = document.getElementById('barcodePopup');
+        const scanResult = document.getElementById('scanResult');
+        const barcodeForm = document.getElementById('barcodeForm');
+
+        // Função para abrir o popup de escaneamento
+        openPopupScanBtn.addEventListener('click', function () {
+            barcodePopup.style.display = 'flex';
+        });
+
+        // Função para fechar o popup de escaneamento
+        closePopupScanBtn.addEventListener('click', function () {
+            barcodePopup.style.display = 'none';
+        });
+
+        // Manipulação do formulário de código de barras
+        document.getElementById('barcodeForm').addEventListener('submit', function (event) {
+            event.preventDefault();  // Evita o comportamento padrão de envio do formulário
+
+            var formData = new FormData(this);
+
+            fetch('{{ url_for("verificar_codigo") }}', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        scanResult.innerHTML = `<p>${data.error}</p>`;
+                    } else {
+                        scanResult.innerHTML = `
+                        <p><h class="corSala">Número:</h> ${data.numero}</p>
+                        <p><h class="corSala">Capacidade de Ferramentas:</h> ${data.capacidade_ferramentas}</p>
+                        <p><h class="corSala">Foto:</h> <img src="/uploads/armarios/${data.foto_armario}" alt="Foto do Armário" style="width: 30%;"></p>
+                        <input type="hidden" id="currentCode" value="${data.numero}">
+                        <button id="updateButton" class="buttonSala">Atualizar Código</button>
+                        <a href="${data.ir_para}" id="goToButton" style="display: ${data.ir_para ? 'inline-block' : 'none'};">Ir até</a>
+                    `;
+
+                        // Adiciona o listener para o botão de atualização
+                        document.getElementById('updateButton').addEventListener('click', function () {
+                            const newCode = prompt('Digite o novo código:', data.numero);
+                            if (newCode && newCode !== data.numero) {
+                                fetch('{{ url_for("atualizar_codigo") }}', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ old_code: data.numero, new_code: newCode })
+                                })
+                                    .then(response => response.json())
+                                    .then(updateData => {
+                                        if (updateData.success) {
+                                            scanResult.innerHTML = `<p>${updateData.success}</p>`;
+                                        } else {
+                                            scanResult.innerHTML = `<p>${updateData.error}</p>`;
+                                        }
+                                    });
+                            }
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    scanResult.innerHTML = 'Erro ao verificar o código.';
+                });
+        });
+
+        // Elementos do popup geral
+        const openPopupBtn = document.getElementById('openPopup');
+        const closePopupBtn = document.getElementById('closePopup');
+        const popup = document.getElementById('popupSala');
+        const overlay = document.getElementById('overlay');
+
+        // Função para abrir o popup e o overlay
+        function openPopup() {
+            popup.style.display = 'block';
+            overlay.style.display = 'block';
+        }
+
+        // Função para fechar o popup e o overlay
+        function closePopup() {
+            popup.style.display = 'none';
+            overlay.style.display = 'none';
+        }
+
+        // Abre o popup ao clicar no botão "Adicionar Salas"
+        openPopupBtn.addEventListener('click', function (event) {
+            event.preventDefault(); // Evita que o link redirecione
+            openPopup(); // Exibe o popup e o overlay
+        });
+
+        // Fecha o popup ao clicar no botão "×"
+        closePopupBtn.addEventListener('click', function () {
+            closePopup(); // Oculta o popup e o overlay
+        });
+
+        // Fecha o popup ao clicar fora do conteúdo
+        overlay.addEventListener('click', function () {
+            closePopup(); // Oculta o popup e o overlay
+        });
+    });
+</script>
+
+
+
+{% endblock %}

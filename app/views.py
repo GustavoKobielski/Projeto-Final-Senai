@@ -235,7 +235,7 @@ def armarios(sala_id):
 
     ferramentas_por_armario = {armario.id_armario: Ferramentas.contar_ferramentas_no_armario(armario.id_armario) for armario in armarios}
 
-    return render_template('armarios.html', sala=sala, armarios=armarios, form=form, ferramentas_por_armario=ferramentas_por_armario)
+    return render_template('armarios2.html', sala=sala, armarios=armarios, form=form, ferramentas_por_armario=ferramentas_por_armario)
 
 
 #############################################
@@ -294,7 +294,7 @@ def ferramentasSuporte():
 
         form.save(filename)
         return redirect(url_for('ferramentasSuporte'))
-    return render_template('defeitoFerramentas.html', ferramentas=ferramentas, form=form, formInfo=formInfo)
+    return render_template('defeitoFerramentas2.html', ferramentas=ferramentas, form=form, formInfo=formInfo)
 
 #############################################
 ######## PAGE LOGS ##########################
