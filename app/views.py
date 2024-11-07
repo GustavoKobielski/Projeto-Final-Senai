@@ -266,7 +266,7 @@ def ferramentas(armario_id):
         form.save(armario_id=armario_id, filename=unique_filename if filename else None)
         return redirect(url_for('ferramentas', armario_id=armario_id))
 
-    return render_template('ferramentas.html', ferramentas=ferramentas, form=form)
+    return render_template('ferramentas2.html', ferramentas=ferramentas, form=form)
 
 
 #############################################
