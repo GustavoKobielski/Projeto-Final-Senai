@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Ignore Python bytecode and cache
 app/__pycache__/
 *.pyc
@@ -6,3 +7,9 @@ app/__pycache__/
 
 # Ignorar a pasta da virtual environment
 .venv/
+=======
+.venv
+
+*.pyc
+__pycache__
+>>>>>>> c46d89769d48904f00ce747e4c960408064fcc5e
