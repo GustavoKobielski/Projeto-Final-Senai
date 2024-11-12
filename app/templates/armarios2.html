@@ -93,7 +93,8 @@
         align-items: center;
         gap: 0.8em;
         padding: .4vh 1vw;
-        background-color: #407DD8; /* Cor do botão de gerar PDF */
+        background-color: #407DD8;
+        /* Cor do botão de gerar PDF */
         color: #ffffff;
         border-radius: 20px;
         font-size: 1em;
@@ -125,17 +126,18 @@
     /* ############### boxs */
 
     .wrapper_boxs {
-    margin-top: 3em;
-    display: flex;
-    flex-wrap: wrap;
-    padding: 1em 0.75em 0 2em;
-    width: 95%;
-    min-height: 65vh;
-    max-height: 65vh; /* Limita a altura máxima */
-    overflow: auto;
-    gap: 1em;
-    justify-content: flex-start;
-}
+        margin-top: 3em;
+        display: flex;
+        flex-wrap: wrap;
+        padding: 1em 0.75em 8em 2em;
+        width: 95%;
+        min-height: 65vh;
+        max-height: 65vh;
+        /* Limita a altura máxima */
+        overflow: auto;
+        gap: 1em;
+        justify-content: flex-start;
+    }
 
     /* Estilo para a barra de rolagem */
     .wrapper_boxs::-webkit-scrollbar {
@@ -163,14 +165,15 @@
     }
 
     .box {
-    width: calc(30% - 1em);
-    min-height: 42vh;
-    align-self: start; /* Impede que o item cresça verticalmente */
-    margin: 1em 0.5em;
-    background-color: #407DD8;
-    border-radius: 12px;
-    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.25), 0px 4px 8px rgba(0, 0, 0, 0.15), 0px 2px 4px rgba(0, 0, 0, 0.1);
-}
+        width: calc(30% - 1em);
+        min-height: 42vh;
+        align-self: start;
+        /* Impede que o item cresça verticalmente */
+        margin: 1em 0.5em;
+        background-color: #407DD8;
+        border-radius: 12px;
+        box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.25), 0px 4px 8px rgba(0, 0, 0, 0.15), 0px 2px 4px rgba(0, 0, 0, 0.1);
+    }
 
     .box:hover {
         transform: scale(1.02);
@@ -203,11 +206,11 @@
     .box .text-wrapper {
         text-transform: uppercase;
         letter-spacing: 1px;
-        
+
     }
 
     .bold-search {
-        font-weight: bold;   
+        font-weight: bold;
     }
 
     .txts_wrapper {
@@ -262,9 +265,9 @@
         pointer-events: none;
     }
 
-.search-input:focus {
-    border-color: #407DD8;
-}
+    .search-input:focus {
+        border-color: #407DD8;
+    }
 
 
 
@@ -481,6 +484,12 @@
         }
     }
 
+    @media (max-width: 1400px) {
+        .box .txts_wrapper p {
+            font-size: 1.9em;
+        }
+    }
+
     /* Media Queries para responsividade */
     @media (max-width: 1024px) {
         .box {
@@ -496,7 +505,7 @@
             min-height: 48vh;
         }
 
-        
+
     }
 
     @media (max-width: 480px) {
@@ -521,7 +530,7 @@
                     <p class="txt-salas">Adicionar Armario</p>
                 </div>
             </a>
-            
+
         </article>
 
 
@@ -550,7 +559,8 @@
                         src="{{ url_for('serve_armario_file', filename=armario.foto_armario) if armario.foto_armario else url_for('static', filename='imgs/defaultImage.jpg') }}" />
 
                     <div class="txts_wrapper">
-                        <p class="text-wrapper">{{ sala.nome_sala }} - <span class="bold-search">{{ armario.numero }}</span></p>
+                        <p class="text-wrapper">{{ sala.nome_sala }} - <span class="bold-search">{{ armario.numero
+                                }}</span></p>
                         <p class="total-de-arm-rios">
                             Total de ferramentas:<br />
                             <span>{{ ferramentas_por_armario[armario.id_armario] }}</span>
@@ -599,35 +609,35 @@
 
 <script>
 
-document.getElementById('generatePdfButton').addEventListener('click', function() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
+    document.getElementById('generatePdfButton').addEventListener('click', function () {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
 
-    // Adicionando o título no PDF
-    doc.setFontSize(18);
-    doc.text('Relatório dos Armarios', 10, 10);
+        // Adicionando o título no PDF
+        doc.setFontSize(18);
+        doc.text('Relatório dos Armarios', 10, 10);
 
-    // Capturando as informações dos cards de ferramentas
-    let yPosition = 20; // Posição inicial no eixo Y
-    const ferramentas = document.querySelectorAll('.box');
-    yPosition += 10;
-    ferramentas.forEach((ferramenta, index) => {
-        const nome = ferramenta.querySelector('.text-wrapper').textContent;
-        const total = ferramenta.querySelector('.total-de-arm-rios span').textContent;
-
-        // Adicionando cada ferramenta no PDF
-        doc.setFontSize(14);
-        doc.text(`Nome do armario ${index + 1}: ${nome}`, 10, yPosition);
+        // Capturando as informações dos cards de ferramentas
+        let yPosition = 20; // Posição inicial no eixo Y
+        const ferramentas = document.querySelectorAll('.box');
         yPosition += 10;
-        doc.text(`Total de Ferramentas: ${total}`, 10, yPosition);
-        yPosition += 20; // Espaço entre as ferramentas
+        ferramentas.forEach((ferramenta, index) => {
+            const nome = ferramenta.querySelector('.text-wrapper').textContent;
+            const total = ferramenta.querySelector('.total-de-arm-rios span').textContent;
+
+            // Adicionando cada ferramenta no PDF
+            doc.setFontSize(14);
+            doc.text(`Nome do armario ${index + 1}: ${nome}`, 10, yPosition);
+            yPosition += 10;
+            doc.text(`Total de Ferramentas: ${total}`, 10, yPosition);
+            yPosition += 20; // Espaço entre as ferramentas
+        });
+
+        // Gerando o PDF
+        doc.save('relatorio_armarios.pdf');
     });
 
-    // Gerando o PDF
-    doc.save('relatorio_armarios.pdf');
-});
-
-document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function () {
         const popup = document.getElementById('popupSala');
         const closePopupBtn = document.getElementById('closePopup');
         const openPopupBtn = document.getElementById('openPopup');
