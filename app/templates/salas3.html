@@ -88,6 +88,33 @@
 
     }
 
+    #generatePdfButton {
+        display: flex;
+        align-items: center;
+        gap: 0.8em;
+        padding: .4vh 1vw;
+        background-color: #407DD8; /* Cor do botão de gerar PDF */
+        color: #ffffff;
+        border-radius: 20px;
+        font-size: 1em;
+        transition: background-color 0.3s, transform 0.2s;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+        border: none;
+    }
+
+    #generatePdfButton:hover {
+        background-color: #548ee4;
+        transform: translateY(-2px);
+    }
+
+    #generatePdfButton:active {
+        transform: translateY(1px);
+    }
+
+    #generatePdfButton i {
+        font-size: 1.5em;
+    }
+
     .desc_txt {
         padding-left: 0.75em;
         font-size: 1.8em;
@@ -98,18 +125,17 @@
     /* ############### boxs */
 
     .wrapper_boxs {
-        margin-top: 3em;
-        display: flex;
-        flex-wrap: wrap;
-        padding: 1em 0.75em 0 2em;
-        width: 95%;
-        height: 65vh;
-        overflow: auto;
-        gap: 1em;
-        /* Espaçamento uniforme entre as boxes */
-        justify-content: flex-start;
-        /* Garante que os itens começam alinhados à esquerda */
-    }
+    margin-top: 3em;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 1em 0.75em 0 2em;
+    width: 95%;
+    min-height: 65vh;
+    max-height: 65vh; /* Limita a altura máxima */
+    overflow: auto;
+    gap: 1em;
+    justify-content: flex-start;
+}
 
     /* Estilo para a barra de rolagem */
     .wrapper_boxs::-webkit-scrollbar {
@@ -137,17 +163,14 @@
     }
 
     .box {
-        width: calc(30% - 1em);
-        min-height: 42vh;
-        margin: 1em 0.5em;
-        box-sizing: border-box;
-        background-color: #407DD8;
-        border-radius: 12px;
-        box-shadow:
-            0px 8px 20px rgba(0, 0, 0, 0.25),
-            0px 4px 8px rgba(0, 0, 0, 0.15),
-            0px 2px 4px rgba(0, 0, 0, 0.1);
-    }
+    width: calc(30% - 1em);
+    min-height: 42vh;
+    align-self: start; /* Impede que o item cresça verticalmente */
+    margin: 1em 0.5em;
+    background-color: #407DD8;
+    border-radius: 12px;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.25), 0px 4px 8px rgba(0, 0, 0, 0.15), 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
 
     .box:hover {
         transform: scale(1.02);
@@ -158,7 +181,7 @@
     .group {
         display: flex;
         justify-content: center;
-
+        display: block;
     }
 
     .box .image {
@@ -199,6 +222,48 @@
         display: flex;
         justify-content: center;
     }
+
+    /* PESQUISA */
+
+    .search-container {
+        display: flex;
+        align-items: center;
+        margin-left: 0.75em;
+        font-size: 1.8em;
+        margin-bottom: 1em;
+    }
+
+    .search-input {
+        padding: 0.5em 1em;
+        padding-right: 2.5em;
+        font-size: 1em;
+        border: 1px solid #ccc;
+        border-radius: 20px;
+        outline: none;
+        box-sizing: border-box;
+        transition: border-color 0.3s;
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .search-input::placeholder {
+        color: #999;
+    }
+
+    .search-icon {
+        position: relative;
+        right: 2.5em;
+        font-size: 1.8em;
+        color: #407DD8;
+        pointer-events: none;
+    }
+
+.search-input:focus {
+    border-color: #407DD8;
+}
+
+
+
 
 
     /* POPUP */
@@ -401,6 +466,17 @@
         margin-left: 1%;
     }
 
+    @media (max-width: 1920px) {
+        .box {
+            width: calc(32% - 1em);
+            min-height: 35vh;
+        }
+
+        .box .txts_wrapper p {
+            font-size: 2.5em;
+        }
+    }
+
     /* Media Queries para responsividade */
     @media (max-width: 1024px) {
         .box {
@@ -416,9 +492,7 @@
             min-height: 48vh;
         }
 
-        .group {
-            display: block;
-        }
+        
     }
 
     @media (max-width: 480px) {
@@ -428,10 +502,6 @@
 
         .box {
             height: 42vh;
-        }
-
-        .group {
-            display: block;
         }
     }
 </style>
@@ -459,6 +529,17 @@
     </div>
 
     <p class="desc_txt">Aqui você consegue ver as salas existentes, e clicar nelas para verificar os armarios.</p>
+
+    <div class="search-container">
+        <input type="text" id="searchInput" class="search-input" placeholder="Pesquisar por nome da sala..." />
+        <span class="search-icon">&#x1F50D;</span>
+
+        <button id="generatePdfButton" class="btn-geral">
+            <i class="bi bi-file-earmark-pdf"></i>
+            Gerar PDF
+        </button>
+
+    </div>
 
 
     <div class="wrapper_boxs">
@@ -536,6 +617,35 @@
 
 
 <script>
+
+document.getElementById('generatePdfButton').addEventListener('click', function() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // Adicionando o título no PDF
+    doc.setFontSize(18);
+    doc.text('Relatório das Salas', 10, 10);
+
+    // Capturando as informações dos cards de ferramentas
+    let yPosition = 20; // Posição inicial no eixo Y
+    const ferramentas = document.querySelectorAll('.box');
+    yPosition += 10;
+    ferramentas.forEach((ferramenta, index) => {
+        const nome = ferramenta.querySelector('.text-wrapper').textContent;
+        const total = ferramenta.querySelector('.total-de-arm-rios span').textContent;
+
+        // Adicionando cada ferramenta no PDF
+        doc.setFontSize(14);
+        doc.text(`Nome da Sala: ${index + 1}: ${nome}`, 10, yPosition);
+        yPosition += 10;
+        doc.text(`Total de armários: ${total}`, 10, yPosition);
+        yPosition += 20; // Espaço entre as ferramentas
+    });
+
+    // Gerando o PDF
+    doc.save('relatorio_salas.pdf');
+});
+
     document.addEventListener('DOMContentLoaded', function () {
         // Elementos do popup de escaneamento
         const openPopupScanBtn = document.getElementById('openPopupScan');
@@ -637,6 +747,24 @@
         // Fecha o popup ao clicar fora do conteúdo
         overlay.addEventListener('click', function () {
             closePopup(); // Oculta o popup e o overlay
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.getElementById('searchInput');
+        const boxes = document.querySelectorAll('.box');
+
+        searchInput.addEventListener('input', function () {
+            const searchText = searchInput.value.toLowerCase();
+
+            boxes.forEach(box => {
+                const boxText = box.querySelector('.text-wrapper').textContent.toLowerCase();
+                if (boxText.includes(searchText)) {
+                    box.style.display = 'block'; // Mostra a box se corresponder à pesquisa
+                } else {
+                    box.style.display = 'none';  // Oculta a box se não corresponder
+                }
+            });
         });
     });
 

@@ -88,6 +88,33 @@
 
     }
 
+    #generatePdfButton {
+        display: flex;
+        align-items: center;
+        gap: 0.8em;
+        padding: .4vh 1vw;
+        background-color: #407DD8; /* Cor do botão de gerar PDF */
+        color: #ffffff;
+        border-radius: 20px;
+        font-size: 1em;
+        transition: background-color 0.3s, transform 0.2s;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+        border: none;
+    }
+
+    #generatePdfButton:hover {
+        background-color: #548ee4;
+        transform: translateY(-2px);
+    }
+
+    #generatePdfButton:active {
+        transform: translateY(1px);
+    }
+
+    #generatePdfButton i {
+        font-size: 1.5em;
+    }
+
     .desc_txt {
         padding-left: 0.75em;
         font-size: 1.8em;
@@ -98,18 +125,17 @@
     /* ############### boxs */
 
     .wrapper_boxs {
-        margin-top: 3em;
-        display: flex;
-        flex-wrap: wrap;
-        padding: 1em 0.75em 0 2em;
-        width: 95%;
-        height: 65vh;
-        overflow: auto;
-        gap: 1em;
-        /* Espaçamento uniforme entre as boxes */
-        justify-content: flex-start;
-        /* Garante que os itens começam alinhados à esquerda */
-    }
+    margin-top: 3em;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 1em 0.75em 0 2em;
+    width: 95%;
+    min-height: 65vh;
+    max-height: 65vh; /* Limita a altura máxima */
+    overflow: auto;
+    gap: 1em;
+    justify-content: flex-start;
+}
 
     /* Estilo para a barra de rolagem */
     .wrapper_boxs::-webkit-scrollbar {
@@ -137,17 +163,14 @@
     }
 
     .box {
-        width: calc(30% - 1em);
-        min-height: 42vh;
-        margin: 1em 0.5em;
-        box-sizing: border-box;
-        background-color: #407DD8;
-        border-radius: 12px;
-        box-shadow:
-            0px 8px 20px rgba(0, 0, 0, 0.25),
-            0px 4px 8px rgba(0, 0, 0, 0.15),
-            0px 2px 4px rgba(0, 0, 0, 0.1);
-    }
+    width: calc(30% - 1em);
+    min-height: 42vh;
+    align-self: start; /* Impede que o item cresça verticalmente */
+    margin: 1em 0.5em;
+    background-color: #407DD8;
+    border-radius: 12px;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.25), 0px 4px 8px rgba(0, 0, 0, 0.15), 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
 
     .box:hover {
         transform: scale(1.02);
@@ -158,7 +181,7 @@
     .group {
         display: flex;
         justify-content: center;
-
+        display: block;
     }
 
     .box .image {
@@ -180,7 +203,11 @@
     .box .text-wrapper {
         text-transform: uppercase;
         letter-spacing: 1px;
-        font-weight: bold;
+        
+    }
+
+    .bold-search {
+        font-weight: bold;   
     }
 
     .txts_wrapper {
@@ -199,6 +226,48 @@
         display: flex;
         justify-content: center;
     }
+
+    /* PESQUISA */
+
+    .search-container {
+        display: flex;
+        align-items: center;
+        margin-left: 0.75em;
+        font-size: 1.8em;
+        margin-bottom: 1em;
+    }
+
+    .search-input {
+        padding: 0.5em 1em;
+        padding-right: 2.5em;
+        font-size: 1em;
+        border: 1px solid #ccc;
+        border-radius: 20px;
+        outline: none;
+        box-sizing: border-box;
+        transition: border-color 0.3s;
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .search-input::placeholder {
+        color: #999;
+    }
+
+    .search-icon {
+        position: relative;
+        right: 2.5em;
+        font-size: 1.8em;
+        color: #407DD8;
+        pointer-events: none;
+    }
+
+.search-input:focus {
+    border-color: #407DD8;
+}
+
+
+
 
 
     /* POPUP */
@@ -401,6 +470,17 @@
         margin-left: 1%;
     }
 
+    @media (max-width: 1920px) {
+        .box {
+            width: calc(32% - 1em);
+            min-height: 35vh;
+        }
+
+        .box .txts_wrapper p {
+            font-size: 2.5em;
+        }
+    }
+
     /* Media Queries para responsividade */
     @media (max-width: 1024px) {
         .box {
@@ -416,9 +496,7 @@
             min-height: 48vh;
         }
 
-        .group {
-            display: block;
-        }
+        
     }
 
     @media (max-width: 480px) {
@@ -429,10 +507,6 @@
         .box {
             height: 42vh;
         }
-
-        .group {
-            display: block;
-        }
     }
 </style>
 
@@ -441,14 +515,13 @@
         <h1 class="main-title">Armários</h1>
 
         <article class="btns">
-    
             <a href="javascript:void(0)" id="openPopup">
                 <div class="btn-geral">
                     <span class="iconSalas"><i class="bi bi-plus-circle"></i></span>
-                    <p class="txt-salas">Adicionar Armários</p>
+                    <p class="txt-salas">Adicionar Armario</p>
                 </div>
             </a>
-
+            
         </article>
 
 
@@ -456,18 +529,30 @@
 
     <p class="desc_txt">Aqui você consegue ver os armários existentes, e clicar neles para verificar as ferramentas.</p>
 
+    <div class="search-container">
+        <input type="text" id="searchInput" class="search-input" placeholder="Pesquisar por nome do armario..." />
+        <span class="search-icon">&#x1F50D;</span>
+
+        <button id="generatePdfButton" class="btn-geral">
+            <i class="bi bi-file-earmark-pdf"></i>
+            Gerar PDF
+        </button>
+    </div>
+
 
     <div class="wrapper_boxs">
         {% for armario in armarios %}
         <div class="box">
             <div class="group">
                 <a href="{{ url_for('ferramentas', armario_id=armario.id_armario) }}">
+
                     <img class="image"
                         src="{{ url_for('serve_armario_file', filename=armario.foto_armario) if armario.foto_armario else url_for('static', filename='imgs/defaultImage.jpg') }}" />
+
                     <div class="txts_wrapper">
-                        <p class="text-wrapper">{{ sala.nome_sala }} - {{ armario.numero }}</p>
+                        <p class="text-wrapper">{{ sala.nome_sala }} - <span class="bold-search">{{ armario.numero }}</span></p>
                         <p class="total-de-arm-rios">
-                            Total de armários:<br />
+                            Total de ferramentas:<br />
                             <span>{{ ferramentas_por_armario[armario.id_armario] }}</span>
                         </p>
                     </div>
@@ -483,25 +568,8 @@
 
 <div class="overlay" id="overlay"></div>
 
-<div class="popup-container" id="barcodePopup">
-    <div class="popup-content">
-        <h1 class="tituloBarcode">Leitura de Código</h1>
-        <span class="closePopup" id="closeBarcodePopup">&times;</span>
-        <form id="barcodeForm" method="post" action="{{ url_for('verificar_codigo') }}">
-            <label for="barcode" class="barcode">Código de Barras</label>
-            <input type="text" id="barcode" name="barcode" class="form-control" placeholder="Digite o código de barras"
-                autofocus>
-            <button type="submit" class="buttonSala">Buscar</button>
-        </form>
-        <div id="scanResult"></div>
-    </div>
-</div>
-
-
-
-
 <div class="containerSala" id="popupSala">
-    <h1 class="tituloSala">Adicionar Ferramenta</h1>
+    <h1 class="tituloSala">Adicionar Armario</h1>
     <span class="closePopup" id="closePopup">&times;</span>
 
 
@@ -530,7 +598,36 @@
 
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+
+document.getElementById('generatePdfButton').addEventListener('click', function() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // Adicionando o título no PDF
+    doc.setFontSize(18);
+    doc.text('Relatório dos Armarios', 10, 10);
+
+    // Capturando as informações dos cards de ferramentas
+    let yPosition = 20; // Posição inicial no eixo Y
+    const ferramentas = document.querySelectorAll('.box');
+    yPosition += 10;
+    ferramentas.forEach((ferramenta, index) => {
+        const nome = ferramenta.querySelector('.text-wrapper').textContent;
+        const total = ferramenta.querySelector('.total-de-arm-rios span').textContent;
+
+        // Adicionando cada ferramenta no PDF
+        doc.setFontSize(14);
+        doc.text(`Nome do armario ${index + 1}: ${nome}`, 10, yPosition);
+        yPosition += 10;
+        doc.text(`Total de Ferramentas: ${total}`, 10, yPosition);
+        yPosition += 20; // Espaço entre as ferramentas
+    });
+
+    // Gerando o PDF
+    doc.save('relatorio_armarios.pdf');
+});
+
+document.addEventListener('DOMContentLoaded', function () {
         const popup = document.getElementById('popupSala');
         const closePopupBtn = document.getElementById('closePopup');
         const openPopupBtn = document.getElementById('openPopup');
@@ -577,8 +674,26 @@
 
     });
 
-</script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.getElementById('searchInput');
+        const boxes = document.querySelectorAll('.box');
 
+        searchInput.addEventListener('input', function () {
+            const searchText = searchInput.value.toLowerCase();
+
+            boxes.forEach(box => {
+                const boxText = box.querySelector('.bold-search').textContent.toLowerCase();
+                if (boxText.includes(searchText)) {
+                    box.style.display = 'block'; // Mostra a box se corresponder à pesquisa
+                } else {
+                    box.style.display = 'none';  // Oculta a box se não corresponder
+                }
+            });
+        });
+    });
+
+
+</script>
 
 
 {% endblock %}

@@ -88,6 +88,33 @@
 
     }
 
+    #generatePdfButton {
+        display: flex;
+        align-items: center;
+        gap: 0.8em;
+        padding: .4vh 1vw;
+        background-color: #407DD8; /* Cor do botão de gerar PDF */
+        color: #ffffff;
+        border-radius: 20px;
+        font-size: 1em;
+        transition: background-color 0.3s, transform 0.2s;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+        border: none;
+    }
+
+    #generatePdfButton:hover {
+        background-color: #548ee4;
+        transform: translateY(-2px);
+    }
+
+    #generatePdfButton:active {
+        transform: translateY(1px);
+    }
+
+    #generatePdfButton i {
+        font-size: 1.5em;
+    }
+
     .desc_txt {
         padding-left: 0.75em;
         font-size: 1.8em;
@@ -98,18 +125,17 @@
     /* ############### boxs */
 
     .wrapper_boxs {
-        margin-top: 3em;
-        display: flex;
-        flex-wrap: wrap;
-        padding: 1em 0.75em 0 2em;
-        width: 95%;
-        height: 65vh;
-        overflow: auto;
-        gap: 1em;
-        /* Espaçamento uniforme entre as boxes */
-        justify-content: flex-start;
-        /* Garante que os itens começam alinhados à esquerda */
-    }
+    margin-top: 3em;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 1em 0.75em 0 2em;
+    width: 95%;
+    min-height: 65vh;
+    max-height: 65vh; /* Limita a altura máxima */
+    overflow: auto;
+    gap: 1em;
+    justify-content: flex-start;
+}
 
     /* Estilo para a barra de rolagem */
     .wrapper_boxs::-webkit-scrollbar {
@@ -137,17 +163,14 @@
     }
 
     .box {
-        width: calc(30% - 1em);
-        min-height: 42vh;
-        margin: 1em 0.5em;
-        box-sizing: border-box;
-        background-color: #407DD8;
-        border-radius: 12px;
-        box-shadow:
-            0px 8px 20px rgba(0, 0, 0, 0.25),
-            0px 4px 8px rgba(0, 0, 0, 0.15),
-            0px 2px 4px rgba(0, 0, 0, 0.1);
-    }
+    width: calc(30% - 1em);
+    min-height: 42vh;
+    align-self: start; /* Impede que o item cresça verticalmente */
+    margin: 1em 0.5em;
+    background-color: #407DD8;
+    border-radius: 12px;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.25), 0px 4px 8px rgba(0, 0, 0, 0.15), 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
 
     .box:hover {
         transform: scale(1.02);
@@ -158,7 +181,7 @@
     .group {
         display: flex;
         justify-content: center;
-
+        display: block;
     }
 
     .box .image {
@@ -180,7 +203,11 @@
     .box .text-wrapper {
         text-transform: uppercase;
         letter-spacing: 1px;
-        font-weight: bold;
+        
+    }
+
+    .bold-search {
+        font-weight: bold;   
     }
 
     .txts_wrapper {
@@ -199,6 +226,48 @@
         display: flex;
         justify-content: center;
     }
+
+    /* PESQUISA */
+
+    .search-container {
+        display: flex;
+        align-items: center;
+        margin-left: 0.75em;
+        font-size: 1.8em;
+        margin-bottom: 1em;
+    }
+
+    .search-input {
+        padding: 0.5em 1em;
+        padding-right: 2.5em;
+        font-size: 1em;
+        border: 1px solid #ccc;
+        border-radius: 20px;
+        outline: none;
+        box-sizing: border-box;
+        transition: border-color 0.3s;
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .search-input::placeholder {
+        color: #999;
+    }
+
+    .search-icon {
+        position: relative;
+        right: 2.5em;
+        font-size: 1.8em;
+        color: #407DD8;
+        pointer-events: none;
+    }
+
+.search-input:focus {
+    border-color: #407DD8;
+}
+
+
+
 
 
     /* POPUP */
@@ -401,6 +470,17 @@
         margin-left: 1%;
     }
 
+    @media (max-width: 1920px) {
+        .box {
+            width: calc(32% - 1em);
+            min-height: 35vh;
+        }
+
+        .box .txts_wrapper p {
+            font-size: 2.5em;
+        }
+    }
+
     /* Media Queries para responsividade */
     @media (max-width: 1024px) {
         .box {
@@ -416,9 +496,7 @@
             min-height: 48vh;
         }
 
-        .group {
-            display: block;
-        }
+        
     }
 
     @media (max-width: 480px) {
@@ -429,10 +507,6 @@
         .box {
             height: 42vh;
         }
-
-        .group {
-            display: block;
-        }
     }
 </style>
 
@@ -441,13 +515,13 @@
         <h1 class="main-title">Ferramentas</h1>
 
         <article class="btns">
-    
             <a href="javascript:void(0)" id="openPopup">
                 <div class="btn-geral">
                     <span class="iconSalas"><i class="bi bi-plus-circle"></i></span>
-                    <p class="txt-salas">Adicionar Ferramentas</p>
+                    <p class="txt-salas">Adicionar Ferramenta</p>
                 </div>
             </a>
+            
         </article>
 
 
@@ -455,11 +529,22 @@
 
     <p class="desc_txt">Aqui você consegue ver as ferramentas existentes.</p>
 
+    <div class="search-container">
+        <input type="text" id="searchInput" class="search-input" placeholder="Pesquisar por nome da ferramenta..." />
+        <span class="search-icon">&#x1F50D;</span>
+
+        <button id="generatePdfButton" class="btn-geral">
+            <i class="bi bi-file-earmark-pdf"></i>
+            Gerar PDF
+        </button>
+    </div>
+
 
     <div class="wrapper_boxs">
         {% for ferramenta in ferramentas %}
         <div class="box">
             <div class="group">
+                
 
                     <img class="image"
                         src="{{ url_for('serve_ferramentas_file', filename=ferramenta.foto_ferramenta) if ferramenta.foto_ferramenta else url_for('static', filename='imgs/defaultImage.jpg') }}" />
@@ -467,10 +552,11 @@
                     <div class="txts_wrapper">
                         <p class="text-wrapper">{{ ferramenta.nome_ferramenta }}</p>
                         <p class="total-de-arm-rios">
-                            Total de Ferramentas:<br />
+                            Total de Ferramentas :<br />
                             <span>{{ ferramenta.total_ferramenta }}</span>
                         </p>
                     </div>
+                
             </div>
         </div>
         {% endfor %}
@@ -481,7 +567,6 @@
 </main>
 
 <div class="overlay" id="overlay"></div>
-
 
 <div class="containerSala" id="popupSala">
     <h1 class="tituloSala">Adicionar Ferramentas</h1>
@@ -511,82 +596,40 @@
 </div>
 
 
-
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Elementos do popup de escaneamento
-        const openPopupScanBtn = document.getElementById('openPopupScan');
-        const closePopupScanBtn = document.getElementById('closeBarcodePopup');
-        const barcodePopup = document.getElementById('barcodePopup');
-        const scanResult = document.getElementById('scanResult');
-        const barcodeForm = document.getElementById('barcodeForm');
 
-        // Função para abrir o popup de escaneamento
-        openPopupScanBtn.addEventListener('click', function () {
-            barcodePopup.style.display = 'flex';
-        });
+document.getElementById('generatePdfButton').addEventListener('click', function() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
 
-        // Função para fechar o popup de escaneamento
-        closePopupScanBtn.addEventListener('click', function () {
-            barcodePopup.style.display = 'none';
-        });
+    // Adicionando o título no PDF
+    doc.setFontSize(18);
+    doc.text('Relatório das Ferramentas', 10, 10);
 
-        // Manipulação do formulário de código de barras
-        document.getElementById('barcodeForm').addEventListener('submit', function (event) {
-            event.preventDefault();  // Evita o comportamento padrão de envio do formulário
+    // Capturando as informações dos cards de ferramentas
+    let yPosition = 20; // Posição inicial no eixo Y
+    const ferramentas = document.querySelectorAll('.box');
+    yPosition += 10;
+    ferramentas.forEach((ferramenta, index) => {
+        const nome = ferramenta.querySelector('.text-wrapper').textContent;
+        const total = ferramenta.querySelector('.total-de-arm-rios span').textContent;
 
-            var formData = new FormData(this);
+        // Adicionando cada ferramenta no PDF
+        doc.setFontSize(14);
+        doc.text(`Nome da Ferramenta ${index + 1}: ${nome}`, 10, yPosition);
+        yPosition += 10;
+        doc.text(`Total de Ferramentas: ${total}`, 10, yPosition);
+        yPosition += 20; // Espaço entre as ferramentas
+    });
 
-            fetch('{{ url_for("verificar_codigo") }}', {
-                method: 'POST',
-                body: formData
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.error) {
-                        scanResult.innerHTML = `<p>${data.error}</p>`;
-                    } else {
-                        scanResult.innerHTML = `
-                        <p><h class="corSala">Número:</h> ${data.numero}</p>
-                        <p><h class="corSala">Capacidade de Ferramentas:</h> ${data.capacidade_ferramentas}</p>
-                        <p><h class="corSala">Foto:</h> <img src="/uploads/armarios/${data.foto_armario}" alt="Foto do Armário" style="width: 30%;"></p>
-                        <input type="hidden" id="currentCode" value="${data.numero}">
-                        <button id="updateButton" class="buttonSala">Atualizar Código</button>
-                        <a href="${data.ir_para}" id="goToButton" style="display: ${data.ir_para ? 'inline-block' : 'none'};">Ir até</a>
-                    `;
+    // Gerando o PDF
+    doc.save('relatorio_ferramentas.pdf');
+});
 
-                        // Adiciona o listener para o botão de atualização
-                        document.getElementById('updateButton').addEventListener('click', function () {
-                            const newCode = prompt('Digite o novo código:', data.numero);
-                            if (newCode && newCode !== data.numero) {
-                                fetch('{{ url_for("atualizar_codigo") }}', {
-                                    method: 'POST',
-                                    headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({ old_code: data.numero, new_code: newCode })
-                                })
-                                    .then(response => response.json())
-                                    .then(updateData => {
-                                        if (updateData.success) {
-                                            scanResult.innerHTML = `<p>${updateData.success}</p>`;
-                                        } else {
-                                            scanResult.innerHTML = `<p>${updateData.error}</p>`;
-                                        }
-                                    });
-                            }
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.error('Erro:', error);
-                    scanResult.innerHTML = 'Erro ao verificar o código.';
-                });
-        });
-
-        // Elementos do popup geral
-        const openPopupBtn = document.getElementById('openPopup');
-        const closePopupBtn = document.getElementById('closePopup');
+document.addEventListener('DOMContentLoaded', function () {
         const popup = document.getElementById('popupSala');
-        const overlay = document.getElementById('overlay');
+        const closePopupBtn = document.getElementById('closePopup');
+        const openPopupBtn = document.getElementById('openPopup');
 
         // Função para abrir o popup e o overlay
         function openPopup() {
@@ -594,11 +637,17 @@
             overlay.style.display = 'block';
         }
 
+
+
+
         // Função para fechar o popup e o overlay
         function closePopup() {
             popup.style.display = 'none';
             overlay.style.display = 'none';
         }
+
+
+
 
         // Abre o popup ao clicar no botão "Adicionar Salas"
         openPopupBtn.addEventListener('click', function (event) {
@@ -606,14 +655,39 @@
             openPopup(); // Exibe o popup e o overlay
         });
 
+
+
+
         // Fecha o popup ao clicar no botão "×"
         closePopupBtn.addEventListener('click', function () {
             closePopup(); // Oculta o popup e o overlay
         });
 
+
+
+
         // Fecha o popup ao clicar fora do conteúdo
         overlay.addEventListener('click', function () {
             closePopup(); // Oculta o popup e o overlay
+        });
+
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.getElementById('searchInput');
+        const boxes = document.querySelectorAll('.box');
+
+        searchInput.addEventListener('input', function () {
+            const searchText = searchInput.value.toLowerCase();
+
+            boxes.forEach(box => {
+                const boxText = box.querySelector('.text-wrapper').textContent.toLowerCase();
+                if (boxText.includes(searchText)) {
+                    box.style.display = 'block'; // Mostra a box se corresponder à pesquisa
+                } else {
+                    box.style.display = 'none';  // Oculta a box se não corresponder
+                }
+            });
         });
     });
 
