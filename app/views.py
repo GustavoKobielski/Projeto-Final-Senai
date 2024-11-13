@@ -316,7 +316,7 @@ def gerenciamento_salas():
     armarios_por_sala = {}
     for sala in salas:
         armarios_por_sala[sala.id_salas] = Armario.contar_armarios_na_sala(sala.id_salas)
-    return render_template('gerenciamentoSalas.html',salas=salas, armarios_por_sala=armarios_por_sala)
+    return render_template('gerenciamentoSalas2.html',salas=salas, armarios_por_sala=armarios_por_sala)
 
 #############################################
 ######## PAGE PESSOAS GERENCIAMENTO #########
