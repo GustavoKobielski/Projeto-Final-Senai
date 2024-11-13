@@ -291,10 +291,10 @@ def ferramentasSuporte():
 
             file.save(file_path)
 
-
+        
         form.save(filename)
         return redirect(url_for('ferramentasSuporte'))
-    return render_template('defeitoFerramentas2.html', ferramentas=ferramentas, form=form, formInfo=formInfo)
+    return render_template('defeitoFerramentas3.html', ferramentas=ferramentas, form=form, formInfo=formInfo)
 
 #############################################
 ######## PAGE LOGS ##########################
@@ -316,7 +316,29 @@ def gerenciamento_salas():
     armarios_por_sala = {}
     for sala in salas:
         armarios_por_sala[sala.id_salas] = Armario.contar_armarios_na_sala(sala.id_salas)
-    return render_template('gerenciamentoSalas2.html',salas=salas, armarios_por_sala=armarios_por_sala)
+    return render_template('gerenciamentoSalas3.html',salas=salas, armarios_por_sala=armarios_por_sala)
+
+
+@app.route('/gerenciamento/salas/delete/<int:id_sala>', methods=['POST'])
+def delete_sala(id_sala):
+    print(f"Attempting to delete sala with ID: {id_sala}")  # Log para verificar se o id_sala está correto
+
+    sala = Salas.query.get(id_sala)
+    if sala:
+        try:
+            print(f"Found sala with ID {id_sala}, deleting now.")  # Log para verificar se a sala foi encontrada
+            db.session.delete(sala)
+            db.session.commit()
+            print(f"Sala with ID {id_sala} successfully deleted.")  # Log de sucesso
+            return jsonify({'success': True, 'message': 'Sala excluída com sucesso'})
+        except Exception as e:
+            db.session.rollback()
+            print(f"Error occurred while deleting sala with ID {id_sala}: {str(e)}")  # Log do erro
+            return jsonify({'success': False, 'message': 'Erro ao excluir a sala: ' + str(e)})
+    else:
+        print(f"Sala with ID {id_sala} not found.")  # Log caso a sala não seja encontrada
+        return jsonify({'success': False, 'message': 'Sala não encontrada'})
+
 
 #############################################
 ######## PAGE PESSOAS GERENCIAMENTO #########

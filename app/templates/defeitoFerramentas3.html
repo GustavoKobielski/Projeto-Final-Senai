@@ -16,6 +16,7 @@
 
     main {
         margin-left: 27.8%;
+
         padding: 20px;
         box-sizing: border-box;
     }
@@ -206,10 +207,6 @@
     .box .text-wrapper {
         text-transform: uppercase;
         letter-spacing: 1px;
-
-    }
-
-    .bold-search {
         font-weight: bold;
     }
 
@@ -473,6 +470,84 @@
         margin-left: 1%;
     }
 
+    /* POPUP INFORMACOES */
+
+    .customContainerInfo {
+        width: 60%;
+        max-width: 600px;
+        /* Limita a largura para telas grandes */
+        background-color: #f5f5f5;
+        border: 1px solid black;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1002;
+        border-radius: 15px;
+        display: none;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .customContentInfo {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .closePopupCustom {
+        position: absolute;
+        top: 3px;
+        right: 15px;
+        font-size: 44px;
+        cursor: pointer;
+        color: #407DD8;
+    }
+
+    .customTitleInfo {
+        font-size: 24px;
+        font-weight: bold;
+        color: #407DD8;
+        margin-bottom: 15px;
+        text-transform: uppercase;
+    }
+
+    .customField {
+        font-size: 16px;
+        color: #407DD8;
+        border: 1px solid #8E8080;
+        border-radius: 10px;
+        padding: 10px;
+        width: 90%;
+        margin: 5px 0;
+        background-color: #fff;
+        box-sizing: border-box;
+    }
+
+    .customImageField {
+        width: 100%;
+
+        /* Define um tamanho máximo */
+        height: auto;
+        border: 1px solid #8E8080;
+        border-radius: 15px;
+        margin-top: 15px;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        /* Centraliza verticalmente a imagem */
+    }
+
+    #toolImage {
+        max-width: 100%;
+        height: auto;
+        object-fit: contain;
+        /* Mantém a proporção da imagem */
+        border-radius: 15px;
+    }
+
     @media (max-width: 1920px) {
         .box {
             width: calc(32% - 1em);
@@ -487,12 +562,6 @@
     @media (max-width: 1400px) {
         .box .txts_wrapper p {
             font-size: 2.2em;
-        }
-    }
-
-    @media (max-width: 1175px) {
-        .box .txts_wrapper p {
-            font-size: 1.85em;
         }
     }
 
@@ -518,8 +587,6 @@
             min-height: 32vh;
         }
 
-
-
     }
 
     @media (max-width: 480px) {
@@ -533,57 +600,63 @@
 
 <main>
     <div class="container">
-        <h1 class="main-title">Armários</h1>
+        <h1 class="main-title">Ferramentas suporte</h1>
 
         <article class="btns">
             <a href="javascript:void(0)" id="openPopup">
                 <div class="btn-geral">
-                    <span class="iconSalas"><i class="bi bi-plus-circle"></i></span>
-                    <p class="txt-salas">Adicionar Armario</p>
+                    <span class="iconDF"><i class="bi bi-plus-circle"></i></span>
+                    <p class="txt-salas">Adicionar Ferramentas</p>
                 </div>
             </a>
-
         </article>
 
 
     </div>
 
-    <p class="desc_txt">Aqui você <strong>consegue ver</strong> os armários existentes, e <strong>clicando
-            neles</strong> para verificar as ferramentas.</p>
+    <p class="desc_txt">Aqui você consegue pedir um suporte ou ver algum para as ferramentas.</p>
 
     <div class="search-container">
-        <input type="text" id="searchInput" class="search-input" placeholder="Pesquise por nome do armario..." />
+        <input type="text" id="searchInput" class="search-input" placeholder="Pesquise por nome da ferramenta..." />
         <span class="search-icon">&#x1F50D;</span>
 
         <button id="generatePdfButton" class="btn-geral">
             <i class="bi bi-file-earmark-pdf"></i>
             Gerar PDF
         </button>
+
     </div>
 
 
     <div class="wrapper_boxs">
-        {% for armario in armarios %}
+        {% if ferramentas %}
+        {% for ferramenta in ferramentas %}
         <div class="box">
             <div class="group">
-                <a href="{{ url_for('ferramentas', armario_id=armario.id_armario) }}">
+                <a href="javascript:void(0)" data-id="{{ ferramenta.id_ferramentas_sup }}"
+                    data-nome="{{ ferramenta.nome_ferramenta_sup }}"
+                    data-defeito="{{ ferramenta.defeito_ferramenta_sup }}"
+                    data-sala="{{ ferramenta.sala_ferramenta_sup }}" data-data="{{ ferramenta.data_ocorrido_sup }}"
+                    data-descricao="{{ ferramenta.ocorrido_ferramenta_sup }}"
+                    data-foto="{{ ferramenta.foto_ferramenta_sup }}"
+                    onclick="showPopup('{{ ferramenta.id_ferramentas_sup }}')">
 
                     <img class="image"
-                        src="{{ url_for('serve_armario_file', filename=armario.foto_armario) if armario.foto_armario else url_for('static', filename='imgs/defaultImage.jpg') }}" />
+                        src="{{ url_for('uploaded_file', filename=ferramenta.foto_ferramenta_sup) if ferramenta.foto_ferramenta_sup else url_for('static', filename='imgs/defaultImage.jpg') }}" />
 
                     <div class="txts_wrapper">
-                        <p class="text-wrapper">{{ sala.nome_sala }} - <span class="bold-search">{{ armario.numero
-                                }}</span></p>
+                        <p class="text-wrapper">{{ ferramenta.nome_ferramenta_sup }}</p>
                         <p class="total-de-arm-rios">
-                            Total de ferramentas:<br />
-                            <span>{{ ferramentas_por_armario[armario.id_armario] }}</span>
+                            <span class="txtInfo"><i class="bi bi-info-circle"></i> Informações</span>
                         </p>
                     </div>
                 </a>
             </div>
         </div>
         {% endfor %}
-
+        {% else %}
+        <p>Nenhuma ferramenta encontrada.</p>
+        {% endif %}
     </div>
 
 
@@ -591,8 +664,9 @@
 
 <div class="overlay" id="overlay"></div>
 
+
 <div class="containerSala" id="popupSala">
-    <h1 class="tituloSala">Adicionar Armario</h1>
+    <h1 class="tituloSala">Cadastrar Suporte para Ferramenta</h1>
     <span class="closePopup" id="closePopup">&times;</span>
 
 
@@ -605,16 +679,41 @@
         <form action="" method="POST" class="formSalas" enctype="multipart/form-data">
             {{form.csrf_token}}
 
-            {{form.numero.label(class="corSala", style="margin-bottom: 10px; display:block;")}}
-            {{form.numero(class="form-control", placeholder='Digite o numero do armario')}}
+            {{form.nome_ferramenta_sup.label(class="corSala", style="margin-bottom: 10px; display:block;")}}
+            {{form.nome_ferramenta_sup(class="form-control", placeholder='Digite o nome da ferramenta')}}
 
-            {{form.capacidade_ferramentas.label(class="corSala", style="margin-bottom: 10px; display:block;")}}
-            {{form.capacidade_ferramentas(class="form-control", placeholder='Qual a capacidade de ferramentas')}}
+            {{form.defeito_ferramenta_sup.label(class="corSala", style="margin-bottom: 10px; display:block;")}}
+            {{form.defeito_ferramenta_sup(class="form-control", placeholder='Digite o defeito')}}
 
-            {{ form.foto_armario(class="addImg", style="display: block;") }}
+            {{form.sala_ferramenta_sup.label(class="corSala", style="margin-bottom: 10px; display:block;")}}
+            {{form.sala_ferramenta_sup(class="form-control", placeholder='Digite a sala')}}
+
+            {{form.data_ocorrido_sup.label(class="corSala", style="margin-bottom: 10px; display:block;")}}
+            {{form.data_ocorrido_sup(class="form-control", placeholder='Data do ocorrido')}}
+
+            {{form.ocorrido_ferramenta_sup.label(class="corSala", style="margin-bottom: 10px; display:block;")}}
+            {{form.ocorrido_ferramenta_sup(class="form-control", placeholder='Descreva o ocorrido')}}
+
+            {{ form.foto_ferramenta_sup(class="addImg", style="display: block;") }}
 
             {{form.btnSubmit(class="buttonSala")}}
         </form>
+    </div>
+</div>
+
+<div id="popupInfoContainer" class="customContainerInfo">
+    <div class="customContentInfo">
+        <span class="closePopupCustom" id="closePopupCustom" onclick="closePopupCustom()">&times;</span>
+
+        <div class="customTitleInfo" id="toolName"></div>
+        <div class="customField" id="eventDescription"></div>
+        <div class="customField" id="toolDefect"></div>
+        <div class="customField" id="toolRoom"></div>
+        <div class="customField" id="eventDate"></div>
+    </div>
+
+    <div class="customImageField">
+        <img id="toolImage" src="" alt="Imagem da ferramenta" style="max-width: 100%; height: auto;">
     </div>
 </div>
 
@@ -628,73 +727,40 @@
 
         // Adicionando o título no PDF
         doc.setFontSize(18);
-        doc.text('Relatório dos Armarios', 10, 10);
+        doc.text('Relatório das Ferramentas com Suporte', 10, 10);
 
         // Capturando as informações dos cards de ferramentas
         let yPosition = 20; // Posição inicial no eixo Y
         const ferramentas = document.querySelectorAll('.box');
         yPosition += 10;
-        ferramentas.forEach((ferramenta, index) => {
-            const nome = ferramenta.querySelector('.text-wrapper').textContent;
-            const total = ferramenta.querySelector('.total-de-arm-rios span').textContent;
 
-            // Adicionando cada ferramenta no PDF
+        ferramentas.forEach((ferramenta, index) => {
+            // Capturando os dados de cada ferramenta
+            const nome = ferramenta.querySelector('.text-wrapper').textContent;
+            const totalArmarios = ferramenta.querySelector('.total-de-arm-rios span').textContent;
+            const defeito = ferramenta.querySelector('[data-defeito]').getAttribute('data-defeito');
+            const sala = ferramenta.querySelector('[data-sala]').getAttribute('data-sala');
+            const dataOcorrido = ferramenta.querySelector('[data-data]').getAttribute('data-data');
+            const descricao = ferramenta.querySelector('[data-descricao]').getAttribute('data-descricao');
+
+            // Adicionando as informações da ferramenta ao PDF
             doc.setFontSize(14);
-            doc.text(`Nome do armario ${index + 1}: ${nome}`, 10, yPosition);
+            doc.text(`Nome da Ferramenta ${index + 1}: ${nome}`, 10, yPosition);
             yPosition += 10;
-            doc.text(`Total de Ferramentas: ${total}`, 10, yPosition);
-            yPosition += 20; // Espaço entre as ferramentas
+            doc.text(`Total de Armários: ${totalArmarios}`, 10, yPosition);
+            yPosition += 10;
+            doc.text(`Defeito: ${defeito || 'Não disponível'}`, 10, yPosition);
+            yPosition += 10;
+            doc.text(`Sala: ${sala || 'Não disponível'}`, 10, yPosition);
+            yPosition += 10;
+            doc.text(`Data do Ocorrido: ${dataOcorrido || 'Não disponível'}`, 10, yPosition);
+            yPosition += 10;
+            doc.text(`Descrição: ${descricao || 'Não disponível'}`, 10, yPosition);
+            yPosition += 20; // Espaço entre cada ferramenta
         });
 
         // Gerando o PDF
-        doc.save('relatorio_armarios.pdf');
-    });
-
-    document.addEventListener('DOMContentLoaded', function () {
-        const popup = document.getElementById('popupSala');
-        const closePopupBtn = document.getElementById('closePopup');
-        const openPopupBtn = document.getElementById('openPopup');
-
-        // Função para abrir o popup e o overlay
-        function openPopup() {
-            popup.style.display = 'block';
-            overlay.style.display = 'block';
-        }
-
-
-
-
-        // Função para fechar o popup e o overlay
-        function closePopup() {
-            popup.style.display = 'none';
-            overlay.style.display = 'none';
-        }
-
-
-
-
-        // Abre o popup ao clicar no botão "Adicionar Salas"
-        openPopupBtn.addEventListener('click', function (event) {
-            event.preventDefault(); // Evita que o link redirecione
-            openPopup(); // Exibe o popup e o overlay
-        });
-
-
-
-
-        // Fecha o popup ao clicar no botão "×"
-        closePopupBtn.addEventListener('click', function () {
-            closePopup(); // Oculta o popup e o overlay
-        });
-
-
-
-
-        // Fecha o popup ao clicar fora do conteúdo
-        overlay.addEventListener('click', function () {
-            closePopup(); // Oculta o popup e o overlay
-        });
-
+        doc.save('relatorio_defeito.pdf');
     });
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -705,7 +771,7 @@
             const searchText = searchInput.value.toLowerCase();
 
             boxes.forEach(box => {
-                const boxText = box.querySelector('.bold-search').textContent.toLowerCase();
+                const boxText = box.querySelector('.text-wrapper').textContent.toLowerCase();
                 if (boxText.includes(searchText)) {
                     box.style.display = 'block'; // Mostra a box se corresponder à pesquisa
                 } else {
@@ -713,6 +779,82 @@
                 }
             });
         });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+
+        // Elementos do popup geral
+        const openPopupBtn = document.getElementById('openPopup');
+        const closePopupBtn = document.getElementById('closePopup');
+        const popup = document.getElementById('popupSala');
+        const overlay = document.getElementById('overlay');
+
+        // Função para abrir o popup e o overlay
+        function openPopup() {
+            popup.style.display = 'block';
+            overlay.style.display = 'block';
+        }
+
+        // Função para fechar o popup e o overlay
+        function closePopup() {
+            popup.style.display = 'none';
+            overlay.style.display = 'none';
+        }
+
+        // Abre o popup ao clicar no botão "Adicionar Salas"
+        openPopupBtn.addEventListener('click', function (event) {
+            event.preventDefault(); // Evita que o link redirecione
+            openPopup(); // Exibe o popup e o overlay
+        });
+
+        // Fecha o popup ao clicar no botão "×"
+        closePopupBtn.addEventListener('click', function () {
+            closePopup(); // Oculta o popup e o overlay
+        });
+
+        // Fecha o popup ao clicar fora do conteúdo
+        overlay.addEventListener('click', function () {
+            closePopup(); // Oculta o popup e o overlay
+        });
+    });
+
+    function showPopup(ferramentaId) {
+        const ferramenta = document.querySelector(`a[data-id="${ferramentaId}"]`);
+
+        if (ferramenta) {
+            document.getElementById('toolName').innerText = ferramenta.dataset.nome || 'Não disponível';
+            document.getElementById('toolDefect').innerHTML = "<strong>Defeito:</strong> <span style='color: rgba(0, 0, 0, 0.6);'>" + (ferramenta.dataset.defeito || 'Não disponível') + "</span>";
+            document.getElementById('toolRoom').innerHTML = "<strong>Sala:</strong> <span style='color: rgba(0, 0, 0, 0.6);'>" + (ferramenta.dataset.sala || 'Não disponível') + "</span>";
+            document.getElementById('eventDate').innerHTML = "<strong>Data do Ocorrido:</strong> <span style='color: rgba(0, 0, 0, 0.6);'>" + (ferramenta.dataset.data || 'Não disponível') + "</span>";
+            document.getElementById('eventDescription').innerHTML = "<strong>Descrição:</strong> <span style='color: rgba(0, 0, 0, 0.6);'>" + (ferramenta.dataset.descricao || 'Não disponível') + "</span>";
+
+
+
+
+            const toolImage = document.getElementById('toolImage');
+            toolImage.src = ferramenta.dataset.foto && ferramenta.dataset.foto !== 'None' ? `/uploads/${ferramenta.dataset.foto}` : '/static/imgs/defaultImage.jpg';
+
+            document.getElementById('popupInfoContainer').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+        } else {
+            console.error('Elemento com o ID fornecido não encontrado.');
+        }
+    }
+
+    // Função para fechar o popup de informações
+    function closePopupCustom() {
+        document.getElementById('popupInfoContainer').style.display = 'none';
+        document.getElementById('overlay').style.display = 'none';
+    }
+
+    // Evento para fechar o popup ao clicar no overlay
+    document.addEventListener('DOMContentLoaded', function () {
+        const overlay = document.getElementById('overlay');
+        const closePopupCustomBtn = document.querySelector('.closePopupCustom');
+
+        // Evento para fechar o popup ao clicar no overlay
+        overlay.addEventListener('click', closePopupCustom);
+        closePopupCustomBtn.addEventListener('click', closePopupCustom);
     });
 
 

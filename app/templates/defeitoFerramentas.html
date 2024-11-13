@@ -117,7 +117,7 @@
         position: relative;
         font-size: 22px;
         right: 10px;
-    
+
     }
 
     .text-wrapper {
@@ -128,7 +128,7 @@
         text-align: center;
         bottom: 35%;
         font-size: 30px;
-        text-transform:capitalize;
+        text-transform: capitalize;
     }
 
     .total-de-arm-rios {
@@ -189,7 +189,8 @@
         left: 62%;
         transform: translate(-50%, -50%);
         width: 60vw;
-        height: auto; /* Ajusta a altura conforme o conteúdo */
+        height: auto;
+        /* Ajusta a altura conforme o conteúdo */
         background-color: #f5f5f5;
         border: 2px solid black;
         border-radius: 15px;
@@ -197,7 +198,7 @@
         z-index: 1001;
         box-sizing: border-box;
     }
-    
+
     .content {
         display: flex;
         justify-content: space-between;
@@ -381,22 +382,32 @@
         color: #407DD8;
         position: relative;
         left: 40%;
-        overflow: hidden; /* Garante que a imagem não ultrapasse os limites */
+        overflow: hidden;
+        /* Garante que a imagem não ultrapasse os limites */
     }
 
     #fotoFerramenta {
-        position: absolute; /* Permite posicionar a imagem dentro do contêiner */
-        top: 50%; /* Posiciona a imagem na metade do contêiner verticalmente */
-        left: 50%; /* Posiciona a imagem na metade do contêiner horizontalmente */
-        transform: translate(-50%, -50%); /* Ajusta a posição para centralizar a imagem */
-        max-width: calc(100% - 20px); /* Ajusta a largura máxima da imagem, considerando a margem */
-        max-height: calc(100% - 20px); /* Ajusta a altura máxima da imagem, considerando a margem */
-        object-fit: contain; /* Mantém a proporção da imagem dentro do contêiner */
-        padding: 10px; /* Adiciona espaço interno ao redor da imagem */
-        box-sizing: border-box; /* Inclui o padding no cálculo da largura e altura */
+        position: absolute;
+        /* Permite posicionar a imagem dentro do contêiner */
+        top: 50%;
+        /* Posiciona a imagem na metade do contêiner verticalmente */
+        left: 50%;
+        /* Posiciona a imagem na metade do contêiner horizontalmente */
+        transform: translate(-50%, -50%);
+        /* Ajusta a posição para centralizar a imagem */
+        max-width: calc(100% - 20px);
+        /* Ajusta a largura máxima da imagem, considerando a margem */
+        max-height: calc(100% - 20px);
+        /* Ajusta a altura máxima da imagem, considerando a margem */
+        object-fit: contain;
+        /* Mantém a proporção da imagem dentro do contêiner */
+        padding: 10px;
+        /* Adiciona espaço interno ao redor da imagem */
+        box-sizing: border-box;
+        /* Inclui o padding no cálculo da largura e altura */
     }
-    
-    
+
+
 
     .tituloInfo {
         display: flex;
@@ -406,7 +417,7 @@
         font-size: 3vw;
         text-transform: uppercase;
     }
-    
+
     #calenderDate {
         position: relative;
         left: 90%;
@@ -520,22 +531,27 @@
             font-size: 24px;
             position: relative;
             right: 8%;
-        } 
+        }
 
         .campoImg {
             width: 25%;
             height: 32%;
-            padding: 1%; /* Adiciona um pouco de espaço dentro do contêiner */
-            box-sizing: border-box; /* Inclui padding e border no tamanho total do contêiner */
-            overflow: hidden; /* Garante que a imagem não ultrapasse os limites do contêiner */
+            padding: 1%;
+            /* Adiciona um pouco de espaço dentro do contêiner */
+            box-sizing: border-box;
+            /* Inclui padding e border no tamanho total do contêiner */
+            overflow: hidden;
+            /* Garante que a imagem não ultrapasse os limites do contêiner */
         }
 
         #fotoFerramenta {
             width: 100%;
             height: auto;
             object-fit: cover;
-            margin: auto; /* Centraliza a imagem horizontalmente */
-            display: block; /* Remove o espaço extra embaixo da imagem */
+            margin: auto;
+            /* Centraliza a imagem horizontalmente */
+            display: block;
+            /* Remove o espaço extra embaixo da imagem */
         }
 
     }
@@ -637,34 +653,30 @@
 
 
 
-<div id="infoPopup" class="containerInfo">
+<div id="popupInfoContainer" class="customContainerInfo">
 
-    <div class="contentInfo">
+    <div class="customContentInfo">
 
-        <span class="closePopupInfo" id="closePopup" onclick="closePopup3()">&times;</span>
+        <span class="closePopupCustom" id="closePopupCustom" onclick="closePopupCustom()">&times;</span>
 
-        <div class="tituloInfo" id="nomeFerramenta"></div>
+        <div class="customTitleInfo" id="toolName"></div>
 
-        <div class="campo" id="descricaoOcorrido"></div>
+        <div class="customField" id="eventDescription"></div>
 
-        <div class="campo" id="defeitoFerramenta"></div>
+        <div class="customField" id="toolDefect"></div>
 
-        <div class="campo" id="salaFerramenta">
-        </div>
+        <div class="customField" id="toolRoom"></div>
 
-        <div class="campo" id="dataOcorrido">
-        </div>
-
-        
-        </div>
-
-        <div class="campoImg">
-            <img id="fotoFerramenta" src="" alt="Imagem da ferramenta" style="max-width: 100%; height: auto;">
-        </div>
+        <div class="customField" id="eventDate"></div>
 
     </div>
 
+    <div class="customImageField">
+        <img id="toolImage" src="" alt="Imagem da ferramenta" style="max-width: 100%; height: auto;">
+    </div>
+
 </div>
+
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
