@@ -542,10 +542,11 @@
 
     </div>
 
-    <p class="desc_txt">Aqui você consegue ver as salas existentes, e clicar nelas para verificar os armarios.</p>
+    <p class="desc_txt">Aqui você <strong>consegue ver</strong> as salas existentes, e <strong>clicando nelas</strong>
+        para verificar os armarios.</p>
 
     <div class="search-container">
-        <input type="text" id="searchInput" class="search-input" placeholder="Pesquisar por nome da sala..." />
+        <input type="text" id="searchInput" class="search-input" placeholder="Pesquise por nome da sala..." />
         <span class="search-icon">&#x1F50D;</span>
 
         <button id="generatePdfButton" class="btn-geral">
@@ -762,6 +763,8 @@
         overlay.addEventListener('click', function () {
             closePopup(); // Oculta o popup e o overlay
         });
+
+
     });
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -781,6 +784,7 @@
             });
         });
     });
+
 
 
 </script>

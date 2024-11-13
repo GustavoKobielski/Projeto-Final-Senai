@@ -132,7 +132,7 @@
         flex-wrap: wrap;
         padding: 1em 0.75em 8em 2em;
         width: 95%;
-        min-height: 70vh;
+        min-height: 65vh;
         max-height: 65vh;
         /* Limita a altura máxima */
         overflow: auto;
@@ -167,7 +167,7 @@
 
     .box {
         width: calc(30% - 1em);
-        height: 40vh;
+        min-height: 42vh;
         align-self: start;
         /* Impede que o item cresça verticalmente */
         margin: 1em 0.5em;
@@ -182,7 +182,7 @@
     }
 
 
-    .group {    
+    .group {
         display: flex;
         justify-content: center;
         display: block;
@@ -205,6 +205,9 @@
     }
 
     .box .text-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         text-transform: uppercase;
         letter-spacing: 1px;
         font-weight: bold;
@@ -443,60 +446,50 @@
 
 
 
-    #goToButton {
-        width: 100%;
-        padding: 10px;
-        border-radius: 5px;
-        color: white;
-        text-align: center;
-        margin-top: 15px;
-        cursor: pointer;
-        border: none;
-        background-color: gray;
-        position: relative;
-        right: 5%;
-    }
-
-    .barcode {
-        color: #407DD8;
-        font-size: 20px;
-        margin-bottom: 2%;
-    }
-
-    .tituloBarcode {
-        text-align: center;
-        color: #407DD8;
-        margin-bottom: 3%;
-        margin-left: 1%;
-    }
-
-    .btns {
+    .action-buttons {
         display: flex;
+        align-items: center;
+        background-color: #407DD8;
+        /* Cor de fundo semelhante ao azul da imagem */
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .edit-btn,
+    .delete-btn {
+        display: flex;
+        align-items: center;
         justify-content: center;
-        width: 100%;
-    }
-
-    .btn-gs {
-        display: flex;
-        justify-content: center ;
+        font-size: 1.5em;
+        padding: 0.8em 1.2em 0.8em;
+        color: #fff;
+        text-decoration: none;
+        background: none;
         border: none;
-        color: #ffffff;
-        font-size: 2rem;
         cursor: pointer;
-        background-color: transparent;
+        transition: background-color 0.3s;
+        width: 100%;
+        /* Tamanho igual para ambos os botões */
     }
 
-    .btn-editar:hover {
-        background-color: #2253ad;
-        border-radius: 10px;
+    .edit-btn:hover,
+    .delete-btn:hover {
+        background-color: #336cb8;
+        /* Efeito hover mais escuro */
     }
 
-    .btn-excluir:hover {
-        background-color: #2253ad;
-        border-radius: 10px;
+    .divider {
+        width: 1px;
+        height: 60%;
+        background-color: #ffffff;
+        opacity: 0.5;
     }
 
-    
+    .edit-btn i,
+    .delete-btn i {
+        margin-right: 0.5em;
+        font-size: 1.4em;
+    }
 
     @media (max-width: 1920px) {
         .box {
@@ -511,16 +504,33 @@
 
     @media (max-width: 1400px) {
         .box .txts_wrapper p {
-            font-size: 1.9em;
+            font-size: 2.2em;
+        }
+
+
+    }
+
+    @media (max-width: 1160px) {
+
+        .edit-btn,
+        .delete-btn {
+            font-size: 1.4em;
         }
     }
 
+    @media (max-width: 1085px) {
+
+        .edit-btn,
+        .delete-btn {
+            font-size: 1.25em;
+        }
+    }
 
     /* Media Queries para responsividade */
     @media (max-width: 1024px) {
         .box {
             width: calc(45% - 1em);
-            min-height: 40vh;
+            min-height: 33vh;
         }
 
 
@@ -528,22 +538,30 @@
     }
 
     @media (max-width: 768px) {
-        .box {
-            width: calc(100% - 1em);
-            min-height: 48vh;
+        .wrapper_boxs {
+            justify-content: center;
         }
 
+        .box {
+            width: calc(100% - 1em);
+            min-height: 32vh;
+        }
 
-
+        .edit-btn,
+        .delete-btn {
+            font-size: 1.7em;
+        }
     }
 
     @media (max-width: 480px) {
         .box {
             width: calc(100% - 1em);
+            min-height: 32vh;
         }
 
-        .box {
-            height: 42vh;
+        .edit-btn,
+        .delete-btn {
+            font-size: 1.4em;
         }
 
     }
@@ -555,39 +573,51 @@
 
     </div>
 
-    <p class="desc_txt">Aqui você consegue ver as salas existentes, editar e excluir. </p>
+    <p class="desc_txt">Aqui você consegue <strong>editar</strong> salas existentes, e clicar nelas para
+        <strong>modificar</strong> a sala, armario,
+        ferramenta.
+    </p>
 
     <div class="search-container">
         <input type="text" id="searchInput" class="search-input" placeholder="Pesquisar por nome da sala..." />
         <span class="search-icon">&#x1F50D;</span>
 
+        <button id="generatePdfButton" class="btn-geral">
+            <i class="bi bi-file-earmark-pdf"></i>
+            Gerar PDF
+        </button>
 
     </div>
 
 
     <div class="wrapper_boxs">
         {% for sala in salas %}
-        <div class="box">
+        <div class="box" data-sala-id="{{ sala.id_salas }}">
             <div class="group">
 
-                    <img class="image"
-                        src="{{ url_for('serve_salas_file', filename=sala.foto_sala) if sala.foto_sala else url_for('static', filename='imgs/defaultImage.jpg') }}" />
 
-                    <div class="txts_wrapper">
-                        <p class="text-wrapper">{{ sala.nome_sala }}</p>
-                        <p class="total-de-arm-rios">
-                            Total de armários:<br />
-                            <span>{{ armarios_por_sala[sala.id_salas] }}</span>
-                        </p>
+                <img class="image"
+                    src="{{ url_for('serve_salas_file', filename=sala.foto_sala) if sala.foto_sala else url_for('static', filename='imgs/defaultImage.jpg') }}" />
+
+                <div class="txts_wrapper">
+                    <p class="text-wrapper">{{ sala.nome_sala }}</p>
+                    <p class="total-de-arm-rios">
+                        Total de armários:<br />
+                        <span>{{ armarios_por_sala[sala.id_salas] }}</span>
+                    </p>
+
+                    <!-- Botões Editar e Excluir -->
+                    <div class="action-buttons">
+                        <a href="#" class="edit-btn">
+                            <i class="bi bi-pencil-square"></i> Editar
+                        </a>
+                        <div class="divider"></div>
+                        <a href="#" class="delete-btn" data-sala-id="{{ sala.id_salas }}">
+                            <i class=" bi bi-trash"></i> Excluir
+                        </a>
                     </div>
+                </div>
 
-                    <div class="btns">
-
-                        <button class="btn-editar btn-gs" >Editar</button>
-                            
-                         <button class="btn-excluir btn-gs">Excluir</button>
-
-                    </div>
             </div>
         </div>
         {% endfor %}
@@ -597,7 +627,6 @@
 
 </main>
 
-<div class="overlay" id="overlay"></div>
 
 
 <script>
@@ -631,74 +660,6 @@
     });
 
     document.addEventListener('DOMContentLoaded', function () {
-        // Elementos do popup de escaneamento
-        const openPopupScanBtn = document.getElementById('openPopupScan');
-        const closePopupScanBtn = document.getElementById('closeBarcodePopup');
-        const barcodePopup = document.getElementById('barcodePopup');
-        const scanResult = document.getElementById('scanResult');
-        const barcodeForm = document.getElementById('barcodeForm');
-
-        // Função para abrir o popup de escaneamento
-        openPopupScanBtn.addEventListener('click', function () {
-            barcodePopup.style.display = 'flex';
-        });
-
-        // Função para fechar o popup de escaneamento
-        closePopupScanBtn.addEventListener('click', function () {
-            barcodePopup.style.display = 'none';
-        });
-
-        // Manipulação do formulário de código de barras
-        document.getElementById('barcodeForm').addEventListener('submit', function (event) {
-            event.preventDefault();  // Evita o comportamento padrão de envio do formulário
-
-            var formData = new FormData(this);
-
-            fetch('{{ url_for("verificar_codigo") }}', {
-                method: 'POST',
-                body: formData
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.error) {
-                        scanResult.innerHTML = `<p>${data.error}</p>`;
-                    } else {
-                        scanResult.innerHTML = `
-                        <p><h class="corSala">Número:</h> ${data.numero}</p>
-                        <p><h class="corSala">Capacidade de Ferramentas:</h> ${data.capacidade_ferramentas}</p>
-                        <p><h class="corSala">Foto:</h> <img src="/uploads/armarios/${data.foto_armario}" alt="Foto do Armário" style="width: 30%;"></p>
-                        <input type="hidden" id="currentCode" value="${data.numero}">
-                        <button id="updateButton" class="buttonSala">Atualizar Código</button>
-                        <a href="${data.ir_para}" id="goToButton" style="display: ${data.ir_para ? 'inline-block' : 'none'};">Ir até</a>
-                    `;
-
-                        // Adiciona o listener para o botão de atualização
-                        document.getElementById('updateButton').addEventListener('click', function () {
-                            const newCode = prompt('Digite o novo código:', data.numero);
-                            if (newCode && newCode !== data.numero) {
-                                fetch('{{ url_for("atualizar_codigo") }}', {
-                                    method: 'POST',
-                                    headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({ old_code: data.numero, new_code: newCode })
-                                })
-                                    .then(response => response.json())
-                                    .then(updateData => {
-                                        if (updateData.success) {
-                                            scanResult.innerHTML = `<p>${updateData.success}</p>`;
-                                        } else {
-                                            scanResult.innerHTML = `<p>${updateData.error}</p>`;
-                                        }
-                                    });
-                            }
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.error('Erro:', error);
-                    scanResult.innerHTML = 'Erro ao verificar o código.';
-                });
-        });
-
         // Elementos do popup geral
         const openPopupBtn = document.getElementById('openPopup');
         const closePopupBtn = document.getElementById('closePopup');
@@ -732,6 +693,7 @@
         overlay.addEventListener('click', function () {
             closePopup(); // Oculta o popup e o overlay
         });
+
     });
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -751,6 +713,49 @@
             });
         });
     });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const deleteBtns = document.querySelectorAll('.delete-btn');
+        deleteBtns.forEach(btn => {
+            btn.addEventListener('click', function (event) {
+                event.preventDefault();
+                const salaId = this.getAttribute('data-sala-id'); // Obtém o ID da sala
+
+                // Exibe SweetAlert para confirmação
+                Swal.fire({
+                    title: 'Tem certeza?',
+                    text: "Você não poderá reverter isso!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sim, excluir!',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Envia a requisição de exclusão
+                        fetch(`/gerenciamento/salas/delete/${salaId}`, {
+                            method: 'POST'
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    Swal.fire('Excluído!', data.message, 'success');
+                                    // Remove o item da interface
+                                    document.querySelector(`[data-sala-id="${salaId}"]`).closest('.box').remove();
+                                } else {
+                                    Swal.fire('Erro!', data.message, 'error');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Erro:', error);  // Log do erro no console
+                                Swal.fire('Erro!', 'Erro ao excluir a sala.', 'error');
+                            });
+                    }
+                });
+            });
+        });
+    });
+
+
 
 
 </script>
