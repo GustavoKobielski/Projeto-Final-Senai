@@ -1,0 +1,757 @@
+{% extends 'base.html' %}
+{% block content %}
+{% include 'navbar.html' %}
+
+<style>
+    html {
+        font-size: 62.5%;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+
+    main {
+        margin-left: 27.8%;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1em;
+        width: 90%;
+        margin-left: 0;
+    }
+
+    .main-title {
+        font-size: 4rem;
+    }
+
+    .btns {
+        display: flex;
+        gap: 2em;
+        /* Espaçamento entre os botões */
+    }
+
+    .btns .btn-geral {
+        display: flex;
+        align-items: center;
+        gap: .8em;
+        padding: 1vh 2vw;
+        background-color: #407DD8;
+        color: #ffffff;
+        border-radius: 20px;
+        font-size: 1.4em;
+        transition: background-color 0.3s, transform 0.2s;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+
+    .btns .btn-geral p {
+        margin: 0;
+        /* Remove a margem do parágrafo para centralização */
+        line-height: 1;
+        /* Ajusta o espaçamento entre linhas */
+    }
+
+    .btns a {
+        text-decoration: none;
+    }
+
+
+    .btns .btn-geral i {
+        font-size: 1.5em;
+        color: #f2f2f2;
+        /* Azul claro para o ícone */
+        border-radius: 100%;
+        /* Torna o fundo do ícone circular */
+
+    }
+
+    .btns .txt-salas {
+        font-size: 1.5em;
+    }
+
+    .btns .btn-geral:hover {
+        background-color: #548ee4;
+        transform: translateY(-2px);
+    }
+
+    .btns .btn-geral:active {
+        transform: translateY(1px);
+
+    }
+
+    #generatePdfButton {
+        display: flex;
+        align-items: center;
+        gap: 0.8em;
+        padding: .4vh 1vw;
+        background-color: #407DD8;
+        /* Cor do botão de gerar PDF */
+        color: #ffffff;
+        border-radius: 20px;
+        font-size: 1em;
+        transition: background-color 0.3s, transform 0.2s;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+        border: none;
+    }
+
+    #generatePdfButton:hover {
+        background-color: #548ee4;
+        transform: translateY(-2px);
+    }
+
+    #generatePdfButton:active {
+        transform: translateY(1px);
+    }
+
+    #generatePdfButton i {
+        font-size: 1.5em;
+    }
+
+    .desc_txt {
+        padding-left: 0.75em;
+        font-size: 1.8em;
+        opacity: 60%;
+    }
+
+
+    /* ############### boxs */
+
+    .wrapper_boxs {
+        margin-top: 3em;
+        display: flex;
+        flex-wrap: wrap;
+        padding: 1em 0.75em 8em 2em;
+        width: 95%;
+        min-height: 65vh;
+        max-height: 65vh;
+        /* Limita a altura máxima */
+        overflow: auto;
+        gap: 1em;
+        justify-content: flex-start;
+    }
+
+    /* Estilo para a barra de rolagem */
+    .wrapper_boxs::-webkit-scrollbar {
+        width: 8px;
+        /* Largura da barra de rolagem */
+    }
+
+    .wrapper_boxs::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        /* Cor de fundo da trilha */
+        border-radius: 10px;
+        /* Bordas arredondadas */
+    }
+
+    .wrapper_boxs::-webkit-scrollbar-thumb {
+        background: #888;
+        /* Cor da barra de rolagem */
+        border-radius: 10px;
+        /* Bordas arredondadas */
+    }
+
+    .wrapper_boxs::-webkit-scrollbar-thumb:hover {
+        background: #555;
+        /* Cor da barra de rolagem quando está em hover */
+    }
+
+    .box {
+        width: calc(30% - 1em);
+        min-height: 42vh;
+        align-self: start;
+        /* Impede que o item cresça verticalmente */
+        margin: 1em 0.5em;
+        background-color: #407DD8;
+        border-radius: 12px;
+        box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.25), 0px 4px 8px rgba(0, 0, 0, 0.15), 0px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .box:hover {
+        transform: scale(1.02);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+
+    .group {
+        display: flex;
+        justify-content: center;
+        display: block;
+    }
+
+    .box .image {
+        max-height: 17em;
+        width: 100%;
+        height: 17em;
+        object-fit: cover;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        display: block;
+        margin-bottom: .5em;
+    }
+
+    .box a {
+        text-decoration: none;
+        justify-content: center;
+    }
+
+    .box .text-wrapper {
+        text-transform: uppercase;
+        letter-spacing: 1px;
+
+    }
+
+    .bold-search {
+        font-weight: bold;
+    }
+
+    .txts_wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .box .txts_wrapper p {
+        color: #f2f2f2;
+        font-size: 2em;
+    }
+
+    .box .txts_wrapper .total-de-arm-rios span {
+        display: flex;
+        justify-content: center;
+    }
+
+    /* PESQUISA */
+
+    .search-container {
+        display: flex;
+        align-items: center;
+        margin-left: 0.75em;
+        font-size: 1.8em;
+        margin-bottom: 1em;
+    }
+
+    .search-input {
+        padding: 0.5em 1em;
+        padding-right: 2.5em;
+        font-size: 1em;
+        border: 1px solid #ccc;
+        border-radius: 20px;
+        outline: none;
+        box-sizing: border-box;
+        transition: border-color 0.3s;
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .search-input::placeholder {
+        color: #999;
+    }
+
+    .search-icon {
+        position: relative;
+        right: 2.5em;
+        font-size: 1.8em;
+        color: #407DD8;
+        pointer-events: none;
+    }
+
+    .search-input:focus {
+        border-color: #407DD8;
+    }
+
+
+
+
+
+    /* POPUP */
+
+    .popup-container {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .popup-content {
+        background: white;
+        padding: 2%;
+        border-radius: 5px;
+        position: relative;
+        width: 35%;
+    }
+
+    .close-popup {
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        font-size: 30px;
+        cursor: pointer;
+        color: black;
+    }
+
+    #scanResult {
+        margin-top: 20px;
+    }
+
+
+    .containerSala {
+        position: fixed;
+        top: 50%;
+        left: 62.5%;
+        transform: translate(-50%, -50%);
+        width: 55%;
+        padding: 1.5%;
+        background-color: #f5f5f5;
+        z-index: 1002;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 15px;
+        border: 1.5px solid black;
+        display: none;
+    }
+
+
+
+
+
+    .tituloSala {
+        text-align: center;
+        color: #407DD8;
+        margin-bottom: 20px;
+    }
+
+
+
+
+    .content {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+    }
+
+
+
+
+    .foto {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 50%;
+    }
+
+    .addFoto {
+        width: 40%;
+        height: auto;
+        /* Mantém a proporção da imagem */
+        margin-bottom: 10px;
+        /* Espaço entre a imagem e o botão */
+    }
+
+    .addImg {
+        position: relative;
+        left: -85%;
+        margin-top: 10px;
+        /* Espaço acima do botão, se necessário */
+        font-size: 1vw;
+    }
+
+
+    .addFoto:hover {
+        cursor: pointer;
+    }
+
+    .formSalas {
+        width: 55%;
+    }
+
+    input.form-control {
+        font-size: 18px !important;
+        color: #999 !important;
+        border: 1px solid #8E8080 !important;
+        width: 100%;
+    }
+
+
+
+
+    input::placeholder {
+        font-size: 16px !important;
+        color: #999 !important;
+        text-align: left;
+    }
+
+
+
+
+    .buttonSala {
+        width: 100%;
+        padding: 10px;
+        background-color: #407DD8;
+        border-radius: 5px;
+        color: white;
+        text-align: center;
+        margin-top: 15px;
+        cursor: pointer;
+        border: none;
+    }
+
+
+
+
+    .corSala {
+        color: #407DD8;
+        font-size: 20px;
+        margin-top: 2%;
+    }
+
+
+    .closePopup {
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        font-size: 50px;
+        cursor: pointer;
+        color: #407DD8;
+    }
+
+
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.5);
+        /* Cor preta com opacidade */
+        z-index: 1000;
+        /* Abaixo do popup */
+        display: none;
+        /* Inicialmente oculto */
+    }
+
+
+
+    #goToButton {
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        color: white;
+        text-align: center;
+        margin-top: 15px;
+        cursor: pointer;
+        border: none;
+        background-color: gray;
+        position: relative;
+        right: 5%;
+    }
+
+    .barcode {
+        color: #407DD8;
+        font-size: 20px;
+        margin-bottom: 2%;
+    }
+
+    .tituloBarcode {
+        text-align: center;
+        color: #407DD8;
+        margin-bottom: 3%;
+        margin-left: 1%;
+    }
+
+    .action-buttons {
+        display: flex;
+        align-items: center;
+        background-color: #407DD8;
+        /* Cor de fundo semelhante ao azul da imagem */
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .edit-btn,
+    .delete-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5em;
+        padding: 0.8em 1.2em 0.8em;
+        color: #fff;
+        text-decoration: none;
+        background: none;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        width: 100%;
+        /* Tamanho igual para ambos os botões */
+    }
+
+    .edit-btn:hover,
+    .delete-btn:hover {
+        background-color: #336cb8;
+        /* Efeito hover mais escuro */
+    }
+
+    .divider {
+        width: 1px;
+        height: 60%;
+        background-color: #ffffff;
+        opacity: 0.5;
+    }
+
+    .edit-btn i,
+    .delete-btn i {
+        margin-right: 0.5em;
+        font-size: 1.4em;
+    }
+
+    @media (max-width: 1920px) {
+        .box {
+            width: calc(32% - 1em);
+            min-height: 35vh;
+        }
+
+        .box .txts_wrapper p {
+            font-size: 2.5em;
+        }
+    }
+
+    @media (max-width: 1400px) {
+        .box .txts_wrapper p {
+            font-size: 2.2em;
+        }
+    }
+
+    @media (max-width: 1175px) {
+        .box .txts_wrapper p {
+            font-size: 1.85em;
+        }
+    }
+
+
+    /* Media Queries para responsividade */
+    @media (max-width: 1024px) {
+        .box {
+            width: calc(45% - 1em);
+            min-height: 33vh;
+        }
+
+
+
+    }
+
+    @media (max-width: 768px) {
+        .wrapper_boxs {
+            justify-content: center;
+        }
+
+        .box {
+            width: calc(100% - 1em);
+            min-height: 32vh;
+        }
+
+
+
+    }
+
+    @media (max-width: 480px) {
+        .box {
+            width: calc(100% - 1em);
+            min-height: 32vh;
+        }
+
+    }
+</style>
+
+<main>
+    <div class="container">
+        <h1 class="main-title">Armários</h1>
+
+        <article class="btns">
+            <a href="javascript:void(0)" id="openPopup">
+                <div class="btn-geral">
+                    <span class="iconSalas"><i class="bi bi-plus-circle"></i></span>
+                    <p class="txt-salas">Adicionar Armario</p>
+                </div>
+            </a>
+
+        </article>
+
+
+    </div>
+
+    <p class="desc_txt">Aqui você <strong>consegue ver</strong> os armários existentes, e <strong>clicando
+            neles</strong> para verificar as ferramentas.</p>
+
+    <div class="search-container">
+        <input type="text" id="searchInput" class="search-input" placeholder="Pesquise por nome do armario..." />
+        <span class="search-icon">&#x1F50D;</span>
+
+        <button id="generatePdfButton" class="btn-geral">
+            <i class="bi bi-file-earmark-pdf"></i>
+            Gerar PDF
+        </button>
+    </div>
+
+
+    <div class="wrapper_boxs">
+        {% for armario in armarios %}
+        <div class="box">
+            <div class="group">
+                <!-- Link para gerenciamento de ferramentas do armário específico -->
+                <a href="{{ url_for('gerenciamento_ferramentas', armario_id=armario.id_armario) }}">
+                    <img class="image"
+                         src="{{ url_for('serve_armario_file', filename=armario.foto_armario) if armario.foto_armario else url_for('static', filename='imgs/defaultImage.jpg') }}" />
+                    <div class="txts_wrapper">
+                        <p class="text-wrapper">Armario - <span class="bold-search">{{ armario.numero }}</span></p>
+                        <p>Total de ferramentas: <span>{{ ferramentas_por_armario[armario.id_armario] }}</span></p>
+                        <div class="action-buttons">
+                            <a href="{{ url_for('editar_armario', armario_id=armario.id_armario) }}" class="edit-btn">
+                                <i class="bi bi-pencil-square"></i> Editar
+                            </a>
+                            <a href="{{ url_for('deletar_armario', armario_id=armario.id_armario) }}" class="delete-btn">
+                                <i class="bi bi-trash"></i> Excluir
+                            </a>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+
+</main>
+
+<div class="overlay" id="overlay"></div>
+
+<div class="containerSala" id="popupSala">
+    <h1 class="tituloSala">Adicionar Armario</h1>
+    <span class="closePopup" id="closePopup">&times;</span>
+
+
+    <div class="content">
+        <div class="foto">
+            <img class="addFoto" src="{{ url_for('static', filename='imgs/addFoto.png')}}" alt="">
+
+        </div>
+
+        
+    </div>
+</div>
+
+
+
+<script>
+
+    document.getElementById('generatePdfButton').addEventListener('click', function () {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        // Adicionando o título no PDF
+        doc.setFontSize(18);
+        doc.text('Relatório dos Armarios', 10, 10);
+
+        // Capturando as informações dos cards de ferramentas
+        let yPosition = 20; // Posição inicial no eixo Y
+        const ferramentas = document.querySelectorAll('.box');
+        yPosition += 10;
+        ferramentas.forEach((ferramenta, index) => {
+            const nome = ferramenta.querySelector('.text-wrapper').textContent;
+            const total = ferramenta.querySelector('.total-de-arm-rios span').textContent;
+
+            // Adicionando cada ferramenta no PDF
+            doc.setFontSize(14);
+            doc.text(`Nome do armario ${index + 1}: ${nome}`, 10, yPosition);
+            yPosition += 10;
+            doc.text(`Total de Ferramentas: ${total}`, 10, yPosition);
+            yPosition += 20; // Espaço entre as ferramentas
+        });
+
+        // Gerando o PDF
+        doc.save('relatorio_armarios.pdf');
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const popup = document.getElementById('popupSala');
+        const closePopupBtn = document.getElementById('closePopup');
+        const openPopupBtn = document.getElementById('openPopup');
+
+        // Função para abrir o popup e o overlay
+        function openPopup() {
+            popup.style.display = 'block';
+            overlay.style.display = 'block';
+        }
+
+
+
+
+        // Função para fechar o popup e o overlay
+        function closePopup() {
+            popup.style.display = 'none';
+            overlay.style.display = 'none';
+        }
+
+
+
+
+        // Abre o popup ao clicar no botão "Adicionar Salas"
+        openPopupBtn.addEventListener('click', function (event) {
+            event.preventDefault(); // Evita que o link redirecione
+            openPopup(); // Exibe o popup e o overlay
+        });
+
+
+
+
+        // Fecha o popup ao clicar no botão "×"
+        closePopupBtn.addEventListener('click', function () {
+            closePopup(); // Oculta o popup e o overlay
+        });
+
+
+
+
+        // Fecha o popup ao clicar fora do conteúdo
+        overlay.addEventListener('click', function () {
+            closePopup(); // Oculta o popup e o overlay
+        });
+
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.getElementById('searchInput');
+        const boxes = document.querySelectorAll('.box');
+
+        searchInput.addEventListener('input', function () {
+            const searchText = searchInput.value.toLowerCase();
+
+            boxes.forEach(box => {
+                const boxText = box.querySelector('.bold-search').textContent.toLowerCase();
+                if (boxText.includes(searchText)) {
+                    box.style.display = 'block'; // Mostra a box se corresponder à pesquisa
+                } else {
+                    box.style.display = 'none';  // Oculta a box se não corresponder
+                }
+            });
+        });
+    });
+
+
+</script>
+
+
+{% endblock %}

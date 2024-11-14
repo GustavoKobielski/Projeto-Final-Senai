@@ -595,29 +595,29 @@
         <div class="box" data-sala-id="{{ sala.id_salas }}">
             <div class="group">
 
+                <a href="{{ url_for('gerenciamento_armarios', sala_id=sala.id_salas) }}">
+                    <img class="image"
+                        src="{{ url_for('serve_salas_file', filename=sala.foto_sala) if sala.foto_sala else url_for('static', filename='imgs/defaultImage.jpg') }}" />
 
-                <img class="image"
-                    src="{{ url_for('serve_salas_file', filename=sala.foto_sala) if sala.foto_sala else url_for('static', filename='imgs/defaultImage.jpg') }}" />
+                    <div class="txts_wrapper">
+                        <p class="text-wrapper">{{ sala.nome_sala }}</p>
+                        <p class="total-de-arm-rios">
+                            Total de armários:<br />
+                            <span>{{ armarios_por_sala[sala.id_salas] }}</span>
+                        </p>
 
-                <div class="txts_wrapper">
-                    <p class="text-wrapper">{{ sala.nome_sala }}</p>
-                    <p class="total-de-arm-rios">
-                        Total de armários:<br />
-                        <span>{{ armarios_por_sala[sala.id_salas] }}</span>
-                    </p>
-
-                    <!-- Botões Editar e Excluir -->
-                    <div class="action-buttons">
-                        <a href="#" class="edit-btn">
-                            <i class="bi bi-pencil-square"></i> Editar
-                        </a>
-                        <div class="divider"></div>
-                        <a href="#" class="delete-btn" data-sala-id="{{ sala.id_salas }}">
-                            <i class=" bi bi-trash"></i> Excluir
-                        </a>
+                        <!-- Botões Editar e Excluir -->
+                        <div class="action-buttons">
+                            <a href="#" class="edit-btn">
+                                <i class="bi bi-pencil-square"></i> Editar
+                            </a>
+                            <div class="divider"></div>
+                            <a href="#" class="delete-btn" data-sala-id="{{ sala.id_salas }}">
+                                <i class=" bi bi-trash"></i> Excluir
+                            </a>
+                        </div>
                     </div>
-                </div>
-
+                </a>
             </div>
         </div>
         {% endfor %}

@@ -185,6 +185,12 @@
 
         /* Responsividade */
 
+        @media (max-width: 1370px) {
+            .botoes {
+                margin-top: 4rem;
+            }
+        }
+
         @media (max-width: 955px) {
             .texto-left {
                 text-align: center;
@@ -202,39 +208,47 @@
 
             .ladoDireito {
                 width: 100%;
-                height: auto;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                padding: 1rem;
+            }
+
+            body {
+                background-color: #f5f5f5;
             }
 
             .botoes {
                 display: flex;
-                flex-direction: row;
                 justify-content: center;
-                margin-top: 2rem;
-                width: auto;
-            }
-
-            .buttonEntrar, .buttonCadastrar {
-                width: auto;
-                margin-right: 0;
-                margin-left: 0;
             }
 
             .container {
-                width: 80%; /* Ajusta a largura do container para 80% da tela */
+                width: 30%;
+                display: flex;
+                justify-content: center;
+                flex-direction: column;
             }
 
             .formulario {
-                width: 100%; /* Ocupa toda a largura disponível */
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
             }
 
-            .form-control, .buttonLogin, .google {
-                width: 100%; /* Ajusta os campos de formulário para ocupar toda a largura */
-                max-width: 300px; /* Define uma largura máxima para evitar que fique muito largo */
+            .labels {
+                text-align: start;
+                width: 100%;
+            }
+
+            .form-control {
+                width: 14rem;
+            }
+
+            .buttonLogin {
+                width: 14rem;
+            }
+
+            .google {
+                width: 14rem;
             }
         }
 
@@ -265,6 +279,24 @@
             .form-control, .buttonLogin, .google {
                 width: 100%;
                 max-width: 280px; /* Ajuste para telas muito pequenas */
+            }
+
+            @media (max-width: 480px) {
+
+                .botoes {
+                    margin-top: 5rem;
+                }
+                .buttonEntrar {
+                    width: 10rem;
+                }
+
+                .buttonCadastrar {
+                    width: 10rem;
+                }
+
+                .container {
+                    width: 50%;
+                }
             }
         }
     </style>
@@ -298,7 +330,9 @@
         </div>
 
         <div class="container">
+
             <form action="" method="POST" class="formulario">
+
                 {{form.csrf_token}}
                 {{form.email.label(class="labels",style="margin-bottom: 10px; display:block;")}}
                 {{form.email(class="form-control", placeholder='Digite seu email')}}
@@ -307,6 +341,7 @@
                 {{form.senha(class="form-control", placeholder='Digite sua senha')}}
 
                 {{form.btnSubmit(class="buttonLogin")}}
+                
             </form>
 
             <h2 class="ou">OU</h2>

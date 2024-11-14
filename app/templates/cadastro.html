@@ -7,32 +7,31 @@
     <title>Document</title>
 
     <style>
+        /* Reset básico para remover margens e espaçamentos */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         html,
         body {
             height: 100%;
-            margin: 0;
-            overflow: hidden;
-        }
-
-        .background {
+            width: 100%;
             display: flex;
+        }
+
+        .ladoEsquerdo {
             height: 100vh;
-        }
-
-        .left-side {
-            background-color: #407DD8;
             width: 40%;
-            height: 100%;
+            background-color: #407DD8;
         }
 
-        .right-side {
-            background-color: #f5f5f5;
+        .ladoDireito {
+            height: 100vh;
             width: 60%;
-            height: 100%;
-            display: grid;
-            place-items: center;
+            background-color: #f5f5f5;
         }
-
 
         .logo {
             display: flex;
@@ -40,7 +39,7 @@
             margin-top: 10%;
         }
 
-        .senai {
+        .logo img {
             width: 21vw;
         }
 
@@ -48,49 +47,43 @@
             color: #f5f5f5;
             justify-content: center;
             display: flex;
-            margin-top: 17%;
+            margin-top: 8rem;
+            margin-bottom: 2rem;
         }
 
         hr {
-            width: 50%;
+            width: 55%;
             border: 2px solid;
             color: #f5f5f5;
+            margin: 0 auto;
         }
 
         .texto-left {
             color: #f5f5f5;
-            font-size: 23px;
             display: flex;
-            text-align: center;
-            margin: 0 20% 0 20%;
+            justify-content: center;
+            margin-top: 2rem;
+            font-size: 1.2rem;
             font-weight: 300;
         }
 
-        .buttonEntrar {
-            background-color: #f5f5f5;
-            padding: 13px;
-            border: 1px #999 solid;
-            border-radius: 3rem;
-            color: black;
-            font-size: 15px;
-            transition: transform 0.3s ease;
-            width: 180px; /* Largura do botão */
-            position: relative;
-            z-index: 0;
+        .botoes {
+            display: flex;
+            justify-content: center;
+            flex-direction: row;
+            margin-top: 8rem;
+            position: relative; /* permite o uso de posição absoluta nos botões */
         }
 
-        .buttonCadastrar {
-            background-color: #407DD8;
-            padding: 13px;
-            color: #f5f5f5;
+        .buttonEntrar {
+            width: 10rem;
+            padding: .8rem;
+            border: 2px solid #999;
+            background-color: #f5f5f5;
             border-radius: 3rem;
-            border: 1px #407DD8 solid;
-            font-size: 15px;
-            transition: transform 0.3s ease;
-            width: 180px; /* Largura do botão */
             position: relative;
-            left: -30px; /* Move o botão para a esquerda */
-            z-index: 1;
+            z-index: 2; /* mantém o buttonEntrar na frente */
+            margin-right: -2vw; /* move para cima do buttonCadastrar */
         }
 
         .buttonEntrar:hover {
@@ -98,171 +91,330 @@
             transform: scale(1.1);
         }
 
+        .buttonCadastrar {
+            width: 10rem;
+            padding: .8rem;
+            color: #f5f5f5;
+            background-color: #407DD8;
+            border: 2px solid #407DD8;
+            border-radius: 3rem;
+            position: relative;
+            z-index: 1; /* mantém o buttonCadastrar abaixo do buttonEntrar */
+        }
+
         .buttonCadastrar:hover {
             cursor: pointer;
             transform: scale(1.1);
-        }
-
-        a:link {
-            color: black;
-        }
-
-        /* Para links visitados */
-        a:visited {
-            color: black;
-        }
-
-        .buttonEntrar a,
-        .buttoCadastrar a {
-            text-decoration: none;
-            /* Remove o sublinhado do link */
-            color: inherit;
-            /* Faz com que a cor do link herde a cor do botão */
+            z-index: 2; /* mantém o buttonEntrar na frente */
+            margin-right: -2vw; /* move para cima do buttonCadastrar */
         }
 
 
-        .buttoCadastrar:hover {
-            cursor: pointer;
-            transform: scale(1.1);
-
+        .container {
+            width: 50%; /* Define uma largura menor para melhor centralização */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: auto; /* Centraliza o container verticalmente e horizontalmente */
+            gap: 1rem; /* Espaçamento entre elementos */
         }
-
+        
+        .formulario {
+            width: 60%;
+            margin-top: 7rem;
+        }
         .form-control {
-            padding: 12px;
-            margin-bottom: 20px;
-            font-size: 16px;
+            width: 18vw;
+            padding: 0.7rem;
+            border: 1px solid #cecece;
             background-color: #EBEBEB;
-            border: 1px solid #CECECE;
             border-radius: 5px;
-            width: 93%;
+            margin-top: .2rem;
         }
 
-        .cor {
+        placeholder {
+            font-size: 2rem;
+        }
+
+        .labels {
             color: #407DD8;
-            font-size: 18px;
-        }
-
-        .button {
-            width: 100%;
-            padding: 9px;
-            border: 1px solid transparent;
-            background-color: #407DD8;
-            border-radius: 5px;
-            cursor: pointer;
-            color: #f5f5f5;
-            font-size: 18px;
+            font-size: 1.2rem;
+            margin-top: .5rem;
         }
 
         input::placeholder {
-            font-size: 16px;
+            font-size: 1rem;
             color: #999;
             text-align: left;
             margin: 0;
             padding: 0;
         }
 
-        input {
-            font-size: 18px; 
-            color: #999;
-            border: #8E8080;
+        input:active {
+            outline: none;
+        }
+
+        .buttonCadastrar2 {
+            border: none;
+            background-color: #407DD8;
+            color: #f5f5f5;
+            width: 18vw;
+            padding: .6rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+            cursor: pointer;
+            font-size: 1.1rem;
         }
 
         .ou {
-            display: block;
-            text-align: center;
-            color: #8E8080;
+            color: #8E8080
         }
 
         .google {
             background-color: #f5f5f5;
-            padding: 9px;
-            width: 100%;
+            padding: .6rem;
+            width: 18vw;
             cursor: pointer;
-            font-size: 20px;
+            font-size: 1.3rem;
             border: 3px solid #407DD8;
             border-radius: 15px;
-        }
-
-        .google2 {
-            width: 5%;
-            margin-right: 10%;
-
-        }
-
-        .container {
-            width: 50%;
-            position: relative;
-            bottom: 10%;
-        }
-
-        .botoesfds {
             display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .tagA {
+            text-decoration: none;
+        }
+
+        .google img {
+            width: .8vw;
+        }
+
+        /* Responsividade */
+
+        @media (max-width: 1680px) {
+
+            .texto-left {
+                width: 70%;
+                text-align: center;
+                display: flex;
+                margin: auto;
+                margin-top: 3rem;
+            }
+        }
+
+        @media (max-width: 1370px) { 
+            .botoes {
+                margin-top: 4rem;
+            }
+
+            .formulario {
+                margin-top: 2rem;
+            }
+
+            .google {
+                font-size: 1rem;
+            }
+
+            .texto-left {
+                width: 80%;
+                text-align: center;
+                display: flex;
+                margin: auto;
+                margin-top: 3rem;
+            }
+        }
+
+            @media (max-width: 955px) {
+            .texto-left {
+                text-align: center;
+            }
+
+            .google img {
+                width: 16px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .ladoEsquerdo {
+                display: none;
+            }
+
+            .ladoDireito {
+                width: 100%;
+            }
+
+            body {
+                background-color: #f5f5f5;
+            }
+
+            .botoes {
+                display: flex;
+                justify-content: center;
+                margin-top: 7rem;
+            }
+
+            .container {
+                width: 30%;
+                display: flex;
+                justify-content: center;
+                flex-direction: column;
+            }
+
+            .formulario {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+            }
+
+            .labels {
+                text-align: start;
+                width: 100%;
+            }
+
+            .form-control {
+                width: 14rem;
+            }
+
+            .buttonLogin {
+                width: 14rem;
+            }
+
+            .google {
+                width: 14rem;
+            }
+
+            .buttonCadastrar2 {
+                width: 14rem;
+            }
 
         }
 
-        @media(min-width: 1300px) and (max-width: 1500px) and (min-height: 598px) and (max-height:900px) {
+        @media (max-width: 480px) {
+            .titulo {
+                font-size: 1.2rem;
+                margin-top: 2rem;
+            }
 
-        .botoesfds {
-            margin-top: 5%;
-        }
+            .texto-left {
+                font-size: 0.9rem;
+            }
 
-        .formulario {
-            margin-top: 15%;
-        }
+            .buttonEntrar, .buttonCadastrar, .buttonLogin, .form-control, .google {
+                width: 100%;
+            }
 
-        .container {
-            height: 95%;
-            
+            .botoes {
+                flex-direction: row;
+                justify-content: center;
+                margin-top: 1rem;
+            }
+
+            .container {
+                width: 100%;
+            }
+
+            .form-control, .buttonLogin, .google {
+                width: 100%;
+                max-width: 280px; /* Ajuste para telas muito pequenas */
+            }
+
+            @media (max-width: 480px) {
+
+                .botoes {
+                    margin-top: 5rem;
+                }
+                .buttonEntrar {
+                    width: 10rem;
+                }
+
+                .buttonCadastrar {
+                    width: 10rem;
+                }
+
+                .container {
+                    width: 50%;
+                }
+
+                .buttonCadastrar2 {
+                    width: 14rem;
+                }
+
+                @media (max-width: 440px) {
+                    .buttonCadastrar2 {
+                        width: 100%;
+                     }
+                }
+            }
         }
-    }
     </style>
 
 </head>
 
 <body>
 
-    <div class="background">
-        <div class="left-side">
-            <div class="logo">
-                <img src="https://logodownload.org/wp-content/uploads/2019/08/senai-logo-1.png" class="senai">
-            </div>\
-            <div class="titulo">
-                <h1>Bem Vindo</h1>
-            </div>
-            <hr>
-            <div class="texto-left">
-                <p>Cadastre em nosso sistema de gestão de ferramentas! Cadastre para conseguir usa-lo.</p>
-            </div>
+    <div class="ladoEsquerdo">
+        
+        <div class="logo">
+            <img src="https://logodownload.org/wp-content/uploads/2019/08/senai-logo-1.png" class="senai">
         </div>
-        <div class="right-side">    
-            <div class="botoesfds">
-                <a href="{{url_for('homepage')}}">
-                    <button class="buttonEntrar">Entrar</button></a>
-                <a href="{{url_for('cadastro')}}">
-                    <button class="buttonCadastrar">Cadastrar</button></a>
-            </div>
+
+        <div class="titulo">
+            <h1>Bem Vindo</h1>
+        </div>
+
+        <hr>
+
+        <div class="texto-left">
+            <p>Cadastre em nosso sistema de gestão de ferramentas! Cadastre para conseguir usa-lo</p>
+        </div>
+
+    </div>
+
+    <div class="ladoDireito">
+
+        <div class="botoes">
+
+            <a href="{{url_for('homepage')}}">
+                <button class="buttonEntrar">Entrar</button>
+            </a>
+
+            <a href="{{url_for('cadastro')}}">
+                <button class="buttonCadastrar">Cadastrar</button>
+            </a>
+
+        </div>
             
             <div class="container">
 
                 <form method="POST" action="{{ url_for('cadastro') }}" class="formulario">
+
                     {{ form.csrf_token }}
-                    {{ form.nome.label(class="cor", style="margin-bottom: 10px; display:block;") }}
+                    {{ form.nome.label(class="labels", style="margin-bottom: 10px; display:block;") }}
                     {{ form.nome(class="form-control", placeholder='Digite seu nome') }}
-                    {{ form.email.label(class="cor", style="margin-bottom: 10px; display:block;") }}
+                    {{ form.email.label(class="labels", style="margin-bottom: 10px; display:block;") }}
                     {{ form.email(class="form-control", placeholder='Digite seu email') }}
-                    {{ form.senha.label(class="cor", style="margin-bottom: 10px; display:block;") }}
+                    {{ form.senha.label(class="labels", style="margin-bottom: 10px; display:block;") }}
                     {{ form.senha(class="form-control", placeholder='Digite sua senha') }}
-                    {{ form.confirmacao_senha.label(class="cor", style="margin-bottom: 10px; display:block;") }}
+                    {{ form.confirmacao_senha.label(class="labels", style="margin-bottom: 10px; display:block;") }}
                     {{ form.confirmacao_senha(class="form-control", placeholder='Confirme sua senha') }}
-                    {{ form.btnSubmit(class="button") }}
+                    {{ form.btnSubmit(class="buttonCadastrar2") }}
+
                 </form>
 
                 <h2 class="ou">OU</h2>
-                <a href="{{url_for('login_google')}}">
-                <button class="google"><img src="https://logopng.com.br/logos/google-37.png"
-                    class="google2" alt="">Inscrever-se com o Google </button></a>
+
+                <a class="tagA" href="{{url_for('login_google')}}">
+                    <button class="google"><img src="https://logopng.com.br/logos/google-37.png"
+                    class="google2" alt="">Inscrever-se com o Google </button>
+                </a>
             </div>
-        </div>
+
     </div>
 
 </body>

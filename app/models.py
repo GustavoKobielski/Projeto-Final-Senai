@@ -75,6 +75,8 @@ class FerramentasSuporte(db.Model):
     foto_ferramenta_sup = db.Column(db.String, nullable=True)
     numero = db.Column(db.String, unique=True, nullable=False)
 
+    armario_id = db.Column(db.Integer, db.ForeignKey('armario.id_armario'), nullable=True)
+
 
     def contar_ferramentas_sup():
         return FerramentasSuporte.query.count()

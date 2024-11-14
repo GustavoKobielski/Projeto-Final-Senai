@@ -1,7 +1,7 @@
 from app import app, db, socketio
 from flask import render_template, send_from_directory, url_for, request, redirect, jsonify, flash, current_app, send_file, make_response
 from flask_login import login_user, logout_user, current_user, login_required
-from app.forms import CadastrarSala, CadastroArmario, CadastroFerramenta, EditarInformacoes, LoginForm, ScanearForm, UserForm, CadastrarSuporte
+from app.forms import CadastrarSala, CadastroArmario, CadastroFerramenta, EditarInformacoes, EditarInformacoesArmario, EditarInformacoesFerramentas, EditarInformacoesSalas, LoginForm, ScanearForm, UserForm, CadastrarSuporte
 from app.models import User, Salas, Armario, Ferramentas, FerramentasSuporte, Message, Group, GroupUser, GroupMessage
 from datetime import datetime
 from flask_socketio import join_room, leave_room, emit
@@ -42,10 +42,8 @@ def serve_ferramentas_file(filename):
 
 
 def generate_barcode_image(number):
-    # Define o caminho onde o código de barras será salvo (sem extensão .png)
     barcode_folder = os.path.join(os.getcwd(), 'app', 'static', 'barcodes')
 
-    # Cria o diretório 'barcodes' se não existir
     if not os.path.exists(barcode_folder):
         try:
             os.makedirs(barcode_folder, exist_ok=True)
@@ -53,19 +51,16 @@ def generate_barcode_image(number):
         except Exception as e:
             print(f"Erro ao criar o diretório: {e}")
             return None
-    
-    # Caminho do arquivo do código de barras sem a extensão .png
+
     barcode_path = os.path.join(barcode_folder, f"{number}")
 
-    # Verifica se o arquivo já existe
     if os.path.exists(barcode_path + ".png"):
         print(f"Arquivo de código de barras já existe: {barcode_path}.png")
-        return barcode_path + ".png"  # Retorna o caminho do arquivo existente
+        return barcode_path + ".png"
 
-    # Usa a classe Code128 diretamente para gerar o código de barras
+    # Usando a fonte padrão
     barcode_instance = Code128(number, writer=ImageWriter())
-    
-    # Gera o código de barras e salva o arquivo
+
     try:
         barcode_instance.save(barcode_path)  # Não inclua a extensão .png aqui
         print(f"Barcode saved to: {barcode_path}.png")
@@ -73,7 +68,7 @@ def generate_barcode_image(number):
         print(f"Error generating barcode for {number}: {e}")
         return None
 
-    return barcode_path + ".png"  # Retorna o caminho do arquivo gerado com .png
+    return barcode_path + ".png"
 
 def get_unique_filename(folder_path, filename):
     """
@@ -141,13 +136,11 @@ def homepage():
 
             if user:  # Se o login for bem-sucedido
                 login_user(user, remember=True)
-                flash('Login bem-sucedido!', 'success')  # Mensagem de sucesso
                 return redirect(url_for('home'))  # Redireciona para a página inicial
-            else:
-                flash('Credenciais incorretas. Tente novamente.', 'danger')  # Mensagem de erro se o login falhar
+             # Mensagem de erro se o login falhar
 
         except Exception as e:
-            flash(f"Erro ao realizar login: {e}", 'danger')  # Exibe erro de forma geral
+            print("aaa")
 
     # Renderiza a mesma página com o formulário e mensagens flash
     return render_template('index2.html', form=form, usuario=current_user)
@@ -170,7 +163,7 @@ def cadastro():
         user = form.save()
         login_user(user, remember=True)
         return redirect(url_for('homepage'))
-    return render_template('cadastro2.html', form=form)
+    return render_template('cadastro.html', form=form)
 
 # Função de dar logout
 @app.route('/sair/')
@@ -224,11 +217,11 @@ def salas():
                     file.save(file_path)
                 except Exception as e:
                     # Flash de erro se ocorrer uma exceção ao salvar o arquivo
-                    flash(f"Erro ao salvar a foto da sala: {e}", "danger")
+                    
                     return redirect(url_for('salas'))
             else:
                 # Flash de erro se o arquivo não for permitido
-                flash("Tipo de arquivo não permitido. Somente imagens são aceitas.", "danger")
+                
                 return redirect(url_for('salas'))
 
         # Tentativa de criação da sala
@@ -487,7 +480,6 @@ def generate_pdf():
     codes = data.get('codes', [])
 
     if not codes:
-        flash("Nenhum código selecionado para impressão.", "error")
         return redirect(url_for('imprimir_codes'))  # Redireciona para a mesma página para exibir o flash
 
     pdf = FPDF()
@@ -501,7 +493,7 @@ def generate_pdf():
     # Adiciona os códigos de barras selecionados ao PDF
     for code in codes:
         try:
-            # Verifica se o código corresponde a um armário ou ferramenta
+            # Verifica se o código corresponde a um armário, ferramenta ou ferramenta de suporte
             armario = Armario.query.filter_by(numero=code).first()
             ferramenta = Ferramentas.query.filter_by(numero=code).first()
             suporte = FerramentasSuporte.query.filter_by(numero=code).first()
@@ -522,11 +514,17 @@ def generate_pdf():
                     pdf.image(barcode_path, x=10, y=y_position, w=50, h=20)
                     y_position = pdf.get_y()  # Atualiza a posição Y após a imagem
                     pdf.ln(25)  # Aumenta o espaçamento entre os itens para garantir que não fiquem sobrepostos
+                else:
+                    print(f"Código de barras não encontrado para {code}")
 
             elif ferramenta:
                 # Se for uma ferramenta, mostra o número e o armário correspondente
-                armario_associado = Armario.query.filter_by(numero=ferramenta.numero_armario).first()
-                pdf.cell(0, 10, f"Ferramenta: {ferramenta.nome_ferramenta} - Armário: {armario_associado.numero}", ln=True)
+                # Corrigido para acessar o relacionamento correto com 'armario_id' ou similar
+                armario_associado = Armario.query.filter_by(id_armario=ferramenta.armario_id).first()
+                if armario_associado:
+                    pdf.cell(0, 10, f"Ferramenta: {ferramenta.nome_ferramenta} - Armário: {armario_associado.numero}", ln=True)
+                else:
+                    print(f"Armário associado à ferramenta {ferramenta.numero} não encontrado.")
 
                 # Menos espaço entre o nome e o código de barras
                 y_position = pdf.get_y() + 2  # Ajusta a posição para dar um espaço pequeno entre o texto e o código de barras
@@ -536,11 +534,19 @@ def generate_pdf():
                     pdf.image(barcode_path, x=10, y=y_position, w=50, h=20)
                     y_position = pdf.get_y()  # Atualiza a posição Y após a imagem
                     pdf.ln(25)  # Aumenta o espaçamento entre os itens para garantir que não fiquem sobrepostos
+                else:
+                    print(f"Código de barras não encontrado para {code}")
+
 
             elif suporte:
                 # Se for uma ferramenta de suporte, mostra o número e o armário correspondente
-                armario_associado = Armario.query.filter_by(numero=suporte.numero_armario).first()
-                pdf.cell(0, 10, f"Ferramenta de Suporte: {suporte.nome_ferramenta_sup} - Armário: {armario_associado.numero}", ln=True)
+                # Correção: Acesso ao armário de suporte através do relacionamento
+                armario_associado = Armario.query.filter_by(id_armario=suporte.armario_id).first()
+                if armario_associado:
+                    pdf.cell(0, 10, f"Ferramenta de Suporte: {suporte.nome_ferramenta_sup} - Armário: {armario_associado.numero}", ln=True)
+                else:
+                    print(f"Armário associado à ferramenta de suporte {suporte.numero} não encontrado.")
+    
 
                 # Menos espaço entre o nome e o código de barras
                 y_position = pdf.get_y() + 2  # Ajusta a posição para dar um espaço pequeno entre o texto e o código de barras
@@ -550,6 +556,9 @@ def generate_pdf():
                     pdf.image(barcode_path, x=10, y=y_position, w=50, h=20)
                     y_position = pdf.get_y()  # Atualiza a posição Y após a imagem
                     pdf.ln(25)  # Aumenta o espaçamento entre os itens para garantir que não fiquem sobrepostos
+                else:
+                    print(f"Código de barras não encontrado para {code}")
+                    flash(f"Código de barras não encontrado para {code}", 'error')
 
         except Exception as e:
             print(f"Erro ao processar o código {code}: {e}")  # Exibe o erro no terminal
@@ -564,42 +573,126 @@ def generate_pdf():
         flash('PDF gerado com sucesso!', 'success')  # Flash após gerar o PDF
         return response
     except Exception as e:
+        print(f"Erro ao gerar o PDF final: {e}")  # Log adicional para depuração
         flash(f"Erro ao gerar o PDF final: {e}", 'error')
         return redirect(url_for('imprimir_codes'))
+
+
 
 #############################################
 ######## PAGE SALAS GERENCIAMENTO ###########
 #############################################
 
-# FUNCAO DA PAGINA DE GERENCIAMENTO DE SALAS
-@app.route('/gerenciamento/salas')
+# FUNÇÃO DA PÁGINA DE GERENCIAMENTO DE SALAS
+@app.route('/gerenciamento/salas', methods=['GET', 'POST'])
 @login_required
 def gerenciamento_salas():
     salas = Salas.query.all()
     armarios_por_sala = {}
+    
+    # Contando os armários por sala
     for sala in salas:
         armarios_por_sala[sala.id_salas] = Armario.contar_armarios_na_sala(sala.id_salas)
-    return render_template('gerenciamentoSalas3.html',salas=salas, armarios_por_sala=armarios_por_sala)
+    
+    # Se a requisição for POST, isso significa que estamos editando uma sala
+    if request.method == 'POST':
+        sala_id = request.form.get('sala_id')
+        sala = Salas.query.get_or_404(sala_id)
+        form = EditarInformacoesSalas(obj=sala)
+        
+        if form.validate_on_submit():
+            # Processando a foto, se houver
+            filename = None
+            if form.foto_sala.data:
+                foto_sala = form.foto_sala.data
+                filename = secure_filename(foto_sala.filename)
+                foto_sala.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
+            # Salvando as alterações
+            form.save(sala, filename)
+            flash("Informações da sala atualizadas com sucesso!", "success")
+            return redirect(url_for('gerenciamento_salas'))
 
-@app.route('/gerenciamento/salas/delete/<int:id_sala>', methods=['POST'])
+    # Se não for POST, apenas renderiza a página
+    return render_template('gerenciamentoSalas3.html', salas=salas, armarios_por_sala=armarios_por_sala)
+
+@app.route('/gerenciamento/armario', methods=['GET', 'POST'])
 @login_required
-def delete_sala(id_sala):
+def gerenciamento_armarios():
+    form = CadastroArmario()
+    armario_id = request.form.get('armario_id')
+    armario = Armario.query.get(armario_id) if armario_id else None
+    salas = Salas.query.all()
+    armarios = Armario.query.all()
+    ferramentas_por_armario = {a.id_armario: Ferramentas.contar_ferramentas_no_armario(a.id_armario) for a in armarios}
 
-    sala = Salas.query.get(id_sala)
-    if sala:
+    if form.validate_on_submit():
+        file = request.files.get('foto_armario')
+        filename = None
+
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            folder_path = os.path.join(app.config['UPLOAD_FOLDER'], 'armarios')
+            unique_filename = get_unique_filename(folder_path, filename)
+            os.makedirs(folder_path, exist_ok=True)
+            file.save(os.path.join(folder_path, unique_filename))
+        elif armario:
+            unique_filename = armario.foto_armario
+
         try:
-            db.session.delete(sala)
+            if armario:
+                armario.numero = form.numero.data
+                armario.foto_armario = unique_filename
+                flash('Armário atualizado com sucesso!', 'success')
+            else:
+                codigo_armario = generate_unique_codigo_armario()
+                form.numero.data = codigo_armario
+                form.save(filename=unique_filename)
+                flash('Armário cadastrado com sucesso!', 'success')
             db.session.commit()
-            flash('Sala excluída com sucesso!', 'success')
-            return jsonify({'success': True, 'message': 'Sala excluída com sucesso'})
         except Exception as e:
             db.session.rollback()
-            flash('Erro ao excluir a sala. Por favor, tente novamente.', 'danger')
-            return jsonify({'success': False, 'message': 'Erro ao excluir a sala: ' + str(e)})
-    else:
-        flash('Sala não encontrada.', 'warning')
-        return jsonify({'success': False, 'message': 'Sala não encontrada'})
+            flash(f'Erro ao salvar armário: {str(e)}', 'danger')
+        return redirect(url_for('gerenciamento_armarios'))
+
+    return render_template(
+        'gerenciamentoArmarios.html',
+        salas=salas,
+        armarios=armarios,
+        form=form,
+        ferramentas_por_armario=ferramentas_por_armario,
+        armario=armario
+    )
+
+@app.route('/editar_ferramenta/<int:ferramenta_id>', methods=['GET', 'POST'])
+@login_required
+def editar_ferramenta(ferramenta_id):
+    ferramenta = Ferramentas.query.get_or_404(ferramenta_id)  # Obtém a ferramenta específica para edição
+    form = EditarInformacoesFerramentas(obj=ferramenta)  # Carrega o formulário com os dados da ferramenta
+
+    if form.validate_on_submit():
+        # Atualiza as informações da ferramenta com os dados do formulário
+        form.populate_obj(ferramenta)
+
+        # Processa a foto, se houver uma nova imagem enviada
+        file = form.foto_ferramenta.data
+        if file:
+            filename = secure_filename(file.filename)
+            folder_path = os.path.join(app.config['UPLOAD_FOLDER'], 'ferramentas')
+            unique_filename = get_unique_filename(folder_path, filename)
+            file_path = os.path.join(folder_path, unique_filename)
+            os.makedirs(folder_path, exist_ok=True)
+            file.save(file_path)
+            ferramenta.foto_ferramenta = unique_filename  # Atualiza o caminho da foto
+
+        # Commite as alterações no banco de dados
+        db.session.commit()
+        flash("Informações da ferramenta atualizadas com sucesso!", "success")
+        
+        # Redireciona para a lista de ferramentas do armário
+        return redirect(url_for('gerenciamento_ferramentas', armario_id=ferramenta.armario_id))  # Redireciona para o armário correspondente
+
+    return render_template('editarFerramenta.html', form=form, ferramenta=ferramenta)
 
 
 #############################################

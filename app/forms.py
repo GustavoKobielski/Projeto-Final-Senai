@@ -177,3 +177,61 @@ class CadastroFerramenta(FlaskForm):
 class ScanearForm(FlaskForm):
     numero_scan = StringField("Clique aqui e scaneie o código de barras", validators=[DataRequired()])
     btnSubmit = SubmitField('Procurar')
+
+
+class EditarInformacoesSalas(FlaskForm):
+    nome_sala = StringField('Nome da Sala', validators=[DataRequired()])
+    capacidade_armario = StringField('Quantos armários tem a sala', validators=[DataRequired()])
+    foto_sala = FileField('Foto da Sala')
+    submit = SubmitField('Salvar Alterações')
+
+    def save(self, sala, filename=None):
+        # Atualiza o nome e a capacidade do armário da sala
+        sala.nome_sala = self.nome_sala.data
+        sala.capacidade_armario = self.capacidade_armario.data
+
+        # Atualiza a foto da sala, se fornecida
+        if filename:
+            sala.foto_sala = filename
+
+        # Commite as mudanças no banco de dados
+        db.session.commit()
+        return sala
+    
+class EditarInformacoesArmario(FlaskForm):
+    numero = StringField("Numero do Armario", validators=[DataRequired()])
+    capacidade_ferramentas = StringField('Quantas ferramentas tem a sala', validators=[DataRequired()])
+    foto_armario = FileField('Foto do Armario')
+    submit = SubmitField('Salvar Alterações')
+
+    def save(self, sala, filename=None):
+        # Atualiza o nome e a capacidade do armário da sala
+        sala.numero = self.numero.data
+        sala.capacidade_ferramentas = self.capacidade_ferramentas.data
+
+        # Atualiza a foto da sala, se fornecida
+        if filename:
+            sala.foto_armario = filename
+
+        # Commite as mudanças no banco de dados
+        db.session.commit()
+        return sala
+    
+class EditarInformacoesFerramentas(FlaskForm):
+    nome_ferramenta = StringField("Nome das ferramentas", validators=[DataRequired()])
+    total_ferramenta = StringField('Quantas ferramentas tem total', validators=[DataRequired()])
+    foto_ferramenta = FileField('Foto do Armario')
+    submit = SubmitField('Salvar Alterações')
+
+    def save(self, sala, filename=None):
+        # Atualiza o nome e a capacidade do armário da sala
+        sala.nome_ferramenta = self.nome_ferramenta.data
+        sala.total_ferramenta = self.total_ferramenta.data
+
+        # Atualiza a foto da sala, se fornecida
+        if filename:
+            sala.foto_ferramenta = filename
+
+        # Commite as mudanças no banco de dados
+        db.session.commit()
+        return sala
