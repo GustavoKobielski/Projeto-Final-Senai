@@ -43,6 +43,8 @@ class Armario(db.Model):
     foto_armario = db.Column(db.String, nullable=True)
     sala_id = db.Column(db.Integer, db.ForeignKey('salas.id_salas'), nullable=False)
 
+    
+
     def contar_armarios_na_sala(sala_id):
         return Armario.query.filter_by(sala_id=sala_id).count()
     
@@ -54,6 +56,7 @@ class Ferramentas(db.Model):
     nome_ferramenta = db.Column(db.String, nullable=False)
     total_ferramenta = db.Column(db.Integer, nullable=False, default=0)
     foto_ferramenta = db.Column(db.String, nullable=True)
+    numero = db.Column(db.String, unique=True, nullable=False)
     armario_id = db.Column(db.Integer, db.ForeignKey('armario.id_armario'), nullable=False)  # Corrigido para 'armario'
     
     def contar_ferramentas():
@@ -70,6 +73,7 @@ class FerramentasSuporte(db.Model):
     data_ocorrido_sup = db.Column(db.String, nullable=False)
     ocorrido_ferramenta_sup = db.Column(db.String, nullable=False)
     foto_ferramenta_sup = db.Column(db.String, nullable=True)
+    numero = db.Column(db.String, unique=True, nullable=False)
 
 
     def contar_ferramentas_sup():

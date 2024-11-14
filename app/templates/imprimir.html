@@ -1,0 +1,275 @@
+{% extends 'base.html' %}
+{% block content %}
+{% include 'navbar.html' %}
+
+<style>
+    html {
+        font-size: 70%; /* Aumenta o tamanho da fonte geral */
+    }
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+    main {
+        margin-left: 27.8%;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+    .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1em;
+        width: 90%;
+        margin-left: 0;
+    }
+    .main-title {
+        font-size: 4.5rem; /* Aumenta o tamanho do título */
+    }
+    .desc_txt {
+        padding-left: 0.75em;
+        font-size: 2rem; /* Aumenta o tamanho do texto de descrição */
+        opacity: 60%;
+    }
+    .btn-group {
+        display: flex;
+        gap: 1em;
+        margin-bottom: 1em;
+    }
+    .btn-group .btn {
+        font-size: 1.6rem; /* Aumenta o tamanho da fonte dos botões */
+        padding: 0.8em 1.5em;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .btn-group .btn.active {
+        background-color: #007bff;
+        color: white;
+    }
+    .table-container {
+        display: none;
+    }
+    .table-container.active {
+        display: block;
+    }
+    .table th, .table td {
+        font-size: 1.4rem; /* Aumenta o tamanho do texto nas tabelas */
+    }
+</style>
+
+<main>
+    <div class="container">
+        <h1 class="main-title">Imprimir</h1>
+
+        <!-- Filtro de Pesquisa (mudando conforme a aba) -->
+        <div class="filter-container" id="filter-container">
+            <form method="POST" id="filter-form">
+                <div class="filter-group">
+                    <label for="filter-sala">Filtrar por Sala:</label>
+                    <select id="filter-sala" name="filter-sala">
+                        <option value="">Selecione uma Sala</option>
+                        {% for sala in salas %}
+                            <option value="{{ sala.id_salas }}" {% if sala.id_salas == filter_sala %}selected{% endif %}>{{ sala.nome_sala }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <!-- Filtro de Armário -->
+                <div class="filter-group" id="filter-armario-container" style="display:none;">
+                    <label for="filter-armario">Filtrar por Armário:</label>
+                    <select id="filter-armario" name="filter-armario">
+                        <option value="">Selecione um Armário</option>
+                        {% for armario in armarios %}
+                            <option value="{{ armario.id_armario }}" {% if armario.id_armario == filter_armario %}selected{% endif %}>{{ armario.numero }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Filtro de Ferramenta -->
+                <div class="filter-group" id="filter-ferramenta-container" style="display:none;">
+                    <label for="filter-ferramenta">Filtrar por Ferramenta:</label>
+                    <select id="filter-ferramenta" name="filter-ferramenta">
+                        <option value="">Selecione uma Ferramenta</option>
+                        {% for ferramenta in ferramentas %}
+                            <option value="{{ ferramenta.id_ferramentas }}" {% if ferramenta.id_ferramentas == filter_ferramenta %}selected{% endif %}>{{ ferramenta.nome_ferramenta }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Aplicar Filtros</button>
+            </form>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn active" onclick="switchTable('armarios', this)">Armários</button>
+            <button class="btn" onclick="switchTable('ferramentas', this)">Ferramentas</button>
+            <button class="btn" onclick="switchTable('ferramentasSup', this)">Ferramentas de Suporte</button>
+        </div>
+    </div>
+
+    <p class="desc_txt">Aqui você <strong>consegue imprimir</strong> os códigos de barra das salas, armários, ferramentas e ferramentas de suporte.</p>
+
+    <button class="btn btn-success my-3" onclick="imprimirSelecionados()">Imprimir Selecionados</button>
+
+    <!-- Tabela de Armários -->
+    <div class="table-container active" id="armarios-table">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="select-all-armarios" onclick="toggleSelectAll('armarios')"></th>
+                    <th>Número</th>
+                    <th>Capacidade</th>
+                    <th>Foto</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for armario in armarios %}
+                <tr>
+                    <td><input type="checkbox" class="armarios-checkbox" data-numero="{{ armario.numero }}"></td>
+                    <td>{{ armario.numero }}</td>
+                    <td>{{ armario.capacidade_ferramentas }}</td>
+                    <td>
+                        {% if armario.foto_armario %}
+                        <img src="{{ url_for('static', filename='uploads/' + armario.foto_armario) }}" alt="Foto" width="50">
+                        {% else %}
+                        <span>Imagem não disponível</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Tabela de Ferramentas -->
+    <div class="table-container" id="ferramentas-table">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="select-all-ferramentas" onclick="toggleSelectAll('ferramentas')"></th>
+                    <th>Número</th>
+                    <th>Nome</th>
+                    <th>Foto</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ferramenta in ferramentas %}
+                <tr>
+                    <td><input type="checkbox" class="ferramentas-checkbox" data-numero="{{ ferramenta.numero }}"></td>
+                    <td>{{ ferramenta.numero }}</td>
+                    <td>{{ ferramenta.nome_ferramenta }}</td>
+                    <td>
+                        {% if ferramenta.foto_ferramenta %}
+                        <img src="{{ url_for('static', filename='uploads/' + ferramenta.foto_ferramenta) }}" alt="Foto" width="50">
+                        {% else %}
+                        <span>Imagem não disponível</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Tabela de Ferramentas de Suporte -->
+    <div class="table-container" id="ferramentasSup-table">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="select-all-ferramentasSup" onclick="toggleSelectAll('ferramentasSup')"></th>
+                    <th>Número</th>
+                    <th>Nome</th>
+                    <th>Defeito</th>
+                    <th>Foto</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for suporte in ferramentas_suporte %}
+                <tr>
+                    <td><input type="checkbox" class="ferramentasSup-checkbox" data-numero="{{ suporte.numero }}"></td>
+                    <td>{{ suporte.numero }}</td>
+                    <td>{{ suporte.nome_ferramenta_sup }}</td>
+                    <td>{{ suporte.defeito_ferramenta_sup }}</td>
+                    <td>
+                        {% if suporte.foto_ferramenta_sup %}
+                        <img src="{{ url_for('static', filename='uploads/' + suporte.foto_ferramenta_sup) }}" alt="Foto" width="50">
+                        {% else %}
+                        <span>Imagem não disponível</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<script>
+    // Lógica para alternar entre as abas
+    function switchTable(tableId, button) {
+        const tables = document.querySelectorAll('.table-container');
+        const buttons = document.querySelectorAll('.btn-group .btn');
+        
+        tables.forEach(table => table.classList.remove('active'));
+        buttons.forEach(btn => btn.classList.remove('active'));
+
+        document.getElementById(tableId + '-table').classList.add('active');
+        button.classList.add('active');
+        
+        // Mostrar filtros de acordo com a aba
+        if (tableId === 'armarios') {
+            document.getElementById('filter-armario-container').style.display = 'none';
+            document.getElementById('filter-ferramenta-container').style.display = 'none';
+        } else if (tableId === 'ferramentas' || tableId === 'ferramentasSup') {
+            document.getElementById('filter-armario-container').style.display = 'block';
+            document.getElementById('filter-ferramenta-container').style.display = 'block';
+        }
+    }
+
+    function toggleSelectAll(type) {
+        const checkboxes = document.querySelectorAll(`.${type}-checkbox`);
+        checkboxes.forEach(checkbox => checkbox.checked = !checkbox.checked);
+    }
+
+    async function imprimirSelecionados() {
+        const selectedCodes = [];
+
+        // Coleta os códigos dos checkboxes selecionados
+        document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
+            if (checkbox.dataset.numero) selectedCodes.push(checkbox.dataset.numero);
+        });
+
+        // Verifica se algum item foi selecionado
+        if (selectedCodes.length) {
+            try {
+                // Envia os dados selecionados para o backend para gerar o PDF
+                const response = await fetch('/generate_pdf', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ codes: selectedCodes })
+                });
+
+                if (response.ok) {
+                    const blob = await response.blob(); // Recebe o PDF gerado
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'codigos_de_barras.pdf';
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                } else {
+                    console.error("Erro ao gerar PDF:", await response.text());
+                    alert("Erro ao gerar PDF.");
+                }
+            } catch (error) {
+                console.error("Erro ao gerar PDF:", error);
+                alert("Erro ao gerar PDF.");
+            }
+        } else {
+            alert("Nenhum item selecionado para impressão.");
+        }
+    }
+</script>
+
+{% endblock %}

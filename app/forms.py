@@ -17,8 +17,7 @@ class UserForm(FlaskForm):
 
 
     def validate_email(self, email):
-        if '@edu.sc.senai.br' not in email.data:
-            raise ValidationError('O e-mail deve ser do domínio @edu.sesisenai.org.br!')
+        
         if User.query.filter_by(email=email.data).first():
             raise ValidationError('Usuário já cadastrado com esse e-mail!')
 
@@ -82,8 +81,9 @@ class CadastrarSuporte(FlaskForm):
     foto_ferramenta_sup = FileField('Foto')
     btnSubmit = SubmitField('Cadastrar')
 
-    def save(self, filename=None):
+    def save(self, filename=None, numero=None):
         suporte = FerramentasSuporte(
+            numero=numero,
             nome_ferramenta_sup=self.nome_ferramenta_sup.data,
             sala_ferramenta_sup=self.sala_ferramenta_sup.data,
             defeito_ferramenta_sup=self.defeito_ferramenta_sup.data,
@@ -100,27 +100,40 @@ class EditarInformacoes(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     senha_atual = PasswordField('Senha Atual', validators=[Optional()])
     nova_senha = PasswordField('Nova Senha', validators=[Optional(), Length(min=6)])
-    confirmar_senha = PasswordField('Confirmar Nova Senha', validators=[Optional(), EqualTo('nova_senha', message='As senhas devem corresponder.')])
     foto = FileField('Foto de Perfil', validators=[FileAllowed(['png', 'jpg', 'jpeg', 'jfif', 'gif'], 'Somente imagens são permitidas.')])
     submit = SubmitField('Salvar Alterações')
 
     def save(self, user, filename=None):
-        # Atualiza as informações do usuário
-        user.nome = self.nome.data
-        user.email = self.email.data
-
-        # Verifica se a senha atual foi fornecida e se é válida
+        # Verifica se a senha atual foi fornecida e é válida antes de qualquer alteração
         if self.senha_atual.data:
+            print("Senha atual fornecida:", self.senha_atual.data)
             if not bcrypt.check_password_hash(user.senha, self.senha_atual.data):
-                raise ValueError('Senha atual incorreta.')
+                print("Senha atual incorreta")
+                raise ValueError('Senha atual incorreta.')  # Interrompe o processo se a senha for incorreta
+
+            # Atualiza o nome e o email após a verificação da senha
+            user.nome = self.nome.data
+            user.email = self.email.data
+            print("Nome e email atualizados:", user.nome, user.email)
+
+            # Processa nova senha, se fornecida
             if self.nova_senha.data:
+                print("Nova senha fornecida:", self.nova_senha.data)
                 user.senha = bcrypt.generate_password_hash(self.nova_senha.data).decode('utf-8')
+            else:
+                print("Nenhuma nova senha fornecida")
 
-        if filename:
-            user.foto = filename
+            # Atualiza a foto do usuário somente se um novo arquivo foi enviado
+            if filename:
+                print("Atualizando foto para o arquivo:", filename)
+                user.foto = filename
 
-        db.session.commit()
-        return user
+            # Commite as mudanças no banco de dados
+            db.session.commit()
+            print("Informações salvas com sucesso")
+            return user
+        else:
+            raise ValueError("Senha atual não fornecida.")
     
 
 class CadastroArmario(FlaskForm):
@@ -148,9 +161,9 @@ class CadastroFerramenta(FlaskForm):
     btnSubmit = SubmitField('Cadastrar')
 
 
-    def save(self, armario_id, filename=None):
+    def save(self, armario_id, filename=None, numero=None):
         ferramentas = Ferramentas(
-            
+            numero=numero,
             nome_ferramenta=self.nome_ferramenta.data,
             total_ferramenta=self.total_ferramenta.data,
             foto_ferramenta=filename,

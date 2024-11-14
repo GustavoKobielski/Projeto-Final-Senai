@@ -218,6 +218,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        text-align: center;
     }
 
     .box .txts_wrapper p {
@@ -229,6 +230,12 @@
         display: flex;
         justify-content: center;
     }
+
+    .tool-number {
+    font-size: 1rem;  /* Ajuste o tamanho da fonte do número da ferramenta */
+    margin-top: 5px;  /* Espaço entre o nome da ferramenta e o número */
+    text-align: center;
+}
 
     /* PESQUISA */
 
@@ -564,13 +571,24 @@
                 <img class="image"
                     src="{{ url_for('serve_ferramentas_file', filename=ferramenta.foto_ferramenta) if ferramenta.foto_ferramenta else url_for('static', filename='imgs/defaultImage.jpg') }}" />
 
-                <div class="txts_wrapper">
-                    <p class="text-wrapper">{{ ferramenta.nome_ferramenta }}</p>
-                    <p class="total-de-arm-rios">
-                        Total de Ferramentas:<br />
-                        <span>{{ ferramenta.total_ferramenta }}</span>
-                    </p>
-                </div>
+                    <div class="txts_wrapper">
+                        <!-- Exibe o número do armário e o nome da ferramenta na mesma linha -->
+                        <p class="text-wrapper">
+                            {{ armario.numero }} - <span class="bold-search">{{ ferramenta.nome_ferramenta }}</span>
+                        </p>
+                        
+                        <!-- Exibe o número da ferramenta um pouco abaixo do nome -->
+                        <p class="tool-number">
+                            Número da Ferramenta: 
+                            <span>{{ ferramenta.numero }}</span>
+                        </p>
+                    
+                        <!-- Exibe o total de ferramentas -->
+                        <p class="total-de-armarios">
+                            Total de Ferramentas:<br />
+                            <span>{{ ferramenta.total_ferramenta }}</span>
+                        </p>
+                    </div>
 
             </div>
         </div>

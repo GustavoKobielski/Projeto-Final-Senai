@@ -1,0 +1,431 @@
+{% extends 'base.html' %}
+{% block content %}
+{% include 'navbar.html' %}
+
+<style>
+    html {
+        font-size: 62.5%;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        overflow: auto;
+    }
+
+    main {
+        margin-left: 27.8%;
+
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1em;
+        width: 90%;
+        margin-left: 0;
+    }
+
+    /* Texts */
+
+    .main-title {
+        font-size: 4rem;
+    }
+
+    .desc_txt {
+        padding-left: 0.75em;
+        font-size: 1.8em;
+        opacity: 60%;
+    }
+
+    /* Forms */
+
+    .formsProfile {
+        padding-left: 0.75rem;
+        font-size: 1.5em;
+        background-color: #f9f6f6;
+        border: .5px solid rgba(0, 0, 0, 0.112);
+        border-radius: 15px;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        width: 90%;
+        height: auto;
+        padding-bottom: 2em;
+        
+    }
+
+    /* FORM FOTO */
+    .profile-photo-section {
+        display: flex; 
+        align-items: center; 
+        gap: 1em; 
+        margin-top: 1.5em;
+        margin-left: 1em;
+        margin-bottom: 1em;
+    }
+
+    .img-profile-photo {
+        width: 16rem; 
+        height: 16rem; 
+        border-radius: 50%; 
+        object-fit: cover;
+        border: 0.5px solid black;
+        image-rendering: auto;
+    }
+
+    .profile-photo-section > div {
+        margin-left: 1.5em;
+        font-size: 1.8rem;
+    }
+
+    .upload-photo-txt {
+        color: rgba(0, 0, 0, 0.899);
+        padding: .5em;
+        font-weight: bold; 
+        
+        cursor: pointer; 
+        border: 1px solid rgba(0, 0, 0, 0.199);
+        border-radius: 12px; 
+        text-align: center;
+        
+    }
+    
+    #upload-photo {
+        display: none;
+    }
+
+    .recommend-photo-txt {
+        font-size: 0.9em; 
+        color: #666; 
+        margin-top: 0.3em;
+    }
+
+    /* FORM PERSONAL */
+
+    .personal-info {
+        border: .5px solid rgba(0, 0, 0, 0.249);
+        border-radius: 15px;
+        width: 95%;
+        margin-top: 4em;
+        margin-left: 1em;
+        padding-left: 1.5em;
+        padding-right: 1.5em;
+        padding-top: .8em;
+    }
+
+    .header-info-btns {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .header-txt-info {
+        font-size: 2.3rem;
+        font-weight: 600;
+    }
+
+    .edit-button {
+        border: 0.1px solid rgba(0, 0, 0, 0.347);
+        padding: 0.4em 0.5em;
+        border-radius: 10px;
+        font-weight: 600;
+        width: 10%;
+        background-color: #fff;
+    }
+    
+    /* INFOS PEOPLE PERSONAL */
+
+    .infos-forms-peopl {
+        display: flex;
+        gap: 2em;
+        flex-wrap: wrap;
+        font-size: 1.15em;
+        margin-top: 1em;
+        margin-bottom: 2em;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        min-width: 20%;
+    }
+    
+
+    .tituloForm {
+        font-weight: 600;
+        font-size: 1em;
+        font-weight: 500;
+        margin-bottom: 0.2em;
+        width: 10em;
+    }
+
+    .form-control-forms {
+        width: 18em;
+        border: none;
+        font-size: 1.05em;
+        font-weight: bold;
+        color: #333;
+        background-color: transparent;
+    }
+
+    .form-control-forms:focus {
+        outline: 1px solid #407DD8;
+        border-radius: 10px;
+        padding: .2em;
+    }
+
+    .editing-border {
+        outline: none;
+        border: 1px solid rgba(0, 0, 0, 0.582);
+        border-radius: 10px;
+    }
+
+    /* submit */
+
+    .form-group-btn-submit {
+        margin-left: calc(50% - 5em);
+        margin-top: 2em;
+        border-radius: 3em;
+    }
+
+    .btn-submit-form-grp {
+        padding: .8em .5em;
+        font-size: 1em;
+        font-weight: 600;
+        
+    }
+
+
+    /* popup senha atual */
+    
+    .modal { 
+        display: none; /* Modal permanece oculto até ser chamado */
+        position: fixed; 
+        z-index: 1; 
+        left: 0; 
+        top: 0; 
+        width: 100%; 
+        height: 100%; 
+        background-color: rgba(0, 0, 0, 0.5); 
+        align-items: center; 
+        justify-content: center; 
+    }
+
+    .modal-content { 
+        background-color: #ffffff; 
+        width: 90%; 
+        max-width: 400px; 
+        padding: 2em; 
+        border-radius: 10px; 
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3); 
+        text-align: center; 
+        position: relative;
+    }
+
+    .close { 
+        color: #aaa; 
+        position: absolute; 
+        right: 1em; 
+        top: 1em; 
+        font-size: 1.5em; 
+        cursor: pointer; 
+        transition: color 0.3s ease; 
+    }
+
+    .close:hover { 
+        color: #333; 
+    }
+
+    .modal-content h2 { 
+        font-size: 2.5em; 
+        font-weight: 600;
+        color: #333; 
+        margin-bottom: 0.5em; 
+    }
+
+    .modal-content p { 
+        font-size: 1.5em; 
+        color: #666; 
+        margin-bottom: 1.5em; 
+    }
+
+    #passwordInput { 
+        width: 100%; 
+        padding: 0.75em; 
+        font-size: 1.5em; 
+        border: 1px solid #ddd; 
+        border-radius: 5px; 
+        margin-bottom: 1.5em; 
+        transition: border-color 0.3s ease; 
+    }
+
+    #passwordInput:focus { 
+        border-color: #407DD8; 
+        outline: none; 
+    }
+
+    .confirm-btn { 
+        background-color: #407DD8; 
+        color: white; 
+        padding: 0.75em 1.5em; 
+        font-size: 1.5em; 
+        border: none; 
+        border-radius: 5px; 
+        cursor: pointer; 
+        transition: background-color 0.3s ease; 
+        width: 100%;
+    }
+
+    .confirm-btn:hover { 
+        background-color: #336bb5; 
+    }
+
+</style>
+
+<main>
+    <div class="container">
+        <h1 class="main-title">Editar Perfil</h1>
+    </div>
+
+    <p class="desc_txt">Aqui você consegue <strong>editar</strong> suas informações pessoais.</p>
+
+    <div class="formsProfile">
+        <form id="profile-form" method="POST" enctype="multipart/form-data" onsubmit="return false;">
+            {{ form.hidden_tag() }}
+
+            <div class="profile-photo-section">
+                <img class="img-profile-photo" id="profile-photo-preview" src="{{ current_user.obter_foto() }}" alt="Profile Photo">
+                <div>
+                    <label class="upload-photo-txt" for="upload-photo">Envie uma nova foto</label>
+                    {{ form.foto(class="form-control", id="upload-photo") }}
+                    <p class="recommend-photo-txt">Recomendado pelo menos 80x80px.<br>JPG,PNG,JPEG e GIFs são permitidos</p>
+                </div>
+            </div>
+
+            <div class="personal-info">
+                <div class="header-info-btns">
+                    <span class="header-txt-info">Informação Pessoal</span>
+                    <button type="button" class="edit-button" id="edit-cancel-button" onclick="toggleEdit()"><i class="bi bi-pencil-square"></i>ﾠEditar</button>
+                </div>
+
+                <div class="infos-forms-peopl">
+                    <div class="form-group">
+                        {{ form.nome.label(class="tituloForm") }}
+                        {{ form.nome(class="form-control-forms disabled-field", disabled=True) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.email.label(class="tituloForm") }}
+                        {{ form.email(class="form-control-forms disabled-field", disabled=True) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.nova_senha.label(class="tituloForm") }}
+                        {{ form.nova_senha(class="form-control-forms disabled-field", disabled=True) }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group-btn-submit" id="submit-button" style="display: none;">
+                <!-- Botão Salvar que abre o modal -->
+                <button type="submit" onclick="openPasswordModal(event)" class="btn btn-primary btn-submit-form-grp">Salvar Alterações</button>
+            </div>
+        </form>
+    </div>
+</main>
+
+<!-- Modal de Senha -->
+<div id="passwordModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closePasswordModal()">&times;</span>
+        <h2>Confirmação de Senha</h2>
+        <p>Para confirmar as <strong>alterações</strong>, digite sua senha atual:</p>
+        <input type="password" id="passwordInput" placeholder="Digite sua senha atual" required>
+        <button type="button" onclick="confirmPasswordAndSubmit()" class="confirm-btn">Confirmar</button>
+    </div>
+</div>
+
+
+<!-- JavaScript -->
+<script>
+    let isEditing = false;
+    let isPhotoChanged = false;
+
+    function toggleEdit() {
+        const inputs = document.querySelectorAll('.form-control-forms.disabled-field');
+        const editCancelButton = document.getElementById('edit-cancel-button');
+        const submitButton = document.getElementById('submit-button');
+
+        if (!isEditing) {
+            inputs.forEach(input => {
+                input.disabled = false;
+                input.classList.add('editing-border'); // Adiciona a borda preta aos campos habilitados
+            });
+            editCancelButton.innerHTML = "Cancelar";
+            submitButton.style.display = 'block';
+            isEditing = true;
+        } else {
+            inputs.forEach(input => {
+                input.disabled = true;
+                input.classList.remove('editing-border');
+            });
+            editCancelButton.innerHTML = '<i class="bi bi-pencil-square"></i>ﾠEditar';
+            if (!isPhotoChanged) {
+                submitButton.style.display = 'none';
+            }
+            isEditing = false;
+        }
+    }
+
+    document.getElementById('upload-photo').addEventListener('change', function(event) {
+        const submitButton = document.getElementById('submit-button');
+        const profilePhotoPreview = document.getElementById('profile-photo-preview');
+
+        isPhotoChanged = true;
+        submitButton.style.display = 'block';
+
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                profilePhotoPreview.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    function openPasswordModal(event) {
+        event.preventDefault(); // Previne o envio do formulário
+        const modal = document.getElementById("passwordModal");
+        modal.style.display = "flex"; // Exibe o modal ao abrir
+    }
+
+    function closePasswordModal() {
+        document.getElementById("passwordModal").style.display = "none";
+    }
+
+    function confirmPasswordAndSubmit() {
+        const password = document.getElementById("passwordInput").value;
+
+        // Verifica se a senha foi preenchida antes de prosseguir
+        if (!password) {
+            alert("Por favor, insira sua senha para confirmar as alterações.");
+            return;
+        }
+
+        // Adiciona a senha ao formulário e envia
+        const form = document.getElementById("profile-form");
+        const senhaAtualInput = document.createElement("input");
+        senhaAtualInput.setAttribute("type", "hidden");
+        senhaAtualInput.setAttribute("name", "senha_atual");
+        senhaAtualInput.setAttribute("value", password);
+        form.appendChild(senhaAtualInput);
+
+        // Fecha o modal e envia o formulário
+        closePasswordModal();
+        form.submit();
+    }
+</script>
+
+
+{% endblock %}

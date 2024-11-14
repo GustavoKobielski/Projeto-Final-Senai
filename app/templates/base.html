@@ -15,15 +15,73 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <style>
+        .flash-messages {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+            width: auto;
+        }
+
+        .flash-messages .alert {
+            font-size: 1.5rem;
+            padding: 1.2rem 2rem;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Barra de progresso */
+        .progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 5px;
+            background-color: rgba(0, 0, 0, 0.8); /* Altere a cor conforme necessário */
+            animation: countdown 4.5s linear forwards;
+            width: 100%;
+        }
+
+        /* Animação para reduzir o tamanho da barra */
+        @keyframes countdown {
+            from {
+                width: 100%;
+            }
+            to {
+                width: 0%;
+            }
+        }
+
+        /* Ajuste do botão de fechar */
+        .flash-messages .btn-close {
+            font-size: 1.2rem;
+            padding: 0.5rem;
+        }
+    </style>
 </head>
 
 <body>
     <section class="container-fluid p-0">
+
+        {% if get_flashed_messages() %}
+    <div class="flash-messages">
+        {% for message in get_flashed_messages(with_categories=true) %}
+            <div class="alert alert-{{ message[0] }} alert-dismissible fade show flash-alert" role="alert">
+                {{ message[1] }}
+                <div class="progress-bar"></div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+
         {% block content %} {% endblock %}
     </section>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
@@ -31,6 +89,25 @@
         crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            setTimeout(function() {
+                let flashAlerts = document.querySelectorAll('.flash-alert');
+                flashAlerts.forEach(function(alert) {
+                    alert.classList.remove('show'); // Oculta o alerta
+                });
+            }, 4500); // 4.5 segundos para a contagem regressiva
+
+            // Remove o alerta do DOM após o fade-out
+            setTimeout(function() {
+                flashAlerts.forEach(function(alert) {
+                    alert.remove();
+                });
+            }, 5000); // 500ms extras para o fade-out completo
+        });
+    </script>
+
 </body>
 
 </html>

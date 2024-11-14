@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 48b137a4fcbd
+Revision ID: d452a0d34dab
 Revises: 
-Create Date: 2024-08-28 13:22:23.614506
+Create Date: 2024-11-13 23:23:02.328411
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '48b137a4fcbd'
+revision = 'd452a0d34dab'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -26,12 +26,15 @@ def upgrade():
     sa.Column('data_ocorrido_sup', sa.String(), nullable=False),
     sa.Column('ocorrido_ferramenta_sup', sa.String(), nullable=False),
     sa.Column('foto_ferramenta_sup', sa.String(), nullable=True),
-    sa.PrimaryKeyConstraint('id_ferramentas_sup')
+    sa.Column('numero', sa.String(), nullable=False),
+    sa.PrimaryKeyConstraint('id_ferramentas_sup'),
+    sa.UniqueConstraint('numero')
     )
     op.create_table('group',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=True),
+    sa.Column('image', sa.String(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('salas',
@@ -53,7 +56,7 @@ def upgrade():
     )
     op.create_table('armario',
     sa.Column('id_armario', sa.Integer(), nullable=False),
-    sa.Column('numero', sa.Integer(), nullable=True),
+    sa.Column('numero', sa.String(), nullable=True),
     sa.Column('capacidade_ferramentas', sa.Integer(), nullable=False),
     sa.Column('foto_armario', sa.String(), nullable=True),
     sa.Column('sala_id', sa.Integer(), nullable=False),
@@ -66,6 +69,8 @@ def upgrade():
     sa.Column('sender_id', sa.Integer(), nullable=False),
     sa.Column('content', sa.String(length=500), nullable=False),
     sa.Column('timestamp', sa.DateTime(), nullable=True),
+    sa.Column('viewed_by', sa.PickleType(), nullable=True),
+    sa.Column('file_path', sa.String(length=200), nullable=True),
     sa.ForeignKeyConstraint(['group_id'], ['group.id'], ),
     sa.ForeignKeyConstraint(['sender_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -91,13 +96,14 @@ def upgrade():
     )
     op.create_table('ferramentas',
     sa.Column('id_ferramentas', sa.Integer(), nullable=False),
-    sa.Column('codigo_ferramenta', sa.String(), nullable=False),
     sa.Column('nome_ferramenta', sa.String(), nullable=False),
     sa.Column('total_ferramenta', sa.Integer(), nullable=False),
     sa.Column('foto_ferramenta', sa.String(), nullable=True),
+    sa.Column('numero', sa.String(), nullable=False),
     sa.Column('armario_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['armario_id'], ['armario.id_armario'], ),
-    sa.PrimaryKeyConstraint('id_ferramentas')
+    sa.PrimaryKeyConstraint('id_ferramentas'),
+    sa.UniqueConstraint('numero')
     )
     # ### end Alembic commands ###
 
