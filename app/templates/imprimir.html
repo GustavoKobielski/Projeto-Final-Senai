@@ -166,32 +166,56 @@
 </main>
 
 <script>
-    // Lógica para alternar entre as abas
-    function switchTable(tableId, button) {
-        const tables = document.querySelectorAll('.table-container');
-        const buttons = document.querySelectorAll('.btn-group .btn');
-        
-        tables.forEach(table => table.classList.remove('active'));
-        buttons.forEach(btn => btn.classList.remove('active'));
 
-        document.getElementById(tableId + '-table').classList.add('active');
-        button.classList.add('active');
-        
-    }
+    // Variável para armazenar itens selecionados
+    let selectedCodes = [];
 
-    function toggleSelectAll(type) {
-        const checkboxes = document.querySelectorAll(`.${type}-checkbox`);
-        checkboxes.forEach(checkbox => checkbox.checked = !checkbox.checked);
-    }
+// Lógica para alternar entre as abas
+function switchTable(tableId, button) {
+    const tables = document.querySelectorAll('.table-container');
+    const buttons = document.querySelectorAll('.btn-group .btn');
 
-    async function imprimirSelecionados() {
-    const selectedCodes = [];
+    // Remove a classe 'active' das tabelas e botões
+    tables.forEach(table => table.classList.remove('active'));
+    buttons.forEach(btn => btn.classList.remove('active'));
 
-    // Coleta os códigos dos checkboxes selecionados, incluindo as ferramentas e ferramentas de suporte
-    document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
-        if (checkbox.dataset.numero) selectedCodes.push(checkbox.dataset.numero);
+    // Adiciona a classe 'active' para a nova tabela e botão
+    document.getElementById(tableId + '-table').classList.add('active');
+    button.classList.add('active');
+
+    // Limpa todos os checkboxes e reseta o array de selecionados
+    resetCheckboxesAndClearData();
+}
+
+// Função para redefinir todos os checkboxes e limpar o array de selecionados
+function resetCheckboxesAndClearData() {
+    const allCheckboxes = document.querySelectorAll('input[type="checkbox"]');
+    allCheckboxes.forEach(checkbox => checkbox.checked = false);
+
+    // Limpa o array de códigos selecionados
+    selectedCodes = [];
+}
+
+// Função para selecionar/deselecionar todos os checkboxes de uma tabela
+function toggleSelectAll(type) {
+    const checkboxes = document.querySelectorAll(`.${type}-checkbox`);
+    const selectAllCheckbox = document.getElementById(`select-all-${type}`);
+    const isChecked = selectAllCheckbox.checked;
+
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = isChecked;
+        const code = checkbox.dataset.numero;
+
+        if (isChecked && !selectedCodes.includes(code)) {
+            selectedCodes.push(code);
+        } else if (!isChecked && selectedCodes.includes(code)) {
+            selectedCodes = selectedCodes.filter(selectedCode => selectedCode !== code);
+        }
     });
+}
 
+// Função para imprimir os itens selecionados
+async function imprimirSelecionados() {
     // Verifica se algum item foi selecionado
     if (selectedCodes.length) {
         try {
@@ -223,6 +247,7 @@
         alert("Nenhum item selecionado para impressão.");
     }
 }
+
 </script>
 
 {% endblock %}

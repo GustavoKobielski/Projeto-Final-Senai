@@ -17,7 +17,9 @@ class UserForm(FlaskForm):
 
 
     def validate_email(self, email):
-        
+        if not email.data.endswith('@edu.sc.senai.br'):
+            raise ValidationError('O e-mail deve ser do domínio edu.sc.senai.br!')
+
         if User.query.filter_by(email=email.data).first():
             raise ValidationError('Usuário já cadastrado com esse e-mail!')
 
@@ -181,8 +183,8 @@ class ScanearForm(FlaskForm):
 
 class EditarInformacoesSalas(FlaskForm):
     nome_sala = StringField('Nome da Sala', validators=[DataRequired()])
-    capacidade_armario = StringField('Quantos armários tem a sala', validators=[DataRequired()])
-    foto_sala = FileField('Foto da Sala')
+    capacidade_armario = StringField('Capacidade de Armários', validators=[DataRequired()])
+    foto_sala = FileField('Foto da Sala', validators=[FileAllowed(['png', 'jpg', 'jpeg', 'jfif', 'gif'], 'Somente imagens são permitidas.')])
     submit = SubmitField('Salvar Alterações')
 
     def save(self, sala, filename=None):

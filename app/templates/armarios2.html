@@ -626,6 +626,15 @@
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
 
+        const ferramentass = document.querySelectorAll('.box');
+
+        if (ferramentass.length === 0) {
+            // Caso não existam ferramentas, exibe uma mensagem de alerta
+            alert('Nenhum armario encontrada para gerar o relatório.');
+            return; // Sai da função sem gerar o PDF
+        }
+
+        
         // Adicionando o título no PDF
         doc.setFontSize(18);
         doc.text('Relatório dos Armarios', 10, 10);

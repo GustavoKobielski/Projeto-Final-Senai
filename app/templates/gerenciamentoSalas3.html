@@ -491,6 +491,52 @@
         font-size: 1.4em;
     }
 
+    .containerEdit-Salas {
+        position: fixed;
+        top: 50%;
+        left: 62.5%;
+        transform: translate(-50%, -50%);
+        width: 55%;
+        padding: 1.5%;
+        background-color: #f5f5f5;
+        z-index: 1002;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 15px;
+        border: 1.5px solid black;
+        display: none;
+    }
+
+    .tituloEdit-Salas {
+        text-align: center;
+        color: #407DD8;
+        margin-bottom: 20px;
+    }
+
+    .contentEdit-Salas {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+    }
+
+    .fotoEdit-Salas {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 50%;
+    }
+
+    .addFotoEdit-Salas {
+        width: 40%;
+        height: auto;
+        /* Mantém a proporção da imagem */
+        margin-bottom: 10px;
+        /* Espaço entre a imagem e o botão */
+    }
+
+    .formEdit-Salas {
+        width: 55%;
+    }
+
     @media (max-width: 1920px) {
         .box {
             width: calc(32% - 1em);
@@ -626,6 +672,33 @@
 
 
 </main>
+
+
+<div class="containerEdit-Salas" id="">
+    <h1 class="tituloEdit-Salas">Editar Sala</h1>
+    <span class="closePopup" id="closePopup">&times;</span>
+
+
+    <div class="contentEdit-Salas">
+        <div class="fotoEdit-Sala">
+            <img class="addFotoEdit-Sala" src="{{ url_for('static', filename='imgs/addFoto.png')}}" alt="">
+        </div>
+
+        <form action="" method="POST" class="formEdit-Salas" enctype="multipart/form-data">
+            {{form.csrf_token}}
+
+            {{form.nome_sala.label(class="corSala", style="margin-bottom: 10px; display:block;")}}
+            {{form.nome_sala(class="form-control", placeholder='Digite o nome da sala')}}
+
+            {{form.capacidade_armario.label(class="corSala", style="margin-bottom: 10px; display:block;")}}
+            {{form.capacidade_armario(class="form-control", placeholder='Quantos armários tem a sala')}}
+
+            {{ form.foto_sala(class="addImg", style="display: block;") }}
+
+            {{form.submit(class="buttonSala")}}
+        </form>
+    </div>
+</div>
 
 
 

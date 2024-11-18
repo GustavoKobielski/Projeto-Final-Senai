@@ -539,13 +539,13 @@ def generate_pdf():
 
 
             elif suporte:
-                # Se for uma ferramenta de suporte, mostra o número e o armário correspondente
-                # Correção: Acesso ao armário de suporte através do relacionamento
-                armario_associado = Armario.query.filter_by(id_armario=suporte.armario_id).first()
-                if armario_associado:
-                    pdf.cell(0, 10, f"Ferramenta de Suporte: {suporte.nome_ferramenta_sup} - Armário: {armario_associado.numero}", ln=True)
+                # Se for uma ferramenta de suporte, mostra o número e a sala correspondente
+                sala_associada = suporte.sala_ferramenta_sup
+                if sala_associada:
+                    pdf.cell(0, 10, f"Ferramenta de Suporte: {suporte.nome_ferramenta_sup} - Sala: {sala_associada}", ln=True)
                 else:
-                    print(f"Armário associado à ferramenta de suporte {suporte.numero} não encontrado.")
+                    print(f"Sala associada à ferramenta de suporte {suporte.numero} não encontrada.")
+                    pdf.cell(0, 10, f"Ferramenta de Suporte: {suporte.nome_ferramenta_sup} - Sala: Não encontrada", ln=True)
     
 
                 # Menos espaço entre o nome e o código de barras
@@ -589,111 +589,46 @@ def generate_pdf():
 def gerenciamento_salas():
     salas = Salas.query.all()
     armarios_por_sala = {}
-    
-    # Contando os armários por sala
-    for sala in salas:
-        armarios_por_sala[sala.id_salas] = Armario.contar_armarios_na_sala(sala.id_salas)
-    
-    # Se a requisição for POST, isso significa que estamos editando uma sala
-    if request.method == 'POST':
-        sala_id = request.form.get('sala_id')
-        sala = Salas.query.get_or_404(sala_id)
-        form = EditarInformacoesSalas(obj=sala)
-        
-        if form.validate_on_submit():
-            # Processando a foto, se houver
-            filename = None
-            if form.foto_sala.data:
-                foto_sala = form.foto_sala.data
-                filename = secure_filename(foto_sala.filename)
-                foto_sala.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-
-            # Salvando as alterações
-            form.save(sala, filename)
-            flash("Informações da sala atualizadas com sucesso!", "success")
-            return redirect(url_for('gerenciamento_salas'))
 
     # Se não for POST, apenas renderiza a página
     return render_template('gerenciamentoSalas3.html', salas=salas, armarios_por_sala=armarios_por_sala)
 
-@app.route('/gerenciamento/armario', methods=['GET', 'POST'])
+
+# FUNÇÃO DA PAGINA DE ARMARIOS
+@app.route('/gerenciamento/armario/<int:sala_id>', methods=['GET', 'POST'])
 @login_required
-def gerenciamento_armarios():
+def gerenciamento_armarios(sala_id):
     form = CadastroArmario()
-    armario_id = request.form.get('armario_id')
-    armario = Armario.query.get(armario_id) if armario_id else None
-    salas = Salas.query.all()
-    armarios = Armario.query.all()
-    ferramentas_por_armario = {a.id_armario: Ferramentas.contar_ferramentas_no_armario(a.id_armario) for a in armarios}
+    armarios = Armario.query.filter_by(sala_id=sala_id).all()
+    sala = Salas.query.get_or_404(sala_id)
 
     if form.validate_on_submit():
         file = request.files.get('foto_armario')
         filename = None
 
-        if file and allowed_file(file.filename):
+        if file and file.filename != '' and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             folder_path = os.path.join(app.config['UPLOAD_FOLDER'], 'armarios')
             unique_filename = get_unique_filename(folder_path, filename)
-            os.makedirs(folder_path, exist_ok=True)
-            file.save(os.path.join(folder_path, unique_filename))
-        elif armario:
-            unique_filename = armario.foto_armario
-
-        try:
-            if armario:
-                armario.numero = form.numero.data
-                armario.foto_armario = unique_filename
-                flash('Armário atualizado com sucesso!', 'success')
-            else:
-                codigo_armario = generate_unique_codigo_armario()
-                form.numero.data = codigo_armario
-                form.save(filename=unique_filename)
-                flash('Armário cadastrado com sucesso!', 'success')
-            db.session.commit()
-        except Exception as e:
-            db.session.rollback()
-            flash(f'Erro ao salvar armário: {str(e)}', 'danger')
-        return redirect(url_for('gerenciamento_armarios'))
-
-    return render_template(
-        'gerenciamentoArmarios.html',
-        salas=salas,
-        armarios=armarios,
-        form=form,
-        ferramentas_por_armario=ferramentas_por_armario,
-        armario=armario
-    )
-
-@app.route('/editar_ferramenta/<int:ferramenta_id>', methods=['GET', 'POST'])
-@login_required
-def editar_ferramenta(ferramenta_id):
-    ferramenta = Ferramentas.query.get_or_404(ferramenta_id)  # Obtém a ferramenta específica para edição
-    form = EditarInformacoesFerramentas(obj=ferramenta)  # Carrega o formulário com os dados da ferramenta
-
-    if form.validate_on_submit():
-        # Atualiza as informações da ferramenta com os dados do formulário
-        form.populate_obj(ferramenta)
-
-        # Processa a foto, se houver uma nova imagem enviada
-        file = form.foto_ferramenta.data
-        if file:
-            filename = secure_filename(file.filename)
-            folder_path = os.path.join(app.config['UPLOAD_FOLDER'], 'ferramentas')
-            unique_filename = get_unique_filename(folder_path, filename)
             file_path = os.path.join(folder_path, unique_filename)
+
+            # Certifica-se de que o diretório existe
             os.makedirs(folder_path, exist_ok=True)
             file.save(file_path)
-            ferramenta.foto_ferramenta = unique_filename  # Atualiza o caminho da foto
 
-        # Commite as alterações no banco de dados
-        db.session.commit()
-        flash("Informações da ferramenta atualizadas com sucesso!", "success")
-        
-        # Redireciona para a lista de ferramentas do armário
-        return redirect(url_for('gerenciamento_ferramentas', armario_id=ferramenta.armario_id))  # Redireciona para o armário correspondente
+        codigo_armario = generate_unique_codigo_armario()
+        form.numero.data = codigo_armario
 
-    return render_template('editarFerramenta.html', form=form, ferramenta=ferramenta)
+        try:
+            form.save(sala_id=sala_id, filename=unique_filename if filename else None)
+            flash('Armário cadastrado com sucesso!', 'success')
+        except Exception as e:
+            flash(f'Erro ao cadastrar armário: {str(e)}', 'danger')
+        return redirect(url_for('armarios', sala_id=sala_id))
 
+    ferramentas_por_armario = {armario.id_armario: Ferramentas.contar_ferramentas_no_armario(armario.id_armario) for armario in armarios}
+
+    return render_template('armarios2.html', sala=sala, armarios=armarios, form=form, ferramentas_por_armario=ferramentas_por_armario)
 
 #############################################
 ######## PAGE PESSOAS GERENCIAMENTO #########

@@ -635,6 +635,14 @@
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
 
+        const ferramentasS = document.querySelectorAll('.box');
+
+        if (ferramentasS.length === 0) {
+            // Caso não existam ferramentas, exibe uma mensagem de alerta
+            alert('Nenhuma sala encontrada para gerar o relatório.');
+            return; // Sai da função sem gerar o PDF
+        }
+
         // Adicionando o título no PDF
         doc.setFontSize(18);
         doc.text('Relatório das Ferramentas', 10, 10);
@@ -645,11 +653,11 @@
         yPosition += 10;
         ferramentas.forEach((ferramenta, index) => {
             const nome = ferramenta.querySelector('.text-wrapper').textContent;
-            const total = ferramenta.querySelector('.total-de-arm-rios span').textContent;
+            const total = ferramenta.querySelector('.total-de-armarios span').textContent;
 
             // Adicionando cada ferramenta no PDF
             doc.setFontSize(14);
-            doc.text(`Nome da Ferramenta ${index + 1}: ${nome}`, 10, yPosition);
+            doc.text(`Nome da Ferramenta ${index + 1}º: ${nome}`, 10, yPosition);
             yPosition += 10;
             doc.text(`Total de Ferramentas: ${total}`, 10, yPosition);
             yPosition += 20; // Espaço entre as ferramentas

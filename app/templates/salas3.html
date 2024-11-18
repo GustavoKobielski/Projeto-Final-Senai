@@ -637,25 +637,46 @@
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
 
+        const ferramentasS = document.querySelectorAll('.box');
+
+        if (ferramentasS.length === 0) {
+            // Caso não existam ferramentas, exibe uma mensagem de alerta
+            alert('Nenhuma sala encontrada para gerar o relatório.');
+            return; // Sai da função sem gerar o PDF
+        }
+
         // Adicionando o título no PDF
         doc.setFontSize(18);
         doc.text('Relatório das Salas', 10, 10);
 
         // Capturando as informações dos cards de ferramentas
         let yPosition = 20; // Posição inicial no eixo Y
-        const ferramentas = document.querySelectorAll('.box');
-        yPosition += 10;
-        ferramentas.forEach((ferramenta, index) => {
-            const nome = ferramenta.querySelector('.text-wrapper').textContent;
-            const total = ferramenta.querySelector('.total-de-arm-rios span').textContent;
+        let totalArmarios = 0; // Contador para o total de armários
 
-            // Adicionando cada ferramenta no PDF
+        ferramentasS.forEach((ferramenta, index) => {
+            const nome = ferramenta.querySelector('.text-wrapper')?.textContent || 'Nome não disponível';
+            const total = parseInt(ferramenta.querySelector('.total-de-arm-rios span')?.textContent || '0', 10);
+
+            // Adiciona cada sala e o número de armários ao PDF
             doc.setFontSize(14);
-            doc.text(`Nome da Sala: ${index + 1}: ${nome}`, 10, yPosition);
+            doc.text(`Nome da Sala ${index + 1}: ${nome}`, 10, yPosition);
             yPosition += 10;
-            doc.text(`Total de armários: ${total}`, 10, yPosition);
+            doc.text(`Total de Armários: ${total}`, 10, yPosition);
             yPosition += 20; // Espaço entre as ferramentas
+
+            // Soma o total de armários
+            totalArmarios += total;
         });
+
+        // Adicionando o total de salas e armários no final
+        yPosition += 10; // Espaço antes do resumo
+        doc.setFontSize(16);
+        doc.text('Resumo:', 10, yPosition);
+        yPosition += 10;
+        doc.setFontSize(14);
+        doc.text(`Total de Salas: ${ferramentasS.length}`, 10, yPosition);
+        yPosition += 10;
+        doc.text(`Total de Armários: ${totalArmarios}`, 10, yPosition);
 
         // Gerando o PDF
         doc.save('relatorio_salas.pdf');
