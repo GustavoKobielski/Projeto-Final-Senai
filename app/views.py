@@ -583,15 +583,60 @@ def generate_pdf():
 ######## PAGE SALAS GERENCIAMENTO ###########
 #############################################
 
-# FUNÇÃO DA PÁGINA DE GERENCIAMENTO DE SALAS
 @app.route('/gerenciamento/salas', methods=['GET', 'POST'])
 @login_required
 def gerenciamento_salas():
     salas = Salas.query.all()
-    armarios_por_sala = {}
+    form = EditarInformacoesSalas()
+    armarios_por_sala = {sala.id_salas: Armario.query.filter_by(sala_id=sala.id_salas).count() for sala in salas}
 
-    # Se não for POST, apenas renderiza a página
-    return render_template('gerenciamentoSalas3.html', salas=salas, armarios_por_sala=armarios_por_sala)
+    if form.validate_on_submit():
+        # Se o formulário for submetido, atualize os dados da sala
+        sala_id = request.form['sala_id']
+        sala = Salas.query.get(sala_id)
+        
+        if sala:
+            sala.nome_sala = form.nome_sala.data
+            sala.capacidade_armario = form.capacidade_armario.data
+
+            # Se uma nova foto foi enviada
+            if form.foto_sala.data:
+                filename = secure_filename(form.foto_sala.data.filename)
+                file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                form.foto_sala.data.save(file_path)
+                sala.foto_sala = filename
+
+            # Salva as alterações no banco de dados
+            db.session.commit()
+            flash('Sala atualizada com sucesso!', 'success')
+
+            return redirect(url_for('gerenciamento_salas'))
+
+    return render_template('gerenciamentoSalas3.html', salas=salas, form=form, armarios_por_sala=armarios_por_sala)
+
+@app.route('/gerenciamento/salas/delete/<int:sala_id>', methods=['POST'])
+@login_required
+def excluir_sala(sala_id):
+    try:
+        # Verifica se a sala existe
+        sala = Salas.query.get(sala_id)
+        if not sala:
+            return jsonify({'success': False, 'message': 'Sala não encontrada.'})
+
+        # Exclui os armários associados a essa sala
+        armarios = Armario.query.filter_by(sala_id=sala_id).all()
+        for armario in armarios:
+            db.session.delete(armario)
+
+        # Exclui a sala
+        db.session.delete(sala)
+        db.session.commit()
+
+        return jsonify({'success': True, 'message': 'Sala excluída com sucesso.'})
+
+    except Exception as e:
+        db.session.rollback()  # Caso algo falhe, desfaz as alterações no banco
+        return jsonify({'success': False, 'message': str(e)})
 
 
 # FUNÇÃO DA PAGINA DE ARMARIOS
@@ -1204,3 +1249,28 @@ def handle_get_group_info(data):
         print(f"Error retrieving group info: {e}")
         emit('error', {'message': 'Unable to retrieve group info'})
 
+@socketio.on('get_contact_info')
+def handle_get_contact_info(data):
+    try:
+        print("Requisição recebida para informações do contato:", data)  # Debugging
+        contact_id = data.get('contact_id')
+        if not contact_id:
+            raise ValueError("ID do contato ausente.")
+
+        # Busca o usuário no banco de dados
+        user = User.query.get(contact_id)
+        if not user:
+            raise ValueError(f"Contato com ID {contact_id} não encontrado.")
+
+        # Formata os dados do contato
+        contact_info = {
+            'name': user.nome,
+            'last_seen': get_last_active_display(user),
+            'foto': url_for('static', filename='uploads/perfil/' + user.foto) if user.foto else url_for('static', filename='imgs/defaultPeople.png')
+        }
+
+        print("Dados do contato enviados:", contact_info)  # Debugging
+        emit('contact_info', contact_info)
+    except Exception as e:
+        print(f"Erro ao processar informações do contato: {e}")  # Debugging
+        emit('error', {'message': 'Erro ao obter informações do contato'})

@@ -492,49 +492,125 @@
     }
 
     .containerEdit-Salas {
-        position: fixed;
-        top: 50%;
-        left: 62.5%;
-        transform: translate(-50%, -50%);
-        width: 55%;
-        padding: 1.5%;
-        background-color: #f5f5f5;
-        z-index: 1002;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-        border-radius: 15px;
-        border: 1.5px solid black;
-        display: none;
-    }
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 600px; /* Limita o tamanho máximo do popup */
+    padding: 2rem;
+    background-color: #fff;
+    z-index: 1002;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    display: none;
+    overflow-y: auto; /* Permite rolagem em dispositivos pequenos */
+    animation: fadeIn 0.3s ease-in-out; /* Animação de aparecimento */
+}
 
-    .tituloEdit-Salas {
-        text-align: center;
-        color: #407DD8;
-        margin-bottom: 20px;
+/* Animação de Fade In para o popup */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
     }
-
-    .contentEdit-Salas {
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
+    100% {
+        opacity: 1;
     }
+}
 
-    .fotoEdit-Salas {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 50%;
-    }
+/* Título do Popup */
+.tituloEdit-Salas {
+    text-align: center;
+    color: #407DD8;
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
 
-    .addFotoEdit-Salas {
-        width: 40%;
-        height: auto;
-        /* Mantém a proporção da imagem */
-        margin-bottom: 10px;
-        /* Espaço entre a imagem e o botão */
-    }
+/* Conteúdo do Popup (Imagem e Formulário) */
+.contentEdit-Salas {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem; /* Espaço entre a foto e o formulário */
+}
 
-    .formEdit-Salas {
-        width: 55%;
+/* Área para a Foto da Sala */
+.fotoEdit-Sala {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.addFotoEdit-Sala {
+    width: 80%;
+    max-width: 250px; /* Define um tamanho máximo para a imagem */
+    height: auto;
+    object-fit: contain; /* Garante que a imagem seja redimensionada corretamente */
+    margin-bottom: 15px;
+}
+
+/* Formulário de Edição */
+.formEdit-Salas {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem; /* Espaçamento entre os campos */
+    width: 100%;
+}
+
+.form-control {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 5px;
+}
+
+.form-control:focus {
+    border-color: #407DD8;
+    outline: none;
+}
+
+/* Botão de Salvar */
+.buttonSala {
+    background-color: #407DD8;
+    color: white;
+    padding: 12px 20px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.buttonSala:hover {
+    background-color: #365eab; /* Efeito hover */
+}
+
+/* Fechar o Popup (X) */
+.closePopup {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 2rem;
+    color: #888;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.closePopup:hover {
+    color: #407DD8; /* Efeito hover no "X" */
+}
+
+    button.swal2-confirm.swal2-styled {
+        background-color: #407DD8;
     }
 
     @media (max-width: 1920px) {
@@ -674,35 +750,76 @@
 </main>
 
 
-<div class="containerEdit-Salas" id="">
+<div class="containerEdit-Salas" id="editSalaModal" style="display: none;">
     <h1 class="tituloEdit-Salas">Editar Sala</h1>
     <span class="closePopup" id="closePopup">&times;</span>
 
-
     <div class="contentEdit-Salas">
         <div class="fotoEdit-Sala">
-            <img class="addFotoEdit-Sala" src="{{ url_for('static', filename='imgs/addFoto.png')}}" alt="">
+            <img id="fotoPreview" class="addFotoEdit-Sala" src="{{ url_for('static', filename='imgs/addFoto.png') }}" alt="Imagem da sala">
         </div>
 
-        <form action="" method="POST" class="formEdit-Salas" enctype="multipart/form-data">
-            {{form.csrf_token}}
+        <form action="{{ url_for('gerenciamento_salas') }}" method="POST" class="formEdit-Salas" enctype="multipart/form-data">
+            {{ form.csrf_token }}
+            <input type="hidden" name="sala_id" id="sala_id">  <!-- ID da sala a ser editada -->
 
-            {{form.nome_sala.label(class="corSala", style="margin-bottom: 10px; display:block;")}}
-            {{form.nome_sala(class="form-control", placeholder='Digite o nome da sala')}}
+            <label for="nome_sala">Nome da Sala</label>
+            <input type="text" name="nome_sala" id="nome_sala" class="form-control" placeholder="Digite o nome da sala" required>
 
-            {{form.capacidade_armario.label(class="corSala", style="margin-bottom: 10px; display:block;")}}
-            {{form.capacidade_armario(class="form-control", placeholder='Quantos armários tem a sala')}}
+            <label for="capacidade_armario">Capacidade de Armários</label>
+            <input type="text" name="capacidade_armario" id="capacidade_armario" class="form-control" placeholder="Quantos armários tem a sala" required>
 
-            {{ form.foto_sala(class="addImg", style="display: block;") }}
+            <label for="foto_sala">Foto da Sala</label>
+            <input type="file" name="foto_sala" id="foto_sala" class="addImg" style="display: block;">
 
-            {{form.submit(class="buttonSala")}}
+            <button type="submit" class="buttonSala">Salvar Alterações</button>
         </form>
     </div>
 </div>
 
 
 
+
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const editBtns = document.querySelectorAll('.edit-btn');
+    const editSalaModal = document.getElementById('editSalaModal');
+    const closePopup = document.getElementById('closePopup');
+    
+    // Abrir o modal quando o botão de editar for clicado
+    editBtns.forEach(btn => {
+        btn.addEventListener('click', function (event) {
+            event.preventDefault();
+            
+            const salaId = this.closest('.box').getAttribute('data-sala-id');  // Pega o ID da sala
+            const salaNome = this.closest('.box').querySelector('.text-wrapper').textContent;  // Nome da sala
+            const salaCapacidade = this.closest('.box').querySelector('.total-de-arm-rios span').textContent;  // Capacidade de armários
+            const fotoSala = this.closest('.box').querySelector('img').getAttribute('src');  // Foto da sala
+            
+            // Preenche o formulário com os dados da sala
+            document.getElementById('sala_id').value = salaId;
+            document.getElementById('nome_sala').value = salaNome;
+            document.getElementById('capacidade_armario').value = salaCapacidade;
+            document.getElementById('fotoPreview').src = fotoSala;
+
+            // Exibe o modal de edição
+            editSalaModal.style.display = 'block';
+        });
+    });
+
+    // Fechar o modal quando o "x" for clicado
+    closePopup.addEventListener('click', function () {
+        editSalaModal.style.display = 'none';
+    });
+
+    // Fechar o modal quando clicar fora do modal
+    window.addEventListener('click', function (event) {
+        if (event.target == editSalaModal) {
+            editSalaModal.style.display = 'none';
+        }
+    });
+});
+
 
     document.getElementById('generatePdfButton').addEventListener('click', function () {
         const { jsPDF } = window.jspdf;

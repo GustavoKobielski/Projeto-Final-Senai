@@ -429,7 +429,7 @@
         background-color: transparent;
         border-radius: 15px;
         border: none;
-        color: #ccc;
+        color: red;
         padding: 2.5%;
         position: relative;
         left: 40%;
@@ -520,50 +520,224 @@
     }
 
     .modalInfoGroup {
-        display: none;
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.4);
-    }
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+}
 
-    .modal-content {
-        background-color: #fff;
-        margin: 15% auto;
-        padding: 20px;
-        border: 1px solid #888;
-        width: 80%;
-        max-width: 500px;
-        overflow-y: scroll;
-    }
+.modal-content {
+    background-color: #ffffff;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+}
 
-    .closePopupGroup {
-        position: fixed;
-        top: 20%;
-        right: 32%;
-        font-size: 50px;
-        cursor: pointer;
-        color: #407DD8;
-    }
+.closePopupGroup {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 25px;
+    color: #407DD8;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
 
-    .closePopupGroup:hover,
-    .closePopupGroup:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
-    }
+.closePopupGroup:hover {
+    color: #FF5C5C;
+}
 
-    .member-img {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        margin-right: 10px;
-        vertical-align: middle;
-    }
+.group-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
 
+#groupPhotoModal {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 2px solid #407DD8;
+    margin-bottom: 10px;
+}
+
+#groupNameModal {
+    font-size: 1.5rem;
+    color: #407DD8;
+    font-weight: bold;
+}
+
+.group-members h3 {
+    color: #407DD8;
+    margin-bottom: 10px;
+}
+
+#groupMembersModal {
+    list-style: none;
+    padding: 0;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+#groupMembersModal li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+#groupMembersModal li img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+#leaveGroupInModalBtn {
+    background-color: #FF5C5C;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+#leaveGroupInModalBtn:hover {
+    background-color: #e04444;
+}
+
+
+
+#modalInfoGroup {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Fundo escuro com opacidade */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    width: 90%;
+    padding: 20px 30px;
+    position: relative;
+    animation: fadeIn 0.3s ease-out; /* Animação de entrada */
+    text-align: center;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.closePopupContact {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 24px;
+    color: #407DD8;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.closePopupContact:hover {
+    color: #FF5C5C; /* Cor vermelha no hover */
+}
+
+.contact-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+#contactPhotoModal {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 4px solid #407DD8; /* Borda azul */
+    object-fit: cover;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+#contactNameModal {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #407DD8;
+    margin-bottom: 10px;
+}
+
+.contact-details h3 {
+    font-size: 1.2rem;
+    color: #333333;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #407DD8; /* Linha decorativa azul */
+    padding-bottom: 5px;
+    display: inline-block;
+}
+
+#contactDetailsModal {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 1rem;
+    color: #666666;
+    text-align: left;
+}
+
+#contactDetailsModal li {
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+#contactDetailsModal li:last-child {
+    margin-bottom: 0;
+}
+
+button.action-btn {
+    display: inline-block;
+    margin-top: 20px;
+    background-color: #407DD8;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button.action-btn:hover {
+    background-color: #285aa8;
+}
 
     /* ##########################################################################################
     ######################################CHAT################################################
@@ -585,13 +759,19 @@
     #groupPhotoModal {
         width: 90px;
         border-radius: 50px;
-        position: relative;
-        left: 40%;
     }
 
     #groupMembersModal {
         font-size: 20px;
     }
+
+    .barraLateral .listBtn {
+        padding-left: 20px !important;
+        margin-bottom: 10px !important;
+    }
+
+
+
 
     @media(min-width: 1300px) and (max-width: 1500px) and (min-height: 598px) and (max-height:900px) {
 
@@ -742,7 +922,7 @@
 
         <div id="contextMenu">
             <button id="infoBtn">Informações</button>
-            <button id="leaveGroupBtn">Sair do Grupo</button>
+            <button id="leaveGroupBtn" style="display: none;">Sair do Grupo</button>
         </div>
 
         <!-- Exibindo os grupos -->
@@ -803,12 +983,34 @@
 <div id="groupInfoModal" class="modalInfoGroup">
     <div class="modal-content">
         <span class="closePopupGroup">&times;</span>
-        <h2 id="groupNameModal"></h2>
-        <img id="groupPhotoModal" src="" alt="Foto do grupo" width="100">
-        <ul id="groupMembersModal"></ul>
+        <div class="group-header">
+            <img id="groupPhotoModal" src="" alt="Foto do grupo">
+            <h2 id="groupNameModal"></h2>
+        </div>
+        <div class="group-members">
+            <h3>Membros do Grupo</h3>
+            <ul id="groupMembersModal"></ul>
+        </div>
         <button id="leaveGroupInModalBtn">Sair do Grupo</button>
     </div>
 </div>
+
+<div id="contactInfoModal" class="modalInfoGroup">
+    <div class="modal-content">
+        <span class="closePopupContact">&times;</span>
+        <div class="contact-header">
+            <img id="contactPhotoModal" src="" alt="Foto do contato">
+            <h2 id="contactNameModal"></h2>
+        </div>
+        <div class="contact-details">
+            <h3>Detalhes do Contato</h3>
+            <ul id="contactDetailsModal"></ul>
+        </div>
+    </div>
+</div>
+
+
+
 
 
 <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
@@ -827,6 +1029,9 @@
         const filePreview = $('#filePreview');
         const previewImage = $('#previewImage');
         const removeImageButton = $('#removeImage');
+
+        let selectedContactId = null; // ID do contato selecionado
+        let selectedGroupId = null;
 
         function filterContacts() {
             var searchValue = $('#searchInput').val().toLowerCase();
@@ -1017,11 +1222,28 @@
             });
         });
 
+        $(document).on('contextmenu', '.contact', function (e) {
+            e.preventDefault();
+            selectedContactId = $(this).data('user-id');
+            selectedGroupId = null; // Reseta o grupo selecionado
+            console.log("Contato selecionado (ID):", selectedContactId); // Debugging
+
+            // Exibe o menu de contexto
+            $('#contextMenu').css({
+                display: 'block',
+                top: e.pageY + 'px',
+                left: e.pageX + 'px'
+            });
+            $('#leaveGroupBtn').hide(); // Esconde botão "Sair do Grupo"
+        });
+
         $(document).on('click', function (e) {
-            if (!$(e.target).closest('#contextMenu').length && !$(e.target).closest('.group').length) {
-                $('#contextMenu').hide(); // Oculta o menu se o clique não for no menu ou em um grupo
+            if (!$(e.target).closest('#contextMenu').length && !$(e.target).closest('.group, .contact').length) {
+                $('#contextMenu').hide();
             }
         });
+
+        
 
         $('#leaveGroupBtn').on('click', function () {
             if (selectedGroupId !== null) {
@@ -1032,10 +1254,15 @@
 
         $('#infoBtn').on('click', function () {
             if (selectedGroupId !== null) {
-                // Solicita as informações do grupo ao servidor
+                // Informações do grupo
+                console.log("Solicitando informações do grupo:", selectedGroupId); // Debugging
                 socket.emit('get_group_info', { group_id: selectedGroupId });
-                $('#contextMenu').hide(); // Esconde o menu de contexto
+            } else if (selectedContactId !== null) {
+                // Informações do contato
+                console.log("Solicitando informações do contato:", selectedContactId); // Debugging
+                socket.emit('get_contact_info', { contact_id: selectedContactId });
             }
+            $('#contextMenu').hide(); // Esconde o menu de contexto
         });
 
         // Recebe as informações do grupo do servidor
@@ -1059,13 +1286,33 @@
             $('#groupInfoModal').show();
         });
 
+        socket.on('contact_info', function (contactData) {
+            console.log("Dados do contato recebidos:", contactData); // Debugging
+            if (contactData) {
+                // Preenche os dados no modal
+                $('#contactNameModal').text(contactData.name);
+                $('#contactPhotoModal').attr('src', contactData.foto ? contactData.foto : 'static/imgs/defaultPeople.png');
+                $('#contactDetailsModal').html(`<li>Última visualização: ${contactData.last_seen}</li>`);
+
+                // Exibe o modal de informações do contato
+                $('#contactInfoModal').show();
+            } else {
+                console.error("Dados do contato ausentes ou inválidos."); // Debugging
+            }
+        });
+
+        $('.closePopupContact').on('click', function () {
+            console.log("Fechando o modal de informações do contato."); // Debugging
+            $('#contactInfoModal').hide();
+        });
+
 
         // Fechar o modal ao clicar no botão de fechar
-        $('.close').on('click', function () {
+        $('.closePopupGroup').on('click', function () {
             $('#groupInfoModal').hide();
         });
 
-        // Sair do grupo diretamente pelo modal
+        
         $('#leaveGroupInModalBtn').on('click', function () {
             if (selectedGroupId !== null) {
                 socket.emit('leave_group', { group_id: selectedGroupId });
