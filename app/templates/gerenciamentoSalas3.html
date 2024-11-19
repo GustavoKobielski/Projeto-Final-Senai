@@ -362,13 +362,7 @@
         /* Espaço entre a imagem e o botão */
     }
 
-    .addImg {
-        position: relative;
-        left: -85%;
-        margin-top: 10px;
-        /* Espaço acima do botão, se necessário */
-        font-size: 1vw;
-    }
+    
 
 
     .addFoto:hover {
@@ -523,7 +517,7 @@
 .tituloEdit-Salas {
     text-align: center;
     color: #407DD8;
-    font-size: 1.8rem;
+    font-size: 3rem;
     font-weight: 600;
     margin-bottom: 20px;
 }
@@ -561,6 +555,11 @@
     width: 100%;
 }
 
+.formEdit-Salas label {
+    color: #407DD8;
+    font-size: 2rem;
+}
+
 .form-control {
     padding: 10px;
     border: 1px solid #ddd;
@@ -581,7 +580,7 @@
     background-color: #407DD8;
     color: white;
     padding: 12px 20px;
-    font-size: 1.1rem;
+    font-size: 2rem;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -598,8 +597,8 @@
 .closePopup {
     position: absolute;
     top: 10px;
-    right: 10px;
-    font-size: 2rem;
+    right: 3rem;
+    font-size: 6rem;
     color: #888;
     cursor: pointer;
     transition: color 0.3s ease;
@@ -770,12 +769,13 @@
             <input type="text" name="capacidade_armario" id="capacidade_armario" class="form-control" placeholder="Quantos armários tem a sala" required>
 
             <label for="foto_sala">Foto da Sala</label>
-            <input type="file" name="foto_sala" id="foto_sala" class="addImg" style="display: block;">
-
+            <input type="file" name="foto_sala" id="foto_sala" class="addImg form-control">
+            
             <button type="submit" class="buttonSala">Salvar Alterações</button>
         </form>
     </div>
 </div>
+
 
 
 

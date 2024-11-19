@@ -420,12 +420,119 @@
     }
 
 
+    .containerEdit-Armarios {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 80%;
+        max-width: 600px;
+        padding: 2rem;
+        background-color: #fff;
+        z-index: 1002;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
+        border: 1px solid #ddd;
+        display: none;
+        overflow-y: auto;
+        animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+
+    .tituloEdit-Armarios {
+        text-align: center;
+        color: #407DD8;
+        font-size: 3rem;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+
+    .contentEdit-Armarios {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .fotoEdit-Armario {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+
+    .addFotoEdit-Armario {
+        width: 80%;
+        max-width: 250px;
+        height: auto;
+        object-fit: contain;
+        margin-bottom: 15px;
+    }
+
+    .formEdit-Armarios {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
+    }
+
+    .formEdit-Armarios label {
+        color: #407DD8;
+        font-size: 2rem;
+    }
+
+    .form-control {
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 1rem;
+        width: 100%;
+        box-sizing: border-box;
+        margin-top: 5px;
+    }
+
+    .form-control:focus {
+        border-color: #407DD8;
+        outline: none;
+    }
+
+    .buttonArmario {
+        background-color: #407DD8;
+        color: white;
+        padding: 12px 20px;
+        font-size: 2rem;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 100%;
+        margin-top: 20px;
+        transition: background-color 0.3s ease;
+    }
+
+    .buttonArmario:hover {
+        background-color: #365eab;
+    }
+
     .closePopup {
         position: absolute;
         top: 10px;
-        right: 20px;
-        font-size: 50px;
+        right: 3rem;
+        font-size: 6rem;
+        color: #888;
         cursor: pointer;
+        transition: color 0.3s ease;
+    }
+
+    .closePopup:hover {
         color: #407DD8;
     }
 
@@ -444,34 +551,6 @@
         /* Inicialmente oculto */
     }
 
-
-
-    #goToButton {
-        width: 100%;
-        padding: 10px;
-        border-radius: 5px;
-        color: white;
-        text-align: center;
-        margin-top: 15px;
-        cursor: pointer;
-        border: none;
-        background-color: gray;
-        position: relative;
-        right: 5%;
-    }
-
-    .barcode {
-        color: #407DD8;
-        font-size: 20px;
-        margin-bottom: 2%;
-    }
-
-    .tituloBarcode {
-        text-align: center;
-        color: #407DD8;
-        margin-bottom: 3%;
-        margin-left: 1%;
-    }
 
     .action-buttons {
         display: flex;
@@ -516,6 +595,10 @@
     .delete-btn i {
         margin-right: 0.5em;
         font-size: 1.4em;
+    }
+
+    button.swal2-confirm.swal2-styled {
+        background-color: #407DD8;
     }
 
     @media (max-width: 1920px) {
@@ -609,20 +692,20 @@
 
     <div class="wrapper_boxs">
         {% for armario in armarios %}
-        <div class="box">
+        <div class="box" data-armario-id="{{ armario.id_armario }}">
             <div class="group">
-                <!-- Link para gerenciamento de ferramentas do armário específico -->
                 <a href="{{ url_for('gerenciamento_ferramentas', armario_id=armario.id_armario) }}">
                     <img class="image"
                          src="{{ url_for('serve_armario_file', filename=armario.foto_armario) if armario.foto_armario else url_for('static', filename='imgs/defaultImage.jpg') }}" />
                     <div class="txts_wrapper">
-                        <p class="text-wrapper">Armario - <span class="bold-search">{{ armario.numero }}</span></p>
+                        <p class="text-wrapper">Armário - <span class="bold-search">{{ armario.numero }}</span></p>
                         <p>Total de ferramentas: <span>{{ ferramentas_por_armario[armario.id_armario] }}</span></p>
                         <div class="action-buttons">
-                            <a href="{{ url_for('editar_armario', armario_id=armario.id_armario) }}" class="edit-btn">
+                            <a href="#" class="edit-btn">
                                 <i class="bi bi-pencil-square"></i> Editar
                             </a>
-                            <a href="{{ url_for('deletar_armario', armario_id=armario.id_armario) }}" class="delete-btn">
+                            <div class="divider"></div>
+                            <a href="#" class="delete-btn" data-armario-id="{{ armario.id_armario }}">
                                 <i class="bi bi-trash"></i> Excluir
                             </a>
                         </div>
@@ -638,18 +721,32 @@
 
 <div class="overlay" id="overlay"></div>
 
-<div class="containerSala" id="popupSala">
-    <h1 class="tituloSala">Adicionar Armario</h1>
-    <span class="closePopup" id="closePopup">&times;</span>
+<div class="containerEdit-Armarios" id="editArmarioModal">
+    <h1 class="tituloEdit-Armarios">Editar Armário</h1>
+    <span class="closePopup" id="closePopupArmario">&times;</span>
 
-
-    <div class="content">
-        <div class="foto">
-            <img class="addFoto" src="{{ url_for('static', filename='imgs/addFoto.png')}}" alt="">
-
+    <div class="contentEdit-Armarios">
+        <div class="fotoEdit-Armario">
+            <img id="fotoPreviewArmario" class="addFotoEdit-Armario"
+                src="{{ url_for('static', filename='imgs/addFoto.png') }}" alt="Imagem do armário">
         </div>
 
-        
+        <form action="{{ url_for('editar_armario') }}" method="POST" class="formEdit-Armarios" enctype="multipart/form-data">
+            {{ form.csrf_token }}
+            <input type="hidden" name="armario_id" id="armario_id">
+
+            <label for="numero">Número do Armário</label>
+            <input type="text" name="numero" id="numero" class="form-control" placeholder="Digite o número do armário" required>
+
+            <label for="capacidade_ferramentas">Capacidade de Ferramentas</label>
+            <input type="number" name="capacidade_ferramentas" id="capacidade_ferramentas" class="form-control"
+                placeholder="Quantas ferramentas cabem" required>
+
+            <label for="foto_armario">Foto do Armário</label>
+            <input type="file" name="foto_armario" id="foto_armario" class="form-control">
+
+            <button type="submit" class="buttonArmario">Salvar Alterações</button>
+        </form>
     </div>
 </div>
 
@@ -657,80 +754,40 @@
 
 <script>
 
-    document.getElementById('generatePdfButton').addEventListener('click', function () {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
+document.addEventListener('DOMContentLoaded', function () {
+    const editBtns = document.querySelectorAll('.edit-btn');
+    const editArmarioModal = document.getElementById('editArmarioModal');
+    const closePopupArmario = document.getElementById('closePopupArmario');
 
-        // Adicionando o título no PDF
-        doc.setFontSize(18);
-        doc.text('Relatório dos Armarios', 10, 10);
+    editBtns.forEach(btn => {
+        btn.addEventListener('click', function (event) {
+            event.preventDefault();
 
-        // Capturando as informações dos cards de ferramentas
-        let yPosition = 20; // Posição inicial no eixo Y
-        const ferramentas = document.querySelectorAll('.box');
-        yPosition += 10;
-        ferramentas.forEach((ferramenta, index) => {
-            const nome = ferramenta.querySelector('.text-wrapper').textContent;
-            const total = ferramenta.querySelector('.total-de-arm-rios span').textContent;
+            const armarioBox = this.closest('.box');
+            const armarioId = armarioBox.getAttribute('data-armario-id');
+            const armarioNumero = armarioBox.querySelector('.bold-search').textContent.trim();
+            const fotoArmario = armarioBox.querySelector('img').getAttribute('src');
 
-            // Adicionando cada ferramenta no PDF
-            doc.setFontSize(14);
-            doc.text(`Nome do armario ${index + 1}: ${nome}`, 10, yPosition);
-            yPosition += 10;
-            doc.text(`Total de Ferramentas: ${total}`, 10, yPosition);
-            yPosition += 20; // Espaço entre as ferramentas
+            // Preenche o formulário com os dados do armário
+            document.getElementById('armario_id').value = armarioId;
+            document.getElementById('numero').value = armarioNumero;
+            document.getElementById('fotoPreviewArmario').src = fotoArmario;
+
+            // Exibe o modal
+            editArmarioModal.style.display = 'block';
         });
-
-        // Gerando o PDF
-        doc.save('relatorio_armarios.pdf');
     });
 
-    document.addEventListener('DOMContentLoaded', function () {
-        const popup = document.getElementById('popupSala');
-        const closePopupBtn = document.getElementById('closePopup');
-        const openPopupBtn = document.getElementById('openPopup');
-
-        // Função para abrir o popup e o overlay
-        function openPopup() {
-            popup.style.display = 'block';
-            overlay.style.display = 'block';
-        }
-
-
-
-
-        // Função para fechar o popup e o overlay
-        function closePopup() {
-            popup.style.display = 'none';
-            overlay.style.display = 'none';
-        }
-
-
-
-
-        // Abre o popup ao clicar no botão "Adicionar Salas"
-        openPopupBtn.addEventListener('click', function (event) {
-            event.preventDefault(); // Evita que o link redirecione
-            openPopup(); // Exibe o popup e o overlay
-        });
-
-
-
-
-        // Fecha o popup ao clicar no botão "×"
-        closePopupBtn.addEventListener('click', function () {
-            closePopup(); // Oculta o popup e o overlay
-        });
-
-
-
-
-        // Fecha o popup ao clicar fora do conteúdo
-        overlay.addEventListener('click', function () {
-            closePopup(); // Oculta o popup e o overlay
-        });
-
+    closePopupArmario.addEventListener('click', function () {
+        editArmarioModal.style.display = 'none';
     });
+
+    window.addEventListener('click', function (event) {
+        if (event.target === editArmarioModal) {
+            editArmarioModal.style.display = 'none';
+        }
+    });
+});
 
     document.addEventListener('DOMContentLoaded', function () {
         const searchInput = document.getElementById('searchInput');
@@ -749,6 +806,76 @@
             });
         });
     });
+
+    document.addEventListener('DOMContentLoaded', function () {
+    const deleteBtns = document.querySelectorAll('.delete-btn');
+
+    deleteBtns.forEach(btn => {
+        btn.addEventListener('click', function (event) {
+            event.preventDefault();
+            const armarioId = this.getAttribute('data-armario-id'); // Obtém o ID do armário
+
+            // Exibe o SweetAlert para confirmação
+            Swal.fire({
+                title: '<h2 style="font-size: 2rem;">Tem certeza?</h2>',
+                html: "<p style='font-size: 1.4rem;'>Você não poderá reverter isso!</p>",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: '<span style="font-size: 1.2rem;">Sim, excluir!</span>',
+                cancelButtonText: '<span style="font-size: 1.2rem;">Cancelar</span>',
+                width: '600px',
+                padding: '2rem'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Faz a requisição para deletar o armário
+                    fetch(`/deletar/armario/${armarioId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                title: '<h2 style="font-size: 2rem;">Excluído!</h2>',
+                                html: `<p style="font-size: 1.4rem;">${data.message}</p>`,
+                                icon: 'success',
+                                showConfirmButton: false,
+                                timer: 2000,
+                                width: '600px',
+                                padding: '2rem'
+                            }).then(() => {
+                                // Remove o card do armário da interface
+                                document.querySelector(`[data-armario-id="${armarioId}"]`).closest('.box').remove();
+                            });
+                        } else {
+                            Swal.fire({
+                                title: '<h2 style="font-size: 2rem;">Erro!</h2>',
+                                html: `<p style="font-size: 1.4rem;">${data.message}</p>`,
+                                icon: 'error',
+                                confirmButtonText: 'OK',
+                                width: '600px',
+                                padding: '2rem'
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erro:', error);
+                        Swal.fire({
+                            title: '<h2 style="font-size: 2rem;">Erro!</h2>',
+                            html: "<p style='font-size: 1.4rem;'>Erro ao excluir o armário.</p>",
+                            icon: 'error',
+                            confirmButtonText: 'OK',
+                            width: '600px',
+                            padding: '2rem'
+                        });
+                    });
+                }
+            });
+        });
+    });
+});
 
 
 </script>

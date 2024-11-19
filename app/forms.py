@@ -183,7 +183,7 @@ class ScanearForm(FlaskForm):
 
 class EditarInformacoesSalas(FlaskForm):
     nome_sala = StringField('Nome da Sala', validators=[DataRequired()])
-    capacidade_armario = StringField('Capacidade de Armários', validators=[DataRequired()])
+    capacidade_armario = StringField('Capacidade de Armários')
     foto_sala = FileField('Foto da Sala', validators=[FileAllowed(['png', 'jpg', 'jpeg', 'jfif', 'gif'], 'Somente imagens são permitidas.')])
     submit = SubmitField('Salvar Alterações')
 
@@ -202,7 +202,7 @@ class EditarInformacoesSalas(FlaskForm):
     
 class EditarInformacoesArmario(FlaskForm):
     numero = StringField("Numero do Armario", validators=[DataRequired()])
-    capacidade_ferramentas = StringField('Quantas ferramentas tem a sala', validators=[DataRequired()])
+    capacidade_ferramentas = StringField('Quantas ferramentas tem a sala')
     foto_armario = FileField('Foto do Armario')
     submit = SubmitField('Salvar Alterações')
 
@@ -221,7 +221,7 @@ class EditarInformacoesArmario(FlaskForm):
     
 class EditarInformacoesFerramentas(FlaskForm):
     nome_ferramenta = StringField("Nome das ferramentas", validators=[DataRequired()])
-    total_ferramenta = StringField('Quantas ferramentas tem total', validators=[DataRequired()])
+    total_ferramenta = StringField('Quantas ferramentas tem total')
     foto_ferramenta = FileField('Foto do Armario')
     submit = SubmitField('Salvar Alterações')
 

@@ -40,7 +40,6 @@ def serve_ferramentas_file(filename):
     return send_from_directory(os.path.join(app.config['UPLOAD_FOLDER'], 'ferramentas'), filename)
 
 
-
 def generate_barcode_image(number):
     barcode_folder = os.path.join(os.getcwd(), 'app', 'static', 'barcodes')
 
@@ -602,7 +601,7 @@ def gerenciamento_salas():
             # Se uma nova foto foi enviada
             if form.foto_sala.data:
                 filename = secure_filename(form.foto_sala.data.filename)
-                file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                file_path = os.path.join(app.config['UPLOAD_FOLDER'],'salas', filename)
                 form.foto_sala.data.save(file_path)
                 sala.foto_sala = filename
 
@@ -640,40 +639,220 @@ def excluir_sala(sala_id):
 
 
 # FUNÇÃO DA PAGINA DE ARMARIOS
+
+
 @app.route('/gerenciamento/armario/<int:sala_id>', methods=['GET', 'POST'])
 @login_required
 def gerenciamento_armarios(sala_id):
-    form = CadastroArmario()
     armarios = Armario.query.filter_by(sala_id=sala_id).all()
     sala = Salas.query.get_or_404(sala_id)
-
-    if form.validate_on_submit():
-        file = request.files.get('foto_armario')
-        filename = None
-
-        if file and file.filename != '' and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            folder_path = os.path.join(app.config['UPLOAD_FOLDER'], 'armarios')
-            unique_filename = get_unique_filename(folder_path, filename)
-            file_path = os.path.join(folder_path, unique_filename)
-
-            # Certifica-se de que o diretório existe
-            os.makedirs(folder_path, exist_ok=True)
-            file.save(file_path)
-
-        codigo_armario = generate_unique_codigo_armario()
-        form.numero.data = codigo_armario
-
-        try:
-            form.save(sala_id=sala_id, filename=unique_filename if filename else None)
-            flash('Armário cadastrado com sucesso!', 'success')
-        except Exception as e:
-            flash(f'Erro ao cadastrar armário: {str(e)}', 'danger')
-        return redirect(url_for('armarios', sala_id=sala_id))
-
     ferramentas_por_armario = {armario.id_armario: Ferramentas.contar_ferramentas_no_armario(armario.id_armario) for armario in armarios}
 
-    return render_template('armarios2.html', sala=sala, armarios=armarios, form=form, ferramentas_por_armario=ferramentas_por_armario)
+    form = EditarInformacoesArmario()
+
+    if form.validate_on_submit() and 'armario_id' in request.form:
+        # Atualiza os dados do armário
+        armario_id = request.form.get("armario_id")
+        armario = Armario.query.get_or_404(armario_id)
+
+        # Atualizar dados do armário
+        armario.numero = form.numero.data
+        armario.capacidade_ferramentas = form.capacidade_ferramentas.data
+
+        print("b")
+        # Atualizar a foto, se enviada
+        if form.foto_armario.data:
+            print("c")
+            filename = secure_filename(form.foto_armario.data.filename)
+            print("file: ",filename)
+            file_path = os.path.join(app.config["UPLOAD_FOLDER"], "gerenciamento_armarios", filename)
+            print("path:",file_path)
+            form.foto_armario.data.save(file_path)
+            armario.foto_armario = filename
+
+        # Salvar alterações no banco de dados
+        db.session.commit()
+        flash("Armário atualizado com sucesso!", "success")
+        return redirect(url_for("gerenciamento_armarios", sala_id=sala_id))
+
+    return render_template(
+        "gerenciamentoArmarios.html",
+        armarios=armarios,
+        sala_id=sala_id,
+        ferramentas_por_armario=ferramentas_por_armario,
+        form=form
+    )
+
+@app.route('/editar/armario', methods=['POST'])
+@login_required
+def editar_armario():
+    """
+    Rota para editar as informações de um armário.
+    """
+    try:
+        # Obtém o ID do armário do formulário
+        armario_id = request.form.get('armario_id')
+        if not armario_id:
+            flash("ID do armário não foi fornecido.", "error")
+            return redirect(url_for('gerenciamento_armarios', sala_id=1))  # Redireciona para a sala padrão
+
+        # Busca o armário no banco de dados
+        armario = Armario.query.get_or_404(armario_id)
+
+        # Atualiza os dados do armário
+        armario.numero = request.form.get('numero')
+        armario.capacidade_ferramentas = request.form.get('capacidade_ferramentas')
+
+        # Processa a nova foto, se enviada
+        if 'foto_armario' in request.files and request.files['foto_armario']:
+            foto = request.files['foto_armario']
+            if foto.filename:  # Verifica se o arquivo é válido
+                filename = secure_filename(foto.filename)
+                file_path = os.path.join(app.config['UPLOAD_FOLDER'], "armarios", filename)
+                foto.save(file_path)
+                armario.foto_armario = filename
+
+        # Salva as alterações no banco de dados
+        db.session.commit()
+        flash("Armário atualizado com sucesso!", "success")
+
+    except Exception as e:
+        app.logger.error(f"Erro ao editar armário: {e}")
+        flash("Ocorreu um erro ao atualizar o armário. Tente novamente.", "error")
+
+    # Redireciona de volta para a página de gerenciamento de armários
+    return redirect(url_for('gerenciamento_armarios', sala_id=armario.sala_id))
+
+
+@app.route('/deletar/armario/<int:armario_id>', methods=['POST'])
+@login_required
+def deletar_armario(armario_id):
+    armario = Armario.query.get_or_404(armario_id)
+    try:
+        db.session.delete(armario)
+        db.session.commit()
+        return jsonify({"success": True, "message": "Armário excluído com sucesso!"})
+    except Exception as e:
+        return jsonify({"success": False, "message": "Erro ao excluir o armário."})
+
+
+ #FUNÇÃO DA PAGINA DE FERRAMENTAS GERENCIAMNETO
+
+# FUNÇÃO DA PÁGINA DE GERENCIAMENTO DE FERRAMENTAS
+@app.route('/gerenciamento/ferramentas/<int:armario_id>', methods=['GET', 'POST'])
+@login_required
+def gerenciamento_ferramentas(armario_id):
+    """
+    Página para gerenciamento de ferramentas de um armário específico.
+    """
+    armario = Armario.query.get_or_404(armario_id)
+    ferramentas = Ferramentas.query.filter_by(armario_id=armario_id).all()
+
+    form = EditarInformacoesFerramentas()
+
+    if form.validate_on_submit():
+        # Captura o ID da ferramenta enviado no formulário
+        ferramenta_id = request.form.get("ferramenta_id")
+
+        if ferramenta_id:  # Atualiza a ferramenta existente
+            ferramenta = Ferramentas.query.get_or_404(ferramenta_id)
+            ferramenta.nome_ferramenta = form.nome_ferramenta.data
+            ferramenta.total_ferramenta = form.total_ferramenta.data
+            ferramenta.numero = form.numero.data
+
+            if form.foto_ferramenta.data:
+                filename = secure_filename(form.foto_ferramenta.data.filename)
+                file_path = os.path.join(app.config["UPLOAD_FOLDER"], "gerenciamento_ferramentas", filename)
+                form.foto_ferramenta.data.save(file_path)
+                ferramenta.foto_ferramenta = filename
+
+        else:  # Cria uma nova ferramenta
+            ferramenta = Ferramentas(
+                nome_ferramenta=form.nome_ferramenta.data,
+                total_ferramenta=form.total_ferramenta.data,
+                numero=form.numero.data,
+                armario_id=armario_id,
+            )
+            if form.foto_ferramenta.data:
+                filename = secure_filename(form.foto_ferramenta.data.filename)
+                file_path = os.path.join(app.config["UPLOAD_FOLDER"], "gerenciamento_ferramentas", filename)
+                form.foto_ferramenta.data.save(file_path)
+                ferramenta.foto_ferramenta = filename
+
+            db.session.add(ferramenta)
+
+        # Salva as alterações
+        db.session.commit()
+        flash("Ferramenta salva com sucesso!", "success")
+        return redirect(url_for("gerenciamento_ferramentas", armario_id=armario_id))
+
+    return render_template(
+        "gerenciamentoFerramentas.html",
+        armario=armario,
+        ferramentas=ferramentas,
+        form=form,
+    )
+
+
+@app.route('/editar/ferramenta', methods=['POST'])
+@login_required
+def editar_ferramenta():
+    """
+    Rota para editar uma ferramenta.
+    """
+    try:
+        # Captura o ID da ferramenta e do armário
+        ferramenta_id = request.form.get('ferramenta_id')
+        armario_id = request.form.get('armario_id')
+
+        if not ferramenta_id or not ferramenta_id.isdigit():
+            flash("ID da ferramenta inválido ou não fornecido.", "error")
+            return redirect(url_for('gerenciamento_ferramentas', armario_id=armario_id or 0))
+
+        # Busca a ferramenta no banco de dados
+        ferramenta = Ferramentas.query.get_or_404(int(ferramenta_id))
+
+        # Atualiza os valores da ferramenta
+        ferramenta.nome_ferramenta = request.form.get('nome_ferramenta')
+        ferramenta.total_ferramenta = request.form.get('total_ferramenta')
+        ferramenta.numero = request.form.get('numero')
+
+        # Atualiza a foto se fornecida
+        if 'foto_ferramenta' in request.files and request.files['foto_ferramenta']:
+            foto = request.files['foto_ferramenta']
+            if foto.filename:
+                filename = secure_filename(foto.filename)
+                file_path = os.path.join(app.config['UPLOAD_FOLDER'], "ferramentas", filename)
+                foto.save(file_path)
+                ferramenta.foto_ferramenta = filename
+
+        # Salva as alterações no banco de dados
+        db.session.commit()
+        flash("Ferramenta atualizada com sucesso!", "success")
+
+    except Exception as e:
+        app.logger.error(f"Erro ao editar ferramenta: {e}")
+        flash("Erro ao atualizar a ferramenta.", "error")
+
+    return redirect(url_for('gerenciamento_ferramentas', armario_id=armario_id or ferramenta.armario_id))
+
+
+@app.route('/deletar/ferramenta/<int:ferramenta_id>', methods=['POST'])
+@login_required
+def deletar_ferramenta(ferramenta_id):
+    """
+    Rota para deletar uma ferramenta.
+    """
+    ferramenta = Ferramentas.query.get_or_404(ferramenta_id)
+    try:
+        db.session.delete(ferramenta)
+        db.session.commit()
+        return jsonify({"success": True, "message": "Ferramenta excluída com sucesso!"})
+    except Exception as e:
+        app.logger.error(f"Erro ao excluir ferramenta: {e}")
+        return jsonify({"success": False, "message": "Erro ao excluir a ferramenta."})
+
+    return redirect(url_for('gerenciamento_ferramentas', armario_id=ferramenta.armario_id))
 
 #############################################
 ######## PAGE PESSOAS GERENCIAMENTO #########

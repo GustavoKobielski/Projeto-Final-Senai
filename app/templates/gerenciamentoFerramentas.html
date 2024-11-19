@@ -427,12 +427,119 @@
     }
 
 
+    .containerEdit-Armarios {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 80%;
+        max-width: 600px;
+        padding: 2rem;
+        background-color: #fff;
+        z-index: 1002;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
+        border: 1px solid #ddd;
+        display: none;
+        overflow-y: auto;
+        animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+
+    .tituloEdit-Armarios {
+        text-align: center;
+        color: #407DD8;
+        font-size: 3rem;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+
+    .contentEdit-Armarios {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .fotoEdit-Armario {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+
+    .addFotoEdit-Armario {
+        width: 80%;
+        max-width: 250px;
+        height: auto;
+        object-fit: contain;
+        margin-bottom: 15px;
+    }
+
+    .formEdit-Armarios {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
+    }
+
+    .formEdit-Armarios label {
+        color: #407DD8;
+        font-size: 2rem;
+    }
+
+    .form-control {
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 1rem;
+        width: 100%;
+        box-sizing: border-box;
+        margin-top: 5px;
+    }
+
+    .form-control:focus {
+        border-color: #407DD8;
+        outline: none;
+    }
+
+    .buttonArmario {
+        background-color: #407DD8;
+        color: white;
+        padding: 12px 20px;
+        font-size: 2rem;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 100%;
+        margin-top: 20px;
+        transition: background-color 0.3s ease;
+    }
+
+    .buttonArmario:hover {
+        background-color: #365eab;
+    }
+
     .closePopup {
         position: absolute;
         top: 10px;
-        right: 20px;
-        font-size: 50px;
+        right: 3rem;
+        font-size: 6rem;
+        color: #888;
         cursor: pointer;
+        transition: color 0.3s ease;
+    }
+
+    .closePopup:hover {
         color: #407DD8;
     }
 
@@ -451,34 +558,6 @@
         /* Inicialmente oculto */
     }
 
-
-
-    #goToButton {
-        width: 100%;
-        padding: 10px;
-        border-radius: 5px;
-        color: white;
-        text-align: center;
-        margin-top: 15px;
-        cursor: pointer;
-        border: none;
-        background-color: gray;
-        position: relative;
-        right: 5%;
-    }
-
-    .barcode {
-        color: #407DD8;
-        font-size: 20px;
-        margin-bottom: 2%;
-    }
-
-    .tituloBarcode {
-        text-align: center;
-        color: #407DD8;
-        margin-bottom: 3%;
-        margin-left: 1%;
-    }
 
     .action-buttons {
         display: flex;
@@ -523,6 +602,10 @@
     .delete-btn i {
         margin-right: 0.5em;
         font-size: 1.4em;
+    }
+
+    button.swal2-confirm.swal2-styled {
+        background-color: #407DD8;
     }
 
     @media (max-width: 1920px) {
@@ -609,46 +692,41 @@
 
     <div class="wrapper_boxs">
         {% for ferramenta in ferramentas %}
-        <div class="box">
+        <div class="box" 
+             data-ferramenta-id="{{ ferramenta.id }}" 
+             data-nome="{{ ferramenta.nome_ferramenta }}" 
+             data-numero="{{ ferramenta.numero }}" 
+             data-total="{{ ferramenta.total_ferramenta }}" 
+             data-foto="{{ url_for('serve_ferramentas_file', filename=ferramenta.foto_ferramenta) if ferramenta.foto_ferramenta else url_for('static', filename='imgs/defaultImage.jpg') }}">
             <div class="group">
-
-
                 <img class="image"
                     src="{{ url_for('serve_ferramentas_file', filename=ferramenta.foto_ferramenta) if ferramenta.foto_ferramenta else url_for('static', filename='imgs/defaultImage.jpg') }}" />
-
-                    <div class="txts_wrapper">
-                        <!-- Exibe o número do armário e o nome da ferramenta na mesma linha -->
-                        <p class="text-wrapper">
-                            Ferramenta - <span class="bold-search">{{ ferramenta.nome_ferramenta }}</span>
-                        </p>
-                        
-                        <!-- Exibe o número da ferramenta um pouco abaixo do nome -->
-                        <p class="tool-number">
-                            Número da Ferramenta: 
-                            <span>{{ ferramenta.numero }}</span>
-                        </p>
-                    
-                        <!-- Exibe o total de ferramentas -->
-                        <p class="total-de-armarios">
-                            Total de Ferramentas:<br />
-                            <span>{{ ferramenta.total_ferramenta }}</span>
-                        </p>
-
-                        <div class="action-buttons">
-                            <a href="#" class="edit-btn">
-                                <i class="bi bi-pencil-square"></i> Editar
-                            </a>
-                            <div class="divider"></div>
-                            <a href="#" class="delete-btn" data-sala-id="">
-                                <i class=" bi bi-trash"></i> Excluir
-                            </a>
-                        </div>
+    
+                <div class="txts_wrapper">
+                    <p class="text-wrapper">
+                        Ferramenta - <span class="bold-search">{{ ferramenta.nome_ferramenta }}</span>
+                    </p>
+                    <p class="tool-number">
+                        Número da Ferramenta: 
+                        <span>{{ ferramenta.numero }}</span>
+                    </p>
+                    <p class="total-de-armarios">
+                        Total de Ferramentas:<br />
+                        <span>{{ ferramenta.total_ferramenta }}</span>
+                    </p>
+                    <div class="action-buttons">
+                        <a href="#" class="edit-btn">
+                            <i class="bi bi-pencil-square"></i> Editar
+                        </a>
+                        <div class="divider"></div>
+                        <a href="#" class="delete-btn" data-ferramenta-id="{{ ferramenta.id }}">
+                            <i class="bi bi-trash"></i> Excluir
+                        </a>
                     </div>
-
+                </div>
             </div>
         </div>
         {% endfor %}
-
     </div>
 
 
@@ -656,109 +734,125 @@
 
 <div class="overlay" id="overlay"></div>
 
-<div class="containerSala" id="popupSala">
-    <h1 class="tituloSala">Adicionar Ferramentas</h1>
-    <span class="closePopup" id="closePopup">&times;</span>
+<div class="containerEdit-Armarios" id="editFerramentaModal">
+    <h1 class="tituloEdit-Armarios">Editar Ferramenta</h1>
+    <span class="closePopup" id="closePopupFerramenta">&times;</span>
 
-
-    <div class="content">
-        <div class="foto">
-            <img class="addFoto" src="{{ url_for('static', filename='imgs/addFoto.png')}}" alt="">
-
+    <div class="contentEdit-Armarios">
+        <div class="fotoEdit-Armario">
+            <img id="fotoPreviewFerramenta" class="addFotoEdit-Armario"
+                src="{{ url_for('static', filename='imgs/addFoto.png') }}" alt="Imagem da ferramenta">
         </div>
 
-        <form action="" method="POST" class="formSalas" enctype="multipart/form-data">
-            {{form.csrf_token}}
+        <form action="{{ url_for('editar_ferramenta') }}" method="POST" class="formEdit-Armarios" enctype="multipart/form-data">
+            {{ form.csrf_token }}
+            <input type="hidden" name="ferramenta_id" id="ferramenta_id"> <!-- Campo oculto preenchido por JS -->
+            <input type="hidden" name="armario_id" value="{{ armario.id }}"> <!-- Mantém o ID do armário -->
 
-            {{form.nome_ferramenta.label(class="corSala", style="margin-bottom: 10px; display:block;")}}
-            {{form.nome_ferramenta(class="form-control", placeholder='Digite o nome da ferramenta')}}
+            <label for="nome_ferramenta">Nome da Ferramenta</label>
+            <input type="text" name="nome_ferramenta" id="nome_ferramenta" class="form-control" placeholder="Digite o nome da ferramenta" required>
 
-            {{form.total_ferramenta.label(class="corSala", style="margin-bottom: 10px; display:block;")}}
-            {{form.total_ferramenta(class="form-control", placeholder='Quantas ferramentas tem')}}
+            <label for="total_ferramenta">Total de Ferramentas</label>
+            <input type="number" name="total_ferramenta" id="total_ferramenta" class="form-control" placeholder="Quantidade total" required>
 
-            {{ form.foto_ferramenta(class="addImg", style="display: block;") }}
+            <label for="numero">Número</label>
+            <input type="text" name="numero" id="numero" class="form-control" placeholder="Número da ferramenta" required>
 
-            {{form.btnSubmit(class="buttonSala")}}
+            <label for="foto_ferramenta">Foto da Ferramenta</label>
+            <input type="file" name="foto_ferramenta" id="foto_ferramenta" class="form-control">
+
+            <button type="submit" class="buttonArmario">Salvar Alterações</button>
         </form>
     </div>
 </div>
 
 
 <script>
+  
+  document.addEventListener('DOMContentLoaded', function () {
+    const editBtns = document.querySelectorAll('.edit-btn');
+    const editFerramentaModal = document.getElementById('editFerramentaModal');
+    const closePopupFerramenta = document.getElementById('closePopupFerramenta');
 
-    document.getElementById('generatePdfButton').addEventListener('click', function () {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
+    // Abrir o modal de edição
+    editBtns.forEach(btn => {
+        btn.addEventListener('click', function (event) {
+            event.preventDefault();
 
-        // Adicionando o título no PDF
-        doc.setFontSize(18);
-        doc.text('Relatório das Ferramentas', 10, 10);
+            const ferramentaBox = this.closest('.box');
 
-        // Capturando as informações dos cards de ferramentas
-        let yPosition = 20; // Posição inicial no eixo Y
-        const ferramentas = document.querySelectorAll('.box');
-        yPosition += 10;
-        ferramentas.forEach((ferramenta, index) => {
-            const nome = ferramenta.querySelector('.text-wrapper').textContent;
-            const total = ferramenta.querySelector('.total-de-arm-rios span').textContent;
+            // Obtém os valores do dataset
+            const ferramentaId = ferramentaBox.dataset.ferramentaId;
+            const nomeFerramenta = ferramentaBox.dataset.nome;
+            const numero = ferramentaBox.dataset.numero;
+            const totalFerramenta = ferramentaBox.dataset.total;
+            const fotoFerramenta = ferramentaBox.dataset.foto;
 
-            // Adicionando cada ferramenta no PDF
-            doc.setFontSize(14);
-            doc.text(`Nome da Ferramenta ${index + 1}: ${nome}`, 10, yPosition);
-            yPosition += 10;
-            doc.text(`Total de Ferramentas: ${total}`, 10, yPosition);
-            yPosition += 20; // Espaço entre as ferramentas
+            // Preenche os campos do modal
+            document.getElementById('ferramenta_id').value = ferramentaId;
+            document.getElementById('nome_ferramenta').value = nomeFerramenta;
+            document.getElementById('numero').value = numero;
+            document.getElementById('total_ferramenta').value = totalFerramenta;
+            document.getElementById('fotoPreviewFerramenta').src = fotoFerramenta;
+
+            // Exibe o modal
+            editFerramentaModal.style.display = 'block';
         });
-
-        // Gerando o PDF
-        doc.save('relatorio_ferramentas.pdf');
     });
 
-    document.addEventListener('DOMContentLoaded', function () {
-        const popup = document.getElementById('popupSala');
-        const closePopupBtn = document.getElementById('closePopup');
-        const openPopupBtn = document.getElementById('openPopup');
+    // Fechar o modal
+    closePopupFerramenta.addEventListener('click', function () {
+        editFerramentaModal.style.display = 'none';
+    });
 
-        // Função para abrir o popup e o overlay
-        function openPopup() {
-            popup.style.display = 'block';
-            overlay.style.display = 'block';
+    window.addEventListener('click', function (event) {
+        if (event.target === editFerramentaModal) {
+            editFerramentaModal.style.display = 'none';
         }
+    });
 
 
 
+        // Exclusão de Ferramentas
+        const deleteBtns = document.querySelectorAll('.delete-btn');
+        deleteBtns.forEach(btn => {
+            btn.addEventListener('click', function (event) {
+                event.preventDefault();
+                const ferramentaId = this.getAttribute('data-ferramenta-id');
 
-        // Função para fechar o popup e o overlay
-        function closePopup() {
-            popup.style.display = 'none';
-            overlay.style.display = 'none';
-        }
-
-
-
-
-        // Abre o popup ao clicar no botão "Adicionar Salas"
-        openPopupBtn.addEventListener('click', function (event) {
-            event.preventDefault(); // Evita que o link redirecione
-            openPopup(); // Exibe o popup e o overlay
+                Swal.fire({
+                    title: 'Tem certeza?',
+                    text: "Você não poderá reverter isso!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sim, excluir!',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetch(`/deletar/ferramenta/${ferramentaId}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire('Excluído!', data.message, 'success');
+                                // Remove a ferramenta do DOM
+                                document.querySelector(`[data-ferramenta-id="${ferramentaId}"]`).closest('.box').remove();
+                            } else {
+                                Swal.fire('Erro!', data.message, 'error');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Erro ao excluir ferramenta:', error);
+                            Swal.fire('Erro!', 'Ocorreu um problema ao excluir a ferramenta.', 'error');
+                        });
+                    }
+                });
+            });
         });
-
-
-
-
-        // Fecha o popup ao clicar no botão "×"
-        closePopupBtn.addEventListener('click', function () {
-            closePopup(); // Oculta o popup e o overlay
-        });
-
-
-
-
-        // Fecha o popup ao clicar fora do conteúdo
-        overlay.addEventListener('click', function () {
-            closePopup(); // Oculta o popup e o overlay
-        });
-
     });
 
     document.addEventListener('DOMContentLoaded', function () {
